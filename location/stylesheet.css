@@ -1,0 +1,129 @@
+/* General tag type stuff */
+
+body {
+  font: 62.5% "Lucida Grande", Arial, sans-serif;
+  background-color: #539DB1;
+  color: #777;
+}
+
+h1, h2, h3, h5 {
+  font-weight: bold;
+  color:#222;
+}
+
+h1, h2, h3, h4 {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #E12E43;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+h1 { 
+  font: 30px Arial, Helvetica, sans-serif;
+  letter-spacing: -1px;
+  padding: 0 0 0 0;
+  margin: 0;
+}
+
+h2 {
+  font: 15px Arial, Helvetica, sans-serif;
+  padding: 0 0 3px 0;
+  margin-bottom: 0;
+}
+
+h3 {
+  font: 36px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  padding: 0 0 0 0;
+  color: #08c;
+  margin-bottom: 0;
+}
+
+h4 {
+  font: 16px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  padding: 0 0 3px 0;
+  color: #08c;
+  margin-bottom: 0;
+}
+
+td {
+  text-align: center;
+}
+
+/* Class stuff, specific to areas */
+
+.textcontent
+{
+  border:2px solid gray;
+  margin-top: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 10px;
+  background-color: #F8D267;
+  color: #000000;
+  padding: 5px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius:10px;
+}
+
+#main, #header, #footer, #disclaimer {
+  margin: 0 auto;
+  width: 910px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+#main {
+  margin-top: 50px;
+  padding: 15px;
+  width: 900px;
+  border: 1px solid #cbcbcb;
+  -moz-border-radius: 10px;
+  -webkit-border-radius:10px;
+  background:#fff;
+}
+
+#title {
+  float: left;
+}
+
+#title a {
+  color: #333;
+}
+
+#login {
+  margin: 5px 0;
+  float: right;
+}
+
+#login a {
+  color: #000000;
+}
+
+#logout {
+  margin: 5px 0;
+  float: right;
+}
+
+#logout a {
+  color: #000000;
+}
+
+#footer {
+  text-align: right;
+  font-size: 10px;
+}
+
+#disclaimer {
+  text-align: left;
+  font-size: 10px;
+  color: #000000;
+}
+

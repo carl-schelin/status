@@ -1,0 +1,5 @@
+.hide_me, .slide_in {
+visibility: hidden;
+position: absolute;
+}
+

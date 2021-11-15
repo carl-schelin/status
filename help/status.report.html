@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Add Tasks to Weekly Status Report</title>
+</head>
+<body>
+
+<p>This is the core of the status report management application.</p>
+
+<center><img src="status.report.jpg"></center>
+
+<p>This is a fresh, unused page ready for you to add your data to. A help popup will be displayed if you hover your 
+mouse cursor over various parts of the tables. There are four tables you might be able to see.</p>
+
+<h4>Title</h4>
+
+<p>This table contains the date and two buttons used to either update an existing status if you decided to make a 
+change or to add a new task.</p>
+
+<p>The date has a less than (&lt;) and a greater than (&gt;) character to either side of it. Clicking on either 
+of these links will move you backward or forward by week.</p>
+
+<h4>Data Entry</h4>
+
+<p>This is where you'll do most of your work. To help you with your progress, when you select an item 
+from the dropdowns or enter data, the box will change to green. With this indicator, you should be able to 
+see when you have everything filled out correctly.</p>
+
+<ol>
+  <li><b>Project</b> - Drop down list that contains all the project descriptions for your group.</li>
+  <li><b>Progress</b> - Drop down list with the progress of the task.</li>
+  <li><b>Type</b> - Drop down list with the type of task. This helps organize your quarterly project listing.</li>
+  <li><b>Big Textarea</b> - Here is where you'll enter your task. There's a character counter to keep you at 
+the 255 character limit.</li>
+  <li><b>Use in Status Report email</b> - This checkbox indicates whether the task you're entering will be part of 
+the e-mail report. You might not want to put everything on a status report such as meetings that repeat or little 
+things you want to keep track of but don't need to be reported.</li>
+  <li><b>Quarterly Accomplishment</b> - This checkbox lets you identify a task that would be broken out as a 
+Quarterly Accomplishment.</li>
+  <li><b>Time Worked</b> - Number of 15 minute blocks of time you spent working on the task.</li>
+  <li><b>Show Selected Day</b> - If you are managing your time or days you did work, selecting the day and then 
+selecting this checkbox will show only the selected day.</li>
+  <li><b>Days</b> - These radio buttons let you select the day the task was worked. If you're managing your time, 
+the daily totals will be here</li>
+</ol>
+
+<p><b>Important</b> - There are six radio buttons in the next table that are part of the Data Entry portion of the 
+page. Select the classification for the task from the list in the next table.</p>
+
+<hr>
+
+<center><img src="status.report2.jpg"></center>
+
+<h4>Data Display</h4>
+
+<p>This section is where the status report data will be displayed. It is populated from the database so if you see 
+the task in this section, you can be sure that the task has been saved.</p>
+
+<p>The section will be built as the status enteries are stored. So it will look similar to your status report 
+except that every entry will be displayed (in the e-mail, only entries with the "Use in Status Report email" 
+checkbox checked will be displayed).</p>
+
+<p>In looking at the highlighted line:</p>
+
+<ol>
+  <li><b>The 'x'</b> - Clicking this will delete the task line. An alert box will pop up to confirm the deletion.</li>
+  <li><b>Progress</b> - The progress of the task is displayed next. This is based on what you selected from the drop down list above.</li>
+  <li><b>Task</b> - This is the task itself. It is a clickable link. Clicking on it will repopulate the Data Entry 
+table so you can make changes or copy the task. The "Copy Task to Next Week" and "Update This Task" buttons will become active so you can save changes or copy the task to the following week. If you're copying an entry for a repeating task, make the appropriate changes and click the "Add New Task" button.</li>
+  <li><b>Day: Hours</b> - The last box can identify several things. First is the letter day of the week. Next is the number of hours worked as selected under Time Worked. If the box is green, the task will be in your status e-mail otherwise it will not. If you selected it as a Quarterly Accomplishment, a bolded asterisk will be in this box.</li>
+</ol>
+
+<h4>Jeff's Timecard Help</h4>
+
+<p>This table is a copy of the text Jeff used to describe the new tasks under the new timecode. It's here 
+to help you if you're not sure which task to select in the project drop down.</p>
+
+</body>
+</html>
