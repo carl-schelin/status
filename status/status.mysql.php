@@ -107,12 +107,12 @@
   $class = 0;
   $first = 0;
   $q_string  = "select cls_id,cls_name,cls_project ";
-  $q_string .= "from class";
-  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_string .= "from st_class";
+  $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_class = mysqli_fetch_array($q_class) ) {
-    $classval[$a_class['cls_id']] = $a_class['cls_name'];
-    $classprj[$a_class['cls_id']] = $a_class['cls_project'];
+  while ( $a_st_class = mysqli_fetch_array($q_st_class) ) {
+    $classval[$a_st_class['cls_id']] = $a_st_class['cls_name'];
+    $classprj[$a_st_class['cls_id']] = $a_st_class['cls_project'];
   }
 
 #######

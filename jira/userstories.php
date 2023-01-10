@@ -197,12 +197,12 @@ $(document).ready( function() {
 <option value="0">No Epic</option>
 <?php
   $q_string  = "select epic_id,epic_jira,epic_title ";
-  $q_string .= "from epics ";
+  $q_string .= "from st_epics ";
   $q_string .= "where epic_user = " . $_SESSION['uid'] . " ";
   $q_string .= "order by epic_jira ";
-  $q_epics = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
-  while ($a_epics = mysqli_fetch_array($q_epics)) {
-    print "<option value=\"" . $a_epics['epic_id'] . "\">" . $a_epics['epic_jira'] . " - " . $a_epics['epic_title'] . "</option>\n";
+  $q_st_epics = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+  while ($a_st_epics = mysqli_fetch_array($q_st_epics)) {
+    print "<option value=\"" . $a_st_epics['epic_id'] . "\">" . $a_st_epics['epic_jira'] . " - " . $a_st_epics['epic_title'] . "</option>\n";
   }
 ?>
 </select></td>

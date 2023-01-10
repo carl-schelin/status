@@ -49,7 +49,7 @@ if (isset($_POST['class'])) {
 
   logaccess($db, $_SESSION['username'], "add.class.php", "Adding class: " . $formVars['cls_name']);
 
-  $q_string = "insert into class set " . 
+  $q_string = "insert into st_class set " . 
     "cls_id       = NULL, " . 
     "cls_name     = \"" . $formVars['cls_name']     . "\"," . 
     "cls_template =   " . $formVars['cls_template'] . "," . 
@@ -99,18 +99,18 @@ if (isset($_POST['class'])) {
 <?php
 
 $q_string  = "select cls_id,cls_name,cls_template,cls_project,cls_title,cls_help ";
-$q_string .= "from class ";
+$q_string .= "from st_class ";
 $q_string .= "order by cls_id";
-$q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_class = mysqli_fetch_array($q_class)) {
+$q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_st_class = mysqli_fetch_array($q_st_class)) {
 
   print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_class['cls_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_template']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_project']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_title']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_help']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . $a_st_class['cls_id'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_name']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_template']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_project']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_title']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_help']) . "</td>\n";
   print "</tr>\n";
   $count++;
 
@@ -122,7 +122,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysqli_free_result($q_class);
+mysqli_free_result($q_st_class);
 
 ?>
 </table>

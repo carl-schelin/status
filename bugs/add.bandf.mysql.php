@@ -100,11 +100,11 @@
         if ($formVars['update'] == 0) {
 # add the user name if it's a new item, otherwise don't change it.
           $q_string = "bf_name   =  " . $formVars['bf_name']   . "," . $q_string;
-          $q_string = "insert into bandf set bf_id = NULL," . $q_string;
+          $q_string = "insert into st_bandf set bf_id = NULL," . $q_string;
           $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
         }
         if ($formVars['update'] == 1) {
-          $q_string = "update bandf set " . $q_string . " where bf_id = " . $formVars['id'];
+          $q_string = "update st_bandf set " . $q_string . " where bf_id = " . $formVars['id'];
           $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
         }
       }
@@ -125,38 +125,38 @@
   $output .= "</tr>";
 
   $q_string  = "select bf_id,bf_name,bf_borf,bf_week,bf_text,bf_dev ";
-  $q_string .= "from bandf ";
+  $q_string .= "from st_bandf ";
   $q_string .= "where bf_status = 0 and bf_borf = 1 ";
   $q_string .= "order by bf_week desc";
-  $q_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_bandf = mysqli_fetch_array($q_bandf)) {
+  $q_st_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_bandf = mysqli_fetch_array($q_st_bandf)) {
 
     $q_string  = "select usr_name ";
     $q_string .= "from users ";
-    $q_string .= "where usr_id = " . $a_bandf['bf_name'];
+    $q_string .= "where usr_id = " . $a_st_bandf['bf_name'];
     $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_name = mysqli_fetch_array($q_users);
 
     $q_string  = "select usr_name ";
     $q_string .= "from users ";
-    $q_string .= "where usr_id = " . $a_bandf['bf_dev'];
+    $q_string .= "where usr_id = " . $a_st_bandf['bf_dev'];
     $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_dev = mysqli_fetch_array($q_users);
 
     $dev = $a_dev['usr_name'];
-    if ($a_bandf['bf_dev'] == 0) {
+    if ($a_st_bandf['bf_dev'] == 0) {
       $dev = "Unassigned";
     }
 
     $q_string  = "select wk_date ";
     $q_string .= "from weeks ";
-    $q_string .= "where wk_id = " . $a_bandf['bf_week'];
+    $q_string .= "where wk_id = " . $a_st_bandf['bf_week'];
     $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_weeks = mysqli_fetch_array($q_weeks);
 
     if (check_userlevel($db, $AL_Admin)) {
-      $linkdel = "<a href='#' onClick=\"javascript:delete_item('add.bandf.del.php?id=" . $a_bandf['bf_id'] . "');\">";
-      $linkstart = "<a href='#' onClick=\"javascript:show_file('add.bandf.fill.php?id=" . $a_bandf['bf_id'] . "');\">";
+      $linkdel = "<a href='#' onClick=\"javascript:delete_item('add.bandf.del.php?id=" . $a_st_bandf['bf_id'] . "');\">";
+      $linkstart = "<a href='#' onClick=\"javascript:show_file('add.bandf.fill.php?id=" . $a_st_bandf['bf_id'] . "');\">";
       $linkend = "</a>";
     } else {
       $linkdel = "";
@@ -168,7 +168,7 @@
     $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "x" . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_name['usr_name'] . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_weeks['wk_date'] . $linkend . "</td>";
-    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . mysqli_real_escape_string($db, $a_bandf['bf_text']) . $linkend . "</td>";
+    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . mysqli_real_escape_string($db, $a_st_bandf['bf_text']) . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $dev . $linkend . "</td>";
     $output .= "</tr>";
 
@@ -191,38 +191,38 @@
   $output .= "</div>";
 
   $q_string  = "select bf_id,bf_name,bf_borf,bf_week,bf_text,bf_dev ";
-  $q_string .= "from bandf ";
+  $q_string .= "from st_bandf ";
   $q_string .= "where bf_status = 0 and bf_borf = 0 ";
   $q_string .= "order by bf_week desc";
-  $q_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_bandf = mysqli_fetch_array($q_bandf)) {
+  $q_st_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_bandf = mysqli_fetch_array($q_st_bandf)) {
 
     $q_string  = "select usr_name ";
     $q_string .= "from users ";
-    $q_string .= "where usr_id = " . $a_bandf['bf_name'];
+    $q_string .= "where usr_id = " . $a_st_bandf['bf_name'];
     $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_name = mysqli_fetch_array($q_users);
 
     $q_string  = "select usr_name ";
     $q_string .= "from users ";
-    $q_string .= "where usr_id = " . $a_bandf['bf_dev'];
+    $q_string .= "where usr_id = " . $a_st_bandf['bf_dev'];
     $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_dev = mysqli_fetch_array($q_users);
 
     $dev = $a_dev['usr_name'];
-    if ($a_bandf['bf_dev'] == 0) {
+    if ($a_st_bandf['bf_dev'] == 0) {
       $dev = "Unassigned";
     }
 
     $q_string  = "select wk_date ";
     $q_string .= "from weeks ";
-    $q_string .= "where wk_id = " . $a_bandf['bf_week'];
+    $q_string .= "where wk_id = " . $a_st_bandf['bf_week'];
     $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_weeks = mysqli_fetch_array($q_weeks);
 
     if (check_userlevel($db, $AL_Admin)) {
-      $linkdel = "<a href=\"#\" onClick=\"javascript:delete_item('add.bandf.del.php?id=" . $a_bandf['bf_id'] . "');\">";
-      $linkstart = "<a href=\"#\" onClick=\"javascript:show_file('add.bandf.fill.php?id=" . $a_bandf['bf_id'] . "');\">";
+      $linkdel = "<a href=\"#\" onClick=\"javascript:delete_item('add.bandf.del.php?id=" . $a_st_bandf['bf_id'] . "');\">";
+      $linkstart = "<a href=\"#\" onClick=\"javascript:show_file('add.bandf.fill.php?id=" . $a_st_bandf['bf_id'] . "');\">";
       $linkend = "</a>";
     } else {
       $linkdel = "";
@@ -234,13 +234,13 @@
     $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "x" . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_name['usr_name'] . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_weeks['wk_date'] . $linkend . "</td>";
-    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . mysqli_real_escape_string($db, $a_bandf['bf_text']) . $linkend . "</td>";
+    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . mysqli_real_escape_string($db, $a_st_bandf['bf_text']) . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $dev . $linkend . "</td>";
     $output .= "</tr>";
 
   }
 
-  mysqli_free_result($q_bandf);
+  mysqli_free_result($q_st_bandf);
 
 ?>
 

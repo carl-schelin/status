@@ -20,19 +20,19 @@
     }
 
     if (check_userlevel($db, $AL_Admin)) {
-      logaccess($db, $_SESSION['uid'], $package, "Requesting record " . $formVars['id'] . " from epics");
+      logaccess($db, $_SESSION['uid'], $package, "Requesting record " . $formVars['id'] . " from st_epics");
 
       $q_string  = "select epic_jira,epic_title,epic_closed ";
-      $q_string .= "from epics ";
+      $q_string .= "from st_epics ";
       $q_string .= "where epic_id = " . $formVars['id'];
-      $q_epics = mysqli_query($db, $q_string) or die (mysqli_error($db));
-      $a_epics = mysqli_fetch_array($q_epics);
-      mysqli_free_result($q_epics);
+      $q_st_epics = mysqli_query($db, $q_string) or die (mysqli_error($db));
+      $a_st_epics = mysqli_fetch_array($q_st_epics);
+      mysqli_free_result($q_st_epics);
 
-      print "document.epics.epic_jira.value = '"       . mysqli_real_escape_string($db, $a_epics['epic_jira'])       . "';\n";
-      print "document.epics.epic_title.value = '"      . mysqli_real_escape_string($db, $a_epics['epic_title'])      . "';\n";
+      print "document.epics.epic_jira.value = '"       . mysqli_real_escape_string($db, $a_st_epics['epic_jira'])       . "';\n";
+      print "document.epics.epic_title.value = '"      . mysqli_real_escape_string($db, $a_st_epics['epic_title'])      . "';\n";
 
-      if ($a_epics['epic_closed']) {
+      if ($a_st_epics['epic_closed']) {
         print "document.epics.epic_closed.checked = true;\n";
       } else {
         print "document.epics.epic_closed.checked = false;\n";

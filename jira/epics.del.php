@@ -20,10 +20,10 @@
     }
 
     if (check_userlevel($db, $AL_Developer)) {
-      logaccess($db, $_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from epics");
+      logaccess($db, $_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from st_epics");
 
       $q_string  = "delete ";
-      $q_string .= "from epics ";
+      $q_string .= "from st_epics ";
       $q_string .= "where epic_id = " . $formVars['id'];
       $insert = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
 

@@ -229,23 +229,23 @@
 
   // Retrieve the class headers. Start with 5 as 1-4 are obsolete (but still used)
   $q_string  = "select cls_id,cls_name,cls_project,cls_help ";
-  $q_string .= "from class ";
+  $q_string .= "from st_class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_class = mysqli_fetch_array($q_class)) {
-    if ($a_class['cls_id'] == $formVars['class']) {
+  $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_class = mysqli_fetch_array($q_st_class)) {
+    if ($a_st_class['cls_id'] == $formVars['class']) {
       $checked = " checked";
     } else {
       $checked = "";
     }
     $output .= "<tr>";
-    $output .= "<td class=\"delete ui-widget-content\" title=\"Classification. Project names are only displayed in the Projects entry." . $a_class['cls_id'] . "\" width=3%>";
-    $output .= "<input type=\"radio\"" . $checked . " value=\"" . $a_class['cls_id'] . "\" name=\"report\" ";
+    $output .= "<td class=\"delete ui-widget-content\" title=\"Classification. Project names are only displayed in the Projects entry." . $a_st_class['cls_id'] . "\" width=3%>";
+    $output .= "<input type=\"radio\"" . $checked . " value=\"" . $a_st_class['cls_id'] . "\" name=\"report\" ";
     $output .= "onclick=\"touch_class();\">";
     $output .= "</td>";
 
-    $output .= "<td class=\"ui-widget-content\" title=\"" . $a_class['cls_help'] . "\" id=\"clsready" . $a_class['cls_id'] . "\" colspan=2>";
-    $output .= "<b>" . $a_class['cls_name'] . "</b>";
+    $output .= "<td class=\"ui-widget-content\" title=\"" . $a_st_class['cls_help'] . "\" id=\"clsready" . $a_st_class['cls_id'] . "\" colspan=2>";
+    $output .= "<b>" . $a_st_class['cls_name'] . "</b>";
     $output .= "</td>";
     $output .= "</tr>";
 
@@ -255,7 +255,7 @@
     $q_string .= "from todo ";
     $q_string .= "where " . $showall . "(todo_user = " . $formVars['user'] . $showyour . ") ";
     $q_string .= "and todo_group = " . $_SESSION['group'] . " ";
-    $q_string .= "and todo_class = " . $a_class['cls_id'] . " ";
+    $q_string .= "and todo_class = " . $a_st_class['cls_id'] . " ";
     $q_string .= "order by todo_project,todo_due,todo_day,todo_status,todo_priority,todo_name ";
     $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     while ($a_todo = mysqli_fetch_assoc($q_todo)) {
@@ -266,7 +266,7 @@
       $q_string .= "where prj_id = " . $a_todo['todo_project'];
       $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       $a_project = mysqli_fetch_assoc($q_project);
-      if ($a_project['prj_desc'] != $c_project && $a_class['cls_project'] == 1) {
+      if ($a_project['prj_desc'] != $c_project && $a_st_class['cls_project'] == 1) {
         $output .= "<tr>";
         $output .= "<td class=\"delete ui-widget-content\">*</td>";
         $output .= "<td class=\"ui-widget-content\" colspan=2><b>" . $a_project['prj_desc'] . "</b></td>";
@@ -339,7 +339,7 @@
   }
 }
 
-mysqli_free_result($q_class);
+mysqli_free_result($q_st_class);
 
 $output .= "</table>";
 

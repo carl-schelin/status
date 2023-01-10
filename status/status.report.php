@@ -68,20 +68,20 @@
   $a_users = mysqli_fetch_array($q_users);
 
   $q_string  = "select COUNT(cls_id) ";
-  $q_string .= "from class ";
+  $q_string .= "from st_class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_class = mysqli_fetch_array($q_class);
+  $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_class = mysqli_fetch_array($q_st_class);
 
-  $numclass = $a_class['COUNT(cls_id)'];
+  $numclass = $a_st_class['COUNT(cls_id)'];
 
   $q_string  = "select cls_id ";
-  $q_string .= "from class ";
+  $q_string .= "from st_class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_class = mysqli_fetch_array($q_class);
+  $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_class = mysqli_fetch_array($q_st_class);
 
-  $class = $a_class['cls_id'];
+  $class = $a_st_class['cls_id'];
 
 ?>
 <!DOCTYPE HTML>
@@ -410,12 +410,12 @@ function textCounter(field,cntfield,maxlimit) {
 <option value="0">No Epic for these User Stories.</option>
 <?php
   $q_string  = "select epic_id,epic_jira,epic_title ";
-  $q_string .= "from epics ";
+  $q_string .= "from st_epics ";
   $q_string .= "where epic_user = 5 and epic_closed = 0 ";
   $q_string .= "order by epic_jira ";
-  $q_epics = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_epics = mysqli_fetch_array($q_epics)) {
-    print "  <option value=\"" . $a_epics['epic_id'] . "\">" . $a_epics['epic_jira'] . " - " . $a_epics['epic_title'] . "</option>\n";
+  $q_st_epics = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_epics = mysqli_fetch_array($q_st_epics)) {
+    print "  <option value=\"" . $a_st_epics['epic_id'] . "\">" . $a_st_epics['epic_jira'] . " - " . $a_st_epics['epic_title'] . "</option>\n";
   }
 ?>
 </select></td>

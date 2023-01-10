@@ -43,12 +43,12 @@
 
 // Now get the last week in the database to set the week drop down
   $q_string  = "select bf_week ";
-  $q_string .= "from bandf ";
+  $q_string .= "from st_bandf ";
   $q_string .= "order by bf_week";
-  $q_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_bandf = mysqli_fetch_array($q_bandf) ) {
-    $week = $a_bandf['bf_week'];
+  while ( $a_st_bandf = mysqli_fetch_array($q_bst_andf) ) {
+    $week = $a_st_bandf['bf_week'];
   }
 
 ?>

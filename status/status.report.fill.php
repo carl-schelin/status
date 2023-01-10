@@ -33,12 +33,12 @@
       $a_users = mysqli_fetch_array($q_users);
 
       $q_string  = "select cls_id ";
-      $q_string .= "from class ";
+      $q_string .= "from st_class ";
       $q_string .= "where cls_template = " . $a_users['usr_template'];
-      $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));;
-      $a_class = mysqli_fetch_array($q_class);
+      $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));;
+      $a_st_class = mysqli_fetch_array($q_st_class);
 
-      $class = $a_class['cls_id'];
+      $class = $a_st_class['cls_id'];
 
 // Retrieve the task array
       $q_string  = "select * ";

@@ -139,23 +139,23 @@
       }
 
       $q_string  = "select epic_id,epic_jira,epic_title ";
-      $q_string .= "from epics ";
+      $q_string .= "from st_epics ";
       $q_string .= "where epic_user = " . $_SESSION['uid'] . " and epic_closed = 0 ";
       $q_string .= "order by epic_jira ";
-      $q_epics = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
-      if (mysqli_num_rows($q_epics) > 0) {
-        while ($a_epics = mysqli_fetch_array($q_epics)) {
+      $q_st_epics = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+      if (mysqli_num_rows($q_st_epics) > 0) {
+        while ($a_st_epics = mysqli_fetch_array($q_st_epics)) {
 
           $class = 'ui-widget-content';
 
           $output .= "<tr>";
           $output .= "  <td class=\"" . $class . " button\">" . "Epic: " . "</td>";
-          $output .= "  <td class=\"" . $class . "\" colspan=\"3\">" . $a_epics['epic_jira'] . " - " . $a_epics['epic_title'] . "</td>";
+          $output .= "  <td class=\"" . $class . "\" colspan=\"3\">" . $a_st_epics['epic_jira'] . " - " . $a_st_epics['epic_title'] . "</td>";
           $output .= "</tr>";
 
           $q_string  = "select user_id,user_jira,user_task,user_closed ";
           $q_string .= "from userstories ";
-          $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $a_epics['epic_id'] . " and user_closed = 0 ";
+          $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $a_st_epics['epic_id'] . " and user_closed = 0 ";
           $q_string .= "order by user_jira ";
           $q_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
           if (mysqli_num_rows($q_userstories) > 0) {
