@@ -19,8 +19,8 @@
       $formVars['id'] = clean($_GET['id'], 10);
     }
 
-    if (check_userlevel($AL_User)) {
-      logaccess($_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from todo");
+    if (check_userlevel($db, $AL_User)) {
+      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from todo");
 
 // id of the record being pulled from the database.
       $formVars['user'] = clean($_GET['user'], 10);
@@ -29,14 +29,14 @@
       $q_string  = "select usr_template,usr_projects ";
       $q_string .= "from users ";
       $q_string .= "where usr_id = " . $formVars['user'];
-      $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_users = mysql_fetch_array($q_users);
+      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_users = mysqli_fetch_array($q_users);
 
       $q_string  = "select cls_id ";
       $q_string .= "from class ";
       $q_string .= "where cls_template = " . $a_users['usr_template'];
-      $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));;
-      $a_class = mysql_fetch_array($q_class);
+      $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));;
+      $a_class = mysqli_fetch_array($q_class);
 
       $class = $a_class['cls_id'];
 
@@ -44,10 +44,10 @@
       $q_string  = "select * ";
       $q_string .= "from status ";
       $q_string .= "where strp_id = " . $formVars['id'];
-      $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_status = mysql_fetch_array($q_status);
+      $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_status = mysqli_fetch_array($q_status);
 
-      mysql_free_result($q_status);
+      mysqli_free_result($q_status);
 
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
@@ -57,8 +57,8 @@
       $q_string .= "from project ";
       $q_string .= "where prj_group = " . $_SESSION['group'] . " and prj_close = 0 ";
       $q_string .= "order by prj_desc";
-      $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      while ( $a_project = mysql_fetch_array($q_project) ) {
+      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ( $a_project = mysqli_fetch_array($q_project) ) {
         if (strlen($a_users['usr_projects']) == 0) {
           if ($a_project['prj_id'] == $a_status['strp_project']) {
             $project = $count;
@@ -86,7 +86,7 @@ document.taskmgr.report['<?php print $a_status['strp_class'] - $class; ?>'].chec
 document.taskmgr.progress['<?php print $a_status['strp_progress']; ?>'].selected = true;
 document.taskmgr.tcktype['<?php print $a_status['strp_type']; ?>'].selected = true;
 document.taskmgr.day['<?php print $a_status['strp_day']; ?>'].checked = true;
-document.taskmgr.task.value = "<?php print mysql_real_escape_string($a_status['strp_task']); ?>";
+document.taskmgr.task.value = "<?php print mysqli_real_escape_string($db, $a_status['strp_task']); ?>";
 document.taskmgr.save.checked = <?php if ($a_status['strp_save']) { print "true"; } else { print "false"; }; ?>;
 document.taskmgr.quarter.checked = <?php if ($a_status['strp_quarter']) { print "true"; } else { print "false"; }; ?>;
 document.taskmgr.time.value = <?php print $a_status['strp_time']; ?>;

@@ -20,15 +20,15 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
 
-      logaccess($_SESSION['username'], "todo.option.php", "Building a project list: user=" . $formVars['user']);
+      logaccess($db, $_SESSION['username'], "todo.option.php", "Building a project list: user=" . $formVars['user']);
 
       $q_string  = "select usr_group ";
       $q_string .= "from users ";
       $q_string .= "where usr_id = " . $formVars['user'];
-      $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_users = mysql_fetch_array($q_users);
+      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_users = mysqli_fetch_array($q_users);
 
 // Only change the list if the person selected is in a different group. Prevents resetting the project id when you change people.
       if ($a_users['usr_group'] != $_SESSION['group']) {
@@ -42,10 +42,10 @@
         $q_string .= "from project ";
         $q_string .= "where prj_group = " . $a_users['usr_group'] . " and prj_close = 0 ";
         $q_string .= "order by prj_desc";
-        $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+        $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 // create the javascript bit for populating the project dropdown box.
-        while ( $a_project = mysql_fetch_array($q_project) ) {
+        while ( $a_project = mysqli_fetch_array($q_project) ) {
           print "selbox.options[selbox.options.length] = new Option(\"" . $a_project['prj_desc'] . "\"," . $a_project['prj_id'] . ");\n";
         }
       }

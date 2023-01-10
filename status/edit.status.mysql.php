@@ -16,12 +16,12 @@
     $package = "edit.status.mysql.php";
     $formVars['id'] = clean($_GET['id'], 10);
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
       $formVars['week']     = clean($_GET['week'], 10);
       $formVars['class']    = clean($_GET['class'], 10);
       $formVars['task']     = clean($_GET['task'], 255);
 
-      logaccess($_SESSION['username'], $package, "Editing record " . $formVars['id'] . " in status");
+      logaccess($db, $_SESSION['username'], $package, "Editing record " . $formVars['id'] . " in status");
 
       $query = "update status set " . 
         "strp_week      =   " . $formVars['week']     . ", " . 
@@ -29,7 +29,7 @@
         "strp_task      = \"" . $formVars['task']     . "\" " . 
         "where strp_id  =   " . $formVars['id'];
 
-      $insert = mysql_query($query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysql_error()));
+      $insert = mysqli_query($db, $query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysqli_error($db)));
     }
   }
 

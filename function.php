@@ -14,27 +14,31 @@ function clean($input, $maxlength) {
 
 # log who did what
 
-function logaccess($user, $source, $detail) {
+function logaccess($p_db, $p_user, $p_source, $p_detail) {
   include('settings.php');
+  $package = 'function.php';
 
   $query = "insert into log set " .
     "log_id        = NULL, " .
-    "log_user      = \"" . $user   . "\", " .
-    "log_source    = \"" . $source . "\", " .
-    "log_detail    = \"" . $detail . "\"";
+    "log_user      = \"" . $p_user   . "\", " .
+    "log_source    = \"" . $p_source . "\", " .
+    "log_detail    = \"" . $p_detail . "\"";
 
-  $insert = mysql_query($query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysql_error()));
+  $insert = mysqli_query($p_db, $query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysqli_error($p_db)));
 
 }
 
 # default access is $AL_Admin
-function check_userlevel( $p_level = 2 ) {
+function check_userlevel( $p_db, $p_level = 2 ) {
+  $package = 'function.php';
+
   if (isset($_SESSION['username'])) {
+    include('settings.php');
     $q_string  = "select usr_level ";
     $q_string .= "from users ";
     $q_string .= "where usr_name = \"" . $_SESSION['username'] . "\"";
-    $q_user_level = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    $a_user_level = mysql_fetch_array($q_user_level);
+    $q_user_level = mysqli_query($p_db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($p_db)));
+    $a_user_level = mysqli_fetch_array($q_user_level);
 
     if ($a_user_level['usr_level'] <= $p_level) {
       return(1);
@@ -47,10 +51,11 @@ function check_userlevel( $p_level = 2 ) {
 }
 
 function return_Index($p_check, $p_string) {
+  $package = 'function.php';
   $r_index = 0;
   $count = 1;
-  $q_table = mysql_query($p_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $p_string . "&mysql=" . mysql_error()));
-  while ($a_table = mysql_fetch_row($q_table)) {
+  $q_table = mysqli_query($db, $p_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $p_string . "&mysql=" . mysqli_error($db)));
+  while ($a_table = mysqli_fetch_row($q_table)) {
     if ($p_check == $a_table[0]) {
       $r_index = $count;
     }
@@ -116,6 +121,7 @@ function myUrlDecode($string) {
 }
 
 function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
+  $package = 'function.php';
   $divout .= "<div id=\"down_" . $ras_id . "\" style=\"display:none\">\n";
   $divout .= "<table>\n";
 
@@ -153,8 +159,8 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
     $q_string .= "from status ";
     $q_string .= "left join project on project.prj_id = status.strp_project ";
     $q_string .= "where prj_code = " . $ras_code . " and strp_yearmon = " . $divyearmon . " and strp_name = " . $ras_resource;
-    $q_divstatus = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ($a_divstatus = mysql_fetch_array($q_divstatus)) {
+    $q_divstatus = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_divstatus = mysqli_fetch_array($q_divstatus)) {
       $divouttotal += $a_divstatus['strp_time'];
     }
 
@@ -179,8 +185,8 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
   $q_string .= "left join users on ras_resource = users.usr_id ";
   $q_string .= "where ras_name not like \"%PTO%\" and ras_group = " . $ras_group . " and ras_resource = " . $ras_resource . " and ras_code = " . $ras_code . " ";
   $q_string .= "order by ras_id desc";
-  $q_showras = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_showras = mysql_fetch_array($q_showras)) {
+  $q_showras = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_showras = mysqli_fetch_array($q_showras)) {
     $viewras[1] = $a_showras['ras_jan'];
     $viewras[2] = $a_showras['ras_feb'];
     $viewras[3] = $a_showras['ras_mar'];
@@ -225,6 +231,16 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
   $divout .= "</div>\n\n";
 
   return $divout;
+}
+
+# connect to the server
+function db_connect($p_server, $p_database, $p_user, $p_pass){
+
+  $r_db = mysqli_connect($p_server, $p_user, $p_pass, $p_database);
+
+  $db_select = mysqli_select_db($r_db, $p_database);
+
+  return $r_db;
 }
 
 ?>

@@ -19,8 +19,8 @@
       $formVars['id'] = clean($_GET['id'], 10);
     }
 
-    if (check_userlevel($AL_User)) {
-      logaccess($_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from todo");
+    if (check_userlevel($db, $AL_User)) {
+      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from todo");
 
       $formVars['user'] = clean($_GET['user'], 10);
 
@@ -28,14 +28,14 @@
       $q_string = "select usr_template,usr_projects ";
       $q_string .= "from users ";
       $q_string .= "where usr_id = " . $formVars['user'];
-      $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_users = mysql_fetch_array($q_users);
+      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_users = mysqli_fetch_array($q_users);
 
       $q_string  = "select cls_id ";
       $q_string .= "from class ";
       $q_string .= "where cls_template = " . $a_users['usr_template'];
-      $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));;
-      $a_class = mysql_fetch_array($q_class);
+      $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));;
+      $a_class = mysqli_fetch_array($q_class);
 
       $class = $a_class['cls_id'];
 
@@ -43,8 +43,8 @@
       $q_string  = "select * ";
       $q_string .= "from todo ";
       $q_string .= "where todo_id = " . $formVars['id'];
-      $q_todo = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_todo = mysql_fetch_array($q_todo);
+      $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_todo = mysqli_fetch_array($q_todo);
 
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
@@ -55,8 +55,8 @@
       $q_string .= "from project ";
       $q_string .= "where prj_group = " . $_SESSION['group'] . " and prj_close = 0 ";
       $q_string .= "order by prj_desc";
-      $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      while ( $a_project = mysql_fetch_array($q_project) ) {
+      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ( $a_project = mysqli_fetch_array($q_project) ) {
         if (strlen($a_users['usr_projects']) == 0) {
           if ($a_project['prj_id'] == $a_todo['todo_project']) {
             $project = $count;
@@ -86,8 +86,8 @@
 #      $q_string .= "from project ";
 #      $q_string .= "where prj_group = " . $_SESSION['group'] . " and prj_close = 0 ";
 #      $q_string .= "order by prj_desc";
-#      $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-#      while ( $a_project = mysql_fetch_array($q_project) ) {
+#      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+#      while ( $a_project = mysqli_fetch_array($q_project) ) {
 #        if ($a_project['prj_id'] == $a_todo['todo_project']) {
 #          $project = $count;
 #        } else {

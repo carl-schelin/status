@@ -10,7 +10,7 @@
 
   $package = "index.php";
 
-  logaccess($formVars['username'], $package, "Accessing the script.");
+  logaccess($db, $formVars['username'], $package, "Accessing the script.");
 
 ### This bit returns the index for the current week. Not everyone uses just the todo function.
   $today = date('w');
@@ -20,8 +20,8 @@
   $q_string  = "select wk_id,wk_date ";
   $q_string .= "from weeks ";
   $q_string .= "where wk_date = \"" . $thisweek . "\" ";
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_weeks = mysql_fetch_array($q_weeks);
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_weeks = mysqli_fetch_array($q_weeks);
 
   $currentweek = $a_weeks['wk_id'];
 ###
@@ -33,8 +33,8 @@
   $q_string  = "select usr_id,usr_first,usr_last,usr_group ";
   $q_string .= "from users ";
   $q_string .= "where usr_name = \"" . $_SESSION['username'] . "\" ";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   $formVars['id'] = $a_users['usr_id'];
   $formVars['username'] = $a_users['usr_first'] . ' ' . $a_users['usr_last'];
@@ -47,8 +47,8 @@
   $week = 0;
   $q_string  = "select wk_id,wk_date ";
   $q_string .= "from weeks ";
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_weeks = mysql_fetch_array($q_weeks) ) {
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
     $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
   }
   $weektot = count($weekval) + 1;
@@ -61,8 +61,8 @@
   $q_string .= "from status ";
   $q_string .= "where strp_name = " . $formVars['id'] . " ";
   $q_string .= "order by strp_week ";
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_status = mysql_fetch_array($q_status) ) {
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_status = mysqli_fetch_array($q_status) ) {
     $week = $a_status['strp_week'];
   }
 

@@ -1,6 +1,7 @@
 <?php
   include('settings.php');
   $called = 'no';
+  include($Sitepath . '/function.php');
 
 # if the person hasn't logged in and is using the email login link then set the variable here.
 # the check_login() function will manage the magickey variable.
@@ -15,11 +16,12 @@
     include($Loginpath . '/check.php');
   }
 
-  check_login($AL_Guest);
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_Guest);
 
   $formVars['uid']      = $_SESSION['uid'];
   $formVars['username'] = $_SESSION['username'];
   $formVars['group']    = $_SESSION['group'];
-
-  include($Sitepath . '/function.php');
 ?>

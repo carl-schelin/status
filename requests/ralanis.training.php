@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "ralanis.training.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   if (isset($_GET['group'])) {
     $formVars['group']     = clean($_GET['group'], 4);
@@ -31,13 +35,13 @@
     $formVars['endweek'] = 279;
   }
 
-  logaccess($_SESSION['username'], "ralanis.training.php", "Viewing Training: startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " group=" . $formVars['group']);
+  logaccess($db, $_SESSION['username'], "ralanis.training.php", "Viewing Training: startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " group=" . $formVars['group']);
 
   $q_string  = "select grp_name ";
   $q_string .= "from groups ";
   $q_string .= "where grp_id = " . $formVars['group'];
-  $q_groups = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_groups = mysql_fetch_array($q_groups);
+  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_groups = mysqli_fetch_array($q_groups);
 
   if ($a_groups['grp_name'] == '') {
     $a_groups['grp_name'] = "Unknown Group";
@@ -46,8 +50,8 @@
   $q_string  = "select prj_id ";
   $q_string .= "from project ";
   $q_string .= "where prj_code = 7884 and prj_task like \"%Training%\"";
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_project = mysql_fetch_array($q_project);
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_project = mysqli_fetch_array($q_project);
 
   if ($a_project['prj_id'] == '') {
     $a_project['prj_id'] = 0;
@@ -84,8 +88,8 @@
   $q_string .= "from status ";
   $q_string .= "left join users on users.usr_id = status.strp_name ";
   $q_string .= "where strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and strp_project = " . $a_project['prj_id'] . " and usr_group = " . $formVars['group'];
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_status = mysql_fetch_array($q_status)) {
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_status = mysqli_fetch_array($q_status)) {
 
     print "<tr>\n";
     print "  <td class=\"ui-widget-content\">" . $a_status['usr_last'] . ", " . $a_status['usr_first'] . "</td>\n";

@@ -20,7 +20,7 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel(2)) {
+    if (check_userlevel($db, $AL_Admin)) {
       if ($formVars['update'] == 0 || $formVars['update'] == 1) {
         $formVars['id']               = clean($_GET['id'],                10);
         $formVars['user_epic']        = clean($_GET['user_epic'],         10);
@@ -39,7 +39,7 @@
         }
     
         if (strlen($formVars['user_jira']) > 0) {
-          logaccess($_SESSION['uid'], $package, "Building the query.");
+          logaccess($db, $_SESSION['uid'], $package, "Building the query.");
 
           $q_string =
             "user_epic        =   " . $formVars['user_epic']     . "," .
@@ -55,16 +55,16 @@
             $query = "update userstories set " . $q_string . " where user_id = " . $formVars['id'];
           }
 
-          logaccess($_SESSION['uid'], $package, "Saving Changes to: " . $formVars['user_jira']);
+          logaccess($db, $_SESSION['uid'], $package, "Saving Changes to: " . $formVars['user_jira']);
 
-          mysql_query($query) or die($query . ": " . mysql_error());
+          mysqli_query($db, $query) or die($query . ": " . mysqli_error($db));
         } else {
           print "alert('You must input data before saving changes.');\n";
         }
       }
 
 
-      logaccess($_SESSION['uid'], $package, "Creating the table for viewing.");
+      logaccess($db, $_SESSION['uid'], $package, "Creating the table for viewing.");
 
       $output  = "<p></p>\n";
       $output .= "<table class=\"ui-styled-table\">\n";
@@ -90,7 +90,7 @@
 
       $output .= "<table class=\"ui-styled-table\">\n";
       $output .= "<tr>\n";
-      if (check_userlevel(1)) {
+      if (check_userlevel($db, $AL_Developer)) {
         $output .= "  <th class=\"ui-state-default\">Del</th>\n";
       }
       $output .= "  <th class=\"ui-state-default\">Jira</th>\n";
@@ -111,9 +111,9 @@
       $q_string .= "from userstories ";
       $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = 0 ";
       $q_string .= "order by user_jira ";
-      $q_userstories = mysql_query($q_string) or die($q_string . ": " . mysql_error());
-      if (mysql_num_rows($q_userstories) > 0) {
-        while ($a_userstories = mysql_fetch_array($q_userstories)) {
+      $q_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+      if (mysqli_num_rows($q_userstories) > 0) {
+        while ($a_userstories = mysqli_fetch_array($q_userstories)) {
 
           $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
           $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_userstories['user_id'] . "');\">";
@@ -127,7 +127,7 @@
           }
 
           $output .= "<tr>";
-          if (check_userlevel(1)) {
+          if (check_userlevel($db, $AL_Developer)) {
             $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
           }
           $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_userstories['user_jira']  . $linkend . "</td>";
@@ -142,9 +142,9 @@
       $q_string .= "from epics ";
       $q_string .= "where epic_user = " . $_SESSION['uid'] . " and epic_closed = 0 ";
       $q_string .= "order by epic_jira ";
-      $q_epics = mysql_query($q_string) or die($q_string . ": " . mysql_error());
-      if (mysql_num_rows($q_epics) > 0) {
-        while ($a_epics = mysql_fetch_array($q_epics)) {
+      $q_epics = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+      if (mysqli_num_rows($q_epics) > 0) {
+        while ($a_epics = mysqli_fetch_array($q_epics)) {
 
           $class = 'ui-widget-content';
 
@@ -157,9 +157,9 @@
           $q_string .= "from userstories ";
           $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $a_epics['epic_id'] . " and user_closed = 0 ";
           $q_string .= "order by user_jira ";
-          $q_userstories = mysql_query($q_string) or die($q_string . ": " . mysql_error());
-          if (mysql_num_rows($q_userstories) > 0) {
-            while ($a_userstories = mysql_fetch_array($q_userstories)) {
+          $q_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+          if (mysqli_num_rows($q_userstories) > 0) {
+            while ($a_userstories = mysqli_fetch_array($q_userstories)) {
 
               $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
               $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_userstories['user_id'] . "');\">";
@@ -174,7 +174,7 @@
               }
 
               $output .= "<tr>";
-              if (check_userlevel(1)) {
+              if (check_userlevel($db, $AL_Developer)) {
                 $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
               }
               $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_userstories['user_jira']  . $linkend . "</td>";
@@ -193,16 +193,16 @@
 
       $output .= "</table>";
 
-      mysql_free_result($q_userstories);
+      mysqli_free_result($q_userstories);
 
       print "document.userstories.user_jira.value = '';\n";
       print "document.userstories.user_task.value = '';\n";
       print "document.userstories.user_closed.checked = false;\n";
 
-      print "document.getElementById('story_mysql').innerHTML = '" . mysql_real_escape_string($output) . "';\n\n";
+      print "document.getElementById('story_mysql').innerHTML = '" . mysqli_real_escape_string($db, $output) . "';\n\n";
 
     } else {
-      logaccess($_SESSION['uid'], $package, "Unauthorized access.");
+      logaccess($db, $_SESSION['uid'], $package, "Unauthorized access.");
     }
   }
 ?>

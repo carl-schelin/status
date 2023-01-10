@@ -20,7 +20,7 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
 
       $formVars['id']        = clean($_GET['id'], 10);
       $formVars['user']      = clean($_GET['user'], 10);
@@ -33,27 +33,27 @@
       $debug = "";
       $DEBUG = 0;
 
-      logaccess($_SESSION['username'], "quarterly.mysql.php", "Accessing quarterly.mysql.php " . $formVars['id'] . ": startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " user=" . $formVars['user'] . " group=" . $formVars['group'] . " save=" . $formVars['save']);
+      logaccess($db, $_SESSION['username'], "quarterly.mysql.php", "Accessing quarterly.mysql.php " . $formVars['id'] . ": startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " user=" . $formVars['user'] . " group=" . $formVars['group'] . " save=" . $formVars['save']);
 
 #### Save incoming data if any.
 
       if ($formVars['save'] >= 0) {
 
-        logaccess($_SESSION['username'], "quarterly.mysql.php", "Updating status record " . $formVars['id'] . ": save=" . $formVars['save']);
+        logaccess($db, $_SESSION['username'], "quarterly.mysql.php", "Updating status record " . $formVars['id'] . ": save=" . $formVars['save']);
         $q_string  = "update status set ";
         $q_string .= "strp_quarter = " . $formVars['save'] . " ";
         $q_string .= "where strp_id = " . $formVars['id'];
-        $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+        $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
       }
 
       if ($formVars['move'] > 0) {
 
-        logaccess($_SESSION['username'], "quarterly.mysql.php", "Updating status record " . $formVars['id'] . ": move=" . $formVars['move']);
+        logaccess($db, $_SESSION['username'], "quarterly.mysql.php", "Updating status record " . $formVars['id'] . ": move=" . $formVars['move']);
         $q_string  = "update status set ";
         $q_string .= "strp_type = " . $formVars['move'] . " ";
         $q_string .= "where strp_id = " . $formVars['id'];
-        $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+        $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
       }
     }
@@ -67,8 +67,8 @@
 
   $q_string  = "select typ_id,typ_name ";
   $q_string .= "from type";
-  $q_type = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_type = mysql_fetch_array($q_type)) {
+  $q_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_type = mysqli_fetch_array($q_type)) {
 
     $type[$a_type['typ_id']] = $a_type['typ_name'];
   }
@@ -81,8 +81,8 @@
   $q_string  = "select usr_group ";
   $q_string .= "from users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   $usergroup = $a_users['usr_group'];
 
@@ -92,9 +92,9 @@
 
   $q_string  = "select wk_id,wk_date ";
   $q_string .= "from weeks";
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_weeks = mysql_fetch_array($q_weeks) ) {
+  while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
     $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
   }
 
@@ -106,9 +106,9 @@
   $first = 0;
   $q_string  = "select cls_id,cls_name,cls_project ";
   $q_string .= "from class";
-  $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_class = mysql_fetch_array($q_class) ) {
+  while ( $a_class = mysqli_fetch_array($q_class) ) {
     $classval[$a_class['cls_id']] = $a_class['cls_name'];
     $classprj[$a_class['cls_id']] = $a_class['cls_project'];
   }
@@ -120,9 +120,9 @@
   $project = 0;
   $q_string  = "select prj_id,prj_desc ";
   $q_string .= "from project"; 
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_project = mysql_fetch_array($q_project) ) {
+  while ( $a_project = mysqli_fetch_array($q_project) ) {
     $projval[$a_project['prj_id']] = $a_project['prj_desc'];
   }
 
@@ -133,9 +133,9 @@
   $progress = 0; 
   $q_string  = "select pro_id,pro_name ";
   $q_string .= "from progress";
-  $q_progress = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_progress = mysql_fetch_array($q_progress) ) {
+  while ( $a_progress = mysqli_fetch_array($q_progress) ) {
     $progval[$a_progress['pro_id']] = $a_progress['pro_name'];
   }
 
@@ -151,16 +151,16 @@
 ###
 
   if ($formVars['group'] > 0) {
-    if (check_userlevel($AL_Supervisor)) {
+    if (check_userlevel($db, $AL_Supervisor)) {
       $q_string = "select usr_id from users where usr_supervisor = " . $formVars['user'];
     }
-    if (check_userlevel($AL_Manager)) {
+    if (check_userlevel($db, $AL_Manager)) {
       $q_string = "select usr_id from users where usr_manager = " . $formVars['user'];
     }
-    if (check_userlevel($AL_Director)) {
+    if (check_userlevel($db, $AL_Director)) {
       $q_string = "select usr_id from users where usr_director = " . $formVars['user'];
     }
-    if (check_userlevel($AL_VicePresident)) {
+    if (check_userlevel($db, $AL_VicePresident)) {
       $q_string = "select usr_id from users where usr_vicepresident = " . $formVars['user'];
     }
 
@@ -173,8 +173,8 @@
     $prtor = "";
     $u_string = "";
 
-    $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ($a_users = mysql_fetch_array($q_users)) {
+    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_users = mysqli_fetch_array($q_users)) {
       $u_string .= $prtor . "strp_name = " . $a_users['usr_id'];
       if ($prtor == "") {
         $prtor = " or ";
@@ -203,15 +203,15 @@
   $q_string .= "from status ";
   $q_string .= "where (($u_string)$managerview) and (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_project,strp_type,strp_week";
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_status = mysql_fetch_array($q_status) ) {
+  while ( $a_status = mysqli_fetch_array($q_status) ) {
 
     $q_string  = "select usr_last ";
     $q_string .= "from users ";
     $q_string .= "where usr_id = " . $a_status['strp_name'];
-    $q_username = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    $a_username = mysql_fetch_array($q_username);
+    $q_username = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_username = mysqli_fetch_array($q_username);
 
     if ($project != $a_status['strp_project']) {
       if ($project > 0) {
@@ -274,7 +274,7 @@
     }
     $projectoutput .= "<a href=\"#\" onclick=\"show_file('quarterly.mysql.php?id=" . $a_status['strp_id'];
     $projectoutput .= "&startweek=" . $formVars['startweek'] . "&endweek=" . $formVars['endweek'] . "&user=" . $formVars['user'] . "&group=" . $formVars['group'];
-    $projectoutput .= "&save=" . $save . "');\">" . mysql_real_escape_string($a_status['strp_task']) . "</a>";
+    $projectoutput .= "&save=" . $save . "');\">" . mysqli_real_escape_string($db, $a_status['strp_task']) . "</a>";
     if ($formVars['group'] > 0) {
       $projectoutput .= " (" . $a_username['usr_last'] . ")";
     }
@@ -318,5 +318,5 @@
 
 ?>
 
-document.getElementById('from_mysql').innerHTML = '<?php print mysql_real_escape_string($output); ?>';
+document.getElementById('from_mysql').innerHTML = '<?php print mysqli_real_escape_string($db, $output); ?>';
 

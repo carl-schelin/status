@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "edit.todo.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $formVars['user']      = clean($_GET['user'], 10);
   $formVars['startweek'] = clean($_GET['startweek'], 4);
@@ -26,21 +30,21 @@
     $formVars['startweek'] = 1;
   }
 
-  logaccess($_SESSION['username'], "edit.todo.php", "Editing todo detail records: week=" . $formVars['startweek'] . " user=" . $formVars['user']);
+  logaccess($db, $_SESSION['username'], "edit.todo.php", "Editing todo detail records: week=" . $formVars['startweek'] . " user=" . $formVars['user']);
 
   $q_string = "select usr_id,usr_name ";
   $q_string .= "from users";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_users = mysql_fetch_array($q_users) ) {
+  while ( $a_users = mysqli_fetch_array($q_users) ) {
     if ($_SESSION['username'] == $a_users['usr_name']) {
       $formVars['id'] = $a_users['usr_id'];
     }
   }
 
   if ($formVars['user'] != $formVars['id']) {
-    check_login($AL_Supervisor);
-    logaccess($_SESSION['username'], "edit.status.php", "Escalated privileged access to " . $formVars['id']);
+    check_login($db, $AL_Supervisor);
+    logaccess($db, $_SESSION['username'], "edit.status.php", "Escalated privileged access to " . $formVars['id']);
   }
 
 ?>
@@ -90,9 +94,9 @@ function delete_line( p_script_url ) {
   $q_string  = "select usr_group,usr_template ";
   $q_string .= "from users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  $a_users = mysql_fetch_array($q_users);
+  $a_users = mysqli_fetch_array($q_users);
 
 #######
 # Retrieve all the weeks into the weekval array
@@ -100,9 +104,9 @@ function delete_line( p_script_url ) {
 
   $q_string  = "select wk_id,wk_date ";
   $q_string .= "from weeks";
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_weeks = mysql_fetch_array($q_weeks) ) {
+  while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
     $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
   }
   $weektot = count($weekval);
@@ -114,10 +118,10 @@ function delete_line( p_script_url ) {
   $q_string  = "select cls_id,cls_name ";
   $q_string .= "from class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $class = 0;
-  while ( $a_class = mysql_fetch_array($q_class) ) {
+  while ( $a_class = mysqli_fetch_array($q_class) ) {
     $classid[$class]    = $a_class['cls_id'];
     $classval[$class++] = $a_class['cls_name'];
   }
@@ -131,10 +135,10 @@ function delete_line( p_script_url ) {
   $q_string .= "from project ";
   $q_string .= "where prj_group = " . $a_users['usr_group'] . " ";
   $q_string .= "order by prj_name";
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $project = 0;
-  while ( $a_project = mysql_fetch_array($q_project) ) {
+  while ( $a_project = mysqli_fetch_array($q_project) ) {
     $projval[$project][0] = $a_project['prj_id'];
     $projval[$project++][1] = $a_project['prj_desc'];
   }
@@ -158,8 +162,8 @@ function delete_line( p_script_url ) {
   $q_string .= "from todo ";
   $q_string .= "where todo_completed = 0 and todo_user = " . $formVars['user'] . " ";
   $q_string .= "order by todo_due,todo_project";
-  $q_todo = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_todo = mysql_fetch_array($q_todo) ) {
+  $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_todo = mysqli_fetch_array($q_todo) ) {
 
     print "<tr>\n";
 

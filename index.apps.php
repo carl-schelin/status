@@ -10,7 +10,7 @@
 
   $package = "index.apps.php";
 
-  logaccess($formVars['username'], $package, "Checking out the index.");
+  logaccess($db, $formVars['username'], $package, "Checking out the index.");
 
 ?>
 <!DOCTYPE HTML>
@@ -40,7 +40,7 @@ $(document).ready( function() {
 
 <ul>
 <?php
-  if (check_userlevel($AL_Supervisor)) {
+  if (check_userlevel($db, $AL_Supervisor)) {
 ?>
   <li><a href="<?php print $Statusroot; ?>/managers.php">Management View</a> - View status reports for your reports.</li>
 <?php

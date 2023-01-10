@@ -102,13 +102,13 @@ if (isset($_POST['login'])) {
       $q_string  = "select usr_id,usr_first,usr_last,usr_group,usr_email ";
       $q_string .= "from users ";
       $q_string .= "where usr_name='$user' and usr_passwd='$pass'"; 
-      $q_users = mysql_query($q_string);
+      $q_users = mysqli_query($db, $q_string);
 
 // Check that at least one row was returned 
-      $c_users = mysql_num_rows($q_users); 
+      $c_users = mysqli_num_rows($q_users); 
 
       if ($c_users > 0) { 
-        while ($a_users = mysql_fetch_array($q_users)) { 
+        while ($a_users = mysqli_fetch_array($q_users)) { 
 
 // Start the session and register a variable 
           session_start(); 
@@ -120,7 +120,7 @@ if (isset($_POST['login'])) {
           $_SESSION['group']       = $a_users['usr_group'];
           $_SESSION['email']       = $a_users['usr_email'];
           $_SESSION['rand']        = rand(5,1000);
-          logaccess($_SESSION['username'], "login.inc.php", $_SESSION['name'] . " has logged in.");
+          logaccess($db, $_SESSION['username'], "login.inc.php", $_SESSION['name'] . " has logged in.");
 
 //  Successful login code will go here... 
 

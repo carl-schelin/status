@@ -20,7 +20,7 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_Admin)) {
+    if (check_userlevel($db, $AL_Admin)) {
       if ($formVars['update'] == 0 || $formVars['update'] == 1) {
         $formVars['id']             = clean($_GET['id'],             10);
         $formVars['usr_first']      = clean($_GET['usr_first'],     255);
@@ -48,7 +48,7 @@
         }
 
         if (strlen($formVars['usr_name']) > 0) {
-          logaccess($_SESSION['username'], $package, "Building the query.");
+          logaccess($db, $_SESSION['username'], $package, "Building the query.");
 
           $q_string = 
             "usr_first       = \"" . $formVars['usr_first']     . "\"," .
@@ -65,7 +65,7 @@
             "usr_reset       =   " . $formVars['usr_reset'];
 
           if (strlen($formVars['usr_passwd']) > 0 && $formVars['usr_passwd'] === $formVars['usr_reenter']) {
-            logaccess($_SESSION['username'], $package, "Resetting user " . $formVars['usr_name'] . " password.");
+            logaccess($db, $_SESSION['username'], $package, "Resetting user " . $formVars['usr_name'] . " password.");
             $q_string .= ",usr_passwd = '" . MD5($formVars['usr_passwd']) . "' ";
           }
 
@@ -79,9 +79,9 @@
             $message = "User updated.";
           }
 
-          logaccess($_SESSION['username'], $package, "Saving Changes to: " . $formVars['usr_name']);
+          logaccess($db, $_SESSION['username'], $package, "Saving Changes to: " . $formVars['usr_name']);
 
-          mysql_query($query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysql_error()));
+          mysqli_query($db, $query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysqli_error($db)));
 
           print "alert('" . $message . "');\n";
 
@@ -90,13 +90,13 @@
             $q_string  = "delete ";
             $q_string .= "from grouplist ";
             $q_string .= "where gpl_user = " . $formVars['id'];
-            mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+            mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
           } else {
             $q_string  = "select gpl_id ";
             $q_string .= "from grouplist ";
             $q_string .= "where gpl_user = " . $formVars['id'] . " and gpl_group = " . $formVars['usr_group'] . " ";
-            $q_grouplist = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-            if (mysql_num_rows($q_grouplist) == 0) {
+            $q_grouplist = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+            if (mysqli_num_rows($q_grouplist) == 0) {
 # if not in the grouplist, add them
 # removing them will be done elsewhere.
               $q_string  = "insert ";
@@ -106,7 +106,7 @@
               $q_string .= "gpl_group = " . $formVars['usr_group'] . ",";
               $q_string .= "gpl_user  = " . $formVars['id'];
 
-              mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+              mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
             }
           }
@@ -117,7 +117,7 @@
       }
 
 
-      logaccess($_SESSION['username'], $package, "Creating the table for viewing.");
+      logaccess($db, $_SESSION['username'], $package, "Creating the table for viewing.");
 
 ######
 # New User Listing
@@ -180,9 +180,9 @@
       $q_string .= "left join themes on themes.theme_id = users.usr_theme ";
       $q_string .= "where usr_disabled = 0 and usr_group = 0 and usr_level > 1 ";
       $q_string .= "order by usr_last,usr_first";
-      $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      if (mysql_num_rows($q_users) > 0) {
-        while ($a_users = mysql_fetch_array($q_users)) {
+      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_users) > 0) {
+        while ($a_users = mysqli_fetch_array($q_users)) {
 
           $linkstart = "<a href=\"#\" onclick=\"show_file('users.fill.php?id=" . $a_users['usr_id'] . "');jQuery('#dialogUser').dialog('open');\">";
           $linkdel   = "<input type=\"button\" value=\"Remove\" onClick=\"javascript:delete_user('users.del.php?id=" . $a_users['usr_id'] . "');\">";
@@ -232,7 +232,7 @@
 
       $output .= "</table>\n";
 
-      print "document.getElementById('new_users_table').innerHTML = '" . mysql_real_escape_string($output) . "';\n\n";
+      print "document.getElementById('new_users_table').innerHTML = '" . mysqli_real_escape_string($db, $output) . "';\n\n";
 
 
       display_User("Registered",      "all",        " and usr_disabled = 0 ");
@@ -255,7 +255,7 @@
       print "document.user.usr_theme[0].selected = true;\n";
 
     } else {
-      logaccess($_SESSION['username'], $package, "Unauthorized access.");
+      logaccess($db, $_SESSION['username'], $package, "Unauthorized access.");
     }
   }
 
@@ -297,8 +297,8 @@ function display_user( $p_title, $p_toggle, $p_query ) {
   $q_string .= "from groups ";
   $q_string .= "where grp_disabled = 0 ";
   $q_string .= "order by grp_name";
-  $q_groups = mysql_query($q_string);
-  while ($a_groups = mysql_fetch_array($q_groups)) {
+  $q_groups = mysqli_query($db, $q_string);
+  while ($a_groups = mysqli_fetch_array($q_groups)) {
 
     $group  = "<table class=\"ui-styled-table\">\n";
     $group .= "<tr>\n";
@@ -324,9 +324,9 @@ function display_user( $p_title, $p_toggle, $p_query ) {
     $q_string .= "left join themes on themes.theme_id = users.usr_theme ";
     $q_string .= "where usr_group = " . $a_groups['grp_id'] . " " . $p_query;
     $q_string .= "order by usr_last,usr_first";
-    $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    if (mysql_num_rows($q_users) > 0) {
-      while ($a_users = mysql_fetch_array($q_users)) {
+    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    if (mysqli_num_rows($q_users) > 0) {
+      while ($a_users = mysqli_fetch_array($q_users)) {
 
         $linkstart = "<a href=\"#\" onclick=\"show_file('users.fill.php?id=" . $a_users['usr_id'] . "');jQuery('#dialogUser').dialog('open');\">";
         $linkdel   = "<input type=\"button\" value=\"Remove\" onClick=\"javascript:delete_user('users.del.php?id="  . $a_users['usr_id'] . "');\">";
@@ -378,7 +378,7 @@ function display_user( $p_title, $p_toggle, $p_query ) {
 
   }
 
-  print "document.getElementById('" . $p_toggle . "_users_table').innerHTML = '" . mysql_real_escape_string($output) . "';\n\n";
+  print "document.getElementById('" . $p_toggle . "_users_table').innerHTML = '" . mysqli_real_escape_string($db, $output) . "';\n\n";
 
 }
 

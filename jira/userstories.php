@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login('2');
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_Admin);
 
   $package = "userstories.php";
 
-  logaccess($_SESSION['uid'], $package, "Viewing the userstories table");
+  logaccess($db, $_SESSION['uid'], $package, "Viewing the userstories table");
 
 ?>
 <!DOCTYPE HTML>
@@ -34,7 +38,7 @@
 <script type="text/javascript">
 
 <?php
-  if (check_userlevel(1)) {
+  if (check_userlevel($db, $AL_Developer)) {
 ?>
 function delete_story( p_script_url ) {
   var answer = confirm("Delete this User Story?")
@@ -196,8 +200,8 @@ $(document).ready( function() {
   $q_string .= "from epics ";
   $q_string .= "where epic_user = " . $_SESSION['uid'] . " ";
   $q_string .= "order by epic_jira ";
-  $q_epics = mysql_query($q_string) or die($q_string . ": " . mysql_error());
-  while ($a_epics = mysql_fetch_array($q_epics)) {
+  $q_epics = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+  while ($a_epics = mysqli_fetch_array($q_epics)) {
     print "<option value=\"" . $a_epics['epic_id'] . "\">" . $a_epics['epic_jira'] . " - " . $a_epics['epic_title'] . "</option>\n";
   }
 ?>

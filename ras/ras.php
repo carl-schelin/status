@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "ras.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $formVars['startweek'] = 0;
   $formVars['endweek']   = 0;
@@ -31,20 +35,20 @@
     $formVars['endweek'] = 179;
   }
 
-  logaccess($_SESSION['username'], "ras.php", "Viewing the ras");
+  logaccess($db, $_SESSION['username'], "ras.php", "Viewing the ras");
 
   $q_string  = "select usr_id,usr_group ";
   $q_string .= "from users ";
   $q_string .= "where usr_name = '" . $_SESSION['username'] . "'";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   $formVars['id'] = $a_users['usr_id'];
   $formVars['group'] = $a_users['usr_group'];
 
   if ($formVars['user'] != $formVars['id']) {
-    logaccess($_SESSION['username'], "ras.php", "Escalated privileged access to " . $formVars['id']);
-    check_login($AL_Supervisor);
+    logaccess($db, $_SESSION['username'], "ras.php", "Escalated privileged access to " . $formVars['id']);
+    check_login($db, $AL_Supervisor);
   }
 
   $projnum = 0;
@@ -53,8 +57,8 @@
   $q_string .= "from project ";
 #  $q_string .= "where prj_code != 7884 and prj_code != 2839 ";
   $q_string .= "order by prj_name";
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_project = mysql_fetch_array($q_project)) {
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_project = mysqli_fetch_array($q_project)) {
     $projid[$projnum]     = $a_project['prj_id'];
     $projdesc[$projnum]   = $a_project['prj_desc'];
     $projcode[$projnum]   = $a_project['prj_code'];
@@ -90,9 +94,9 @@
 $q_string  = "select grp_id,grp_name ";
 $q_string .= "from groups ";
 $q_string .= "order by grp_name";
-$q_groups = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+$q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-while ($a_groups = mysql_fetch_array($q_groups)) {
+while ($a_groups = mysqli_fetch_array($q_groups)) {
 
   $total = 0;
   $projects = 0;
@@ -106,8 +110,8 @@ while ($a_groups = mysql_fetch_array($q_groups)) {
   $q_string  = "select usr_id ";
   $q_string .= "from users ";
   $q_string .= "where usr_group = " . $a_groups['grp_id'];
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_users = mysql_fetch_array($q_users)) {
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_users = mysqli_fetch_array($q_users)) {
     $query .= $orstr . "strp_name = " . $a_users['usr_id'];
     $orstr = " or ";
   }
@@ -119,8 +123,8 @@ while ($a_groups = mysql_fetch_array($q_groups)) {
       $q_string  = "select strp_time ";
       $q_string .= "from status ";
       $q_string .= "where (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") and " . $query . " strp_project = " . $projid[$i] . " ";
-      $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      while ($a_status = mysql_fetch_array($q_status)) {
+      $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ($a_status = mysqli_fetch_array($q_status)) {
         if ($projcode[$i] == 7884 || $projcode[$i] == 2839) {
           $subtotal += $a_status['strp_time'];
         } else {

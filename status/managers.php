@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_Supervisor);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_Supervisor);
 
   $package = "managers.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $DEBUG = 0;
 
@@ -23,8 +27,8 @@
   $thisweek = date('Y-m-d', mktime(0, 0, 0, date('m'), date("d") + $friday, date("Y")));
 
   $q_string = "select wk_id,wk_date from weeks where wk_date = \"" . $thisweek . "\"";
-  $q_weeks = mysql_query($q_string);
-  $a_weeks = mysql_fetch_array($q_weeks);
+  $q_weeks = mysqli_query($db, $q_string);
+  $a_weeks = mysqli_fetch_array($q_weeks);
 
   $currentweek = $a_weeks['wk_id'];
 ###
@@ -36,14 +40,14 @@
   $q_string  = "select usr_id,usr_first,usr_last,usr_group,usr_supervisor,usr_manager,usr_director ";
   $q_string .= "from users ";
   $q_string .= "where usr_name = \"" . $_SESSION['username'] . "\"";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   $formVars['id'] = $a_users['usr_id'];
   $formVars['username'] = $a_users['usr_first'] . ' ' . $a_users['usr_last'];
   $formVars['group'] = $a_users['usr_group'];
 
-  logaccess($_SESSION['username'], "managers.php", "Viewing the manager app: user=" . $formVars['username'] . " group=" . $formVars['group']);
+  logaccess($db, $_SESSION['username'], "managers.php", "Viewing the manager app: user=" . $formVars['username'] . " group=" . $formVars['group']);
 # select users who's supervisor == your uid, manager == your uid, and/or director == your uid.
 
 ######
@@ -51,26 +55,26 @@
 ######
 
   $q_string = "select usr_id,usr_first,usr_last,usr_group from users where usr_id = " . $formVars['id'] . " or ";
-  if (check_userlevel($AL_VicePresident)) {
+  if (check_userlevel($db, $AL_VicePresident)) {
     $q_string .= "usr_vicepresident = " . $formVars['id'] . " and ";
   } else {
-    if (check_userlevel($AL_Director)) {
+    if (check_userlevel($db, $AL_Director)) {
       $q_string .= "usr_director = " . $formVars['id'] . " and ";
     } else {
-      if (check_userlevel($AL_Manager)) {
+      if (check_userlevel($db, $AL_Manager)) {
         $q_string .= "usr_manager = " . $formVars['id'] . " and ";
       } else {
-        if (check_userlevel($AL_Supervisor)) {
+        if (check_userlevel($db, $AL_Supervisor)) {
           $q_string .= "usr_supervisor = " . $formVars['id'] . " and ";
         }
       }
     }
   }
   $q_string .= "usr_id != 1 and usr_disabled = 0 order by usr_last";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $count = 0;
-  while ( $a_users = mysql_fetch_array($q_users) ) {
+  while ( $a_users = mysqli_fetch_array($q_users) ) {
     $userid[$count] = $a_users['usr_id'];
     $usergrp[$count] = $a_users['usr_group'];
     $userval[$count++] = $a_users['usr_last'] . ", " . $a_users['usr_first'];
@@ -86,10 +90,10 @@
   for ($i = 0; $i < $usertot; $i++) {
     $q_string .= " or grp_id = " . $usergrp[$i];
   }
-  $q_groups = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $count = 0;
-  while ( $a_groups = mysql_fetch_array($q_groups) ) {
+  while ( $a_groups = mysqli_fetch_array($q_groups) ) {
     $groupid[$count] = $a_groups['grp_id'];
     $groupval[$count++] = $a_groups['grp_name'];
   }
@@ -101,10 +105,10 @@
 
   $q_string  = "select wk_id,wk_date ";
   $q_string .= "from weeks";
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $week = 0;
-  while ( $a_weeks = mysql_fetch_array($q_weeks) ) {
+  while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
     $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
   }
   $weektot = count($weekval) + 1;
@@ -117,9 +121,9 @@
   $q_string .= "from status ";
   $q_string .= "where strp_name = " . $formVars['id'] . " ";
   $q_string .= "order by strp_week";
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_status = mysql_fetch_array($q_status) ) {
+  while ( $a_status = mysqli_fetch_array($q_status) ) {
     $week = $a_status['strp_week'];
   }
 
@@ -199,7 +203,7 @@ data.</p>
 </select></td>
   <td class="ui-widget-content">
 <?php
-  if (check_userlevel($AL_Supervisor)) {
+  if (check_userlevel($db, $AL_Supervisor)) {
     print "<select name=\"user\">\n";
     print "  <option value=\"0\" />None\n";
 

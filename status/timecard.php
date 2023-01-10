@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "timecard.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
 // Set, clean, the GETed values
   $formVars['user']      = 0;
@@ -25,34 +29,34 @@
   $formVars['endweek']   = clean($_GET["endweek"], 10);
   $formVars['group']     = clean($_GET["group"], 10);
 
-  logaccess($_SESSION['username'], "timecard.php", "Viewing timecard: startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " user=" . $formVars['user'] . " group=" . $formVars['group']);
+  logaccess($db, $_SESSION['username'], "timecard.php", "Viewing timecard: startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " user=" . $formVars['user'] . " group=" . $formVars['group']);
 
   $q_string  = "select usr_id,usr_name ";
   $q_string .= "from users";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_users = mysql_fetch_array($q_users) ) {
+  while ( $a_users = mysqli_fetch_array($q_users) ) {
     if ($_SESSION['username'] == $a_users['usr_name']) {
       $formVars['id'] = $a_users['usr_id'];
     }
   }
 
   if ($formVars['user'] != $formVars['id']) {
-    check_login($AL_User);
+    check_login($db, $AL_User);
   }
 
   $q_string  = "select wk_date ";
   $q_string .= "from weeks ";
   $q_string .= "where wk_id = " . $formVars['startweek'];
-  $q_week = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_week = mysql_fetch_array($q_week);
+  $q_week = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_week = mysqli_fetch_array($q_week);
   $startname = $a_week['wk_date'];
 
   $q_string  = "select wk_date ";
   $q_string .= "from weeks ";
   $q_string .= "where wk_id = " . $formVars['endweek'];
-  $q_week = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_week = mysql_fetch_array($q_week);
+  $q_week = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_week = mysqli_fetch_array($q_week);
   $endname = $a_week['wk_date'];
 
 ?>
@@ -140,16 +144,16 @@
 // Either a user is selected or group. If both are zero, show all data
 
   if ($formVars['group'] != 0) {
-    if (check_userlevel($AL_Supervisor)) {
+    if (check_userlevel($db, $AL_Supervisor)) {
       $q_string = "select usr_id from users where usr_supervisor = " . $formVars['user'];
     }
-    if (check_userlevel($AL_Manager)) {
+    if (check_userlevel($db, $AL_Manager)) {
       $q_string = "select usr_id from users where usr_manager = " . $formVars['user'];
     }
-    if (check_userlevel($AL_Director)) {
+    if (check_userlevel($db, $AL_Director)) {
       $q_string = "select usr_id from users where usr_director = " . $formVars['user'];
     }
-    if (check_userlevel($AL_VicePresident)) {
+    if (check_userlevel($db, $AL_VicePresident)) {
       $q_string = "select usr_id from users where usr_vicepresident = " . $formVars['user'];
     }
   
@@ -162,8 +166,8 @@
     $prtor = "";
     $u_string = "";
   
-    $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ($a_users = mysql_fetch_array($q_users)) {
+    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_users = mysqli_fetch_array($q_users)) {
       $u_string .= $prtor . "strp_name = " . $a_users['usr_id'];
       if ($prtor == "") {
         $prtor = " or ";
@@ -182,8 +186,8 @@
   $q_string  = "select prj_id,prj_code,prj_snow,prj_name,prj_task,prj_desc ";
   $q_string .= "from project ";
   $q_string .= "order by prj_code,prj_task";
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_project = mysql_fetch_array($q_project) ) {
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_project = mysqli_fetch_array($q_project) ) {
 
     $class = "ui-widget-content";
     if ($a_project['prj_code'] == '7884' && $a_project['prj_task'] == '1.2 Maintenance') {
@@ -209,8 +213,8 @@
     $q_string  = "select strp_day,strp_time ";
     $q_string .= "from status ";
     $q_string .= "where strp_project = " . $a_project['prj_id'] . " and strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and (" . $u_string . ")";
-    $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ( $a_status = mysql_fetch_array($q_status) ) {
+    $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ( $a_status = mysqli_fetch_array($q_status) ) {
       $dailytot[$a_status['strp_day']] += $a_status['strp_time'];
     }
 

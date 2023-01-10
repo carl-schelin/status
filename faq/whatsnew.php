@@ -10,7 +10,7 @@
 
   $package = "whatsnew.php";
 
-  logaccess($formVars['username'], $package, "Accessing script");
+  logaccess($db, $formVars['username'], $package, "Accessing script");
 
 ?>
 <!DOCTYPE HTML>

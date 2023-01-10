@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "users.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
 ?>
 <!DOCTYPE HTML>
@@ -53,8 +57,8 @@
   $q_string .= "from users ";
   $q_string .= "where usr_id != 1 and usr_disabled = 0 ";
   $q_string .= "order by usr_last";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_users = mysql_fetch_array($q_users) ) {
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_users = mysqli_fetch_array($q_users) ) {
 
     $statusweek = "--";
     $statuscount = 0;
@@ -71,8 +75,8 @@
     $q_string .= "from status ";
     $q_string .= "where strp_name = " . $a_users['usr_id'] . " ";
     $q_string .= "order by strp_week";
-    $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ( $a_status = mysql_fetch_array($q_status) ) {
+    $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ( $a_status = mysqli_fetch_array($q_status) ) {
       $statuscount++;
       $statusweek = $a_status['strp_week'];
       if ($a_status['strp_save'] == 1) {
@@ -87,8 +91,8 @@
       $q_string  = "select wk_date ";
       $q_string .= "from weeks ";
       $q_string .= "where wk_id = " . $statusweek;
-      $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_weeks = mysql_fetch_array($q_weeks);
+      $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_weeks = mysqli_fetch_array($q_weeks);
       $statusweek = $a_weeks['wk_date'];
     }
 
@@ -97,9 +101,9 @@
     $q_string .= "from todo ";
     $q_string .= "where todo_user = " . $a_users['usr_id'] . " ";
     $q_string .= "order by todo_entered";
-    $q_todo = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+    $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-    while ( $a_todo = mysql_fetch_array($q_todo) ) {
+    while ( $a_todo = mysqli_fetch_array($q_todo) ) {
       $todocount++;
       if ($a_todo['todo_completed'] > 0) {
         $todocompleted++;
@@ -111,8 +115,8 @@
     $q_string .= "from report ";
     $q_string .= "where rep_user = " . $a_users['usr_id'] . " ";
     $q_string .= "order by rep_timestamp";
-    $q_report = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ($a_report = mysql_fetch_array($q_report)) {
+    $q_report = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_report = mysqli_fetch_array($q_report)) {
       $reportcount++;
       $reportweek = explode(" ", $a_report['rep_timestamp']);
     }

@@ -1,4 +1,4 @@
-CREATE TABLE `bandf` (
+CREATE TABLE `st_bandf` (
   `bf_id` int(10) NOT NULL AUTO_INCREMENT,
   `bf_name` int(10) NOT NULL DEFAULT '0',
   `bf_borf` int(10) NOT NULL DEFAULT '0',
@@ -9,7 +9,7 @@ CREATE TABLE `bandf` (
   PRIMARY KEY (`bf_id`)
 ); 
 
-CREATE TABLE `cande` (
+CREATE TABLE `st_cande` (
   `ce_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ce_name` int(10) unsigned NOT NULL DEFAULT '0',
   `ce_week` int(10) unsigned NOT NULL DEFAULT '0',
@@ -17,7 +17,7 @@ CREATE TABLE `cande` (
   PRIMARY KEY (`ce_id`)
 ); 
 
-CREATE TABLE `class` (
+CREATE TABLE `st_class` (
   `cls_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `cls_name` char(70) DEFAULT NULL,
   `cls_template` int(10) NOT NULL DEFAULT '0',
@@ -27,21 +27,21 @@ CREATE TABLE `class` (
   PRIMARY KEY (`cls_id`)
 ); 
 
-CREATE TABLE `events` (
+CREATE TABLE `st_events` (
   `evt_id` int(10) NOT NULL AUTO_INCREMENT,
   `evt_group` int(10) NOT NULL DEFAULT '0',
   `evt_task` char(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`evt_id`)
 ); 
 
-CREATE TABLE `grouplist` (
+CREATE TABLE `st_grouplist` (
   `gpl_id` int(10) NOT NULL AUTO_INCREMENT,
   `gpl_group` int(10) NOT NULL DEFAULT '0',
   `gpl_user` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`gpl_id`)
 ); 
 
-CREATE TABLE `groups` (
+CREATE TABLE `st_groups` (
   `grp_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `grp_name` char(70) NOT NULL DEFAULT '',
   `grp_email` char(100) NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`grp_id`)
 ); 
 
-CREATE TABLE `levels` (
+CREATE TABLE `st_levels` (
   `lvl_id` int(8) NOT NULL AUTO_INCREMENT,
   `lvl_name` varchar(255) NOT NULL,
   `lvl_level` int(1) NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `levels` (
   PRIMARY KEY (`lvl_id`)
 ); 
 
-CREATE TABLE `log` (
+CREATE TABLE `st_log` (
   `log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `log_user` char(30) NOT NULL DEFAULT '',
   `log_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -71,7 +71,7 @@ CREATE TABLE `log` (
   PRIMARY KEY (`log_id`)
 ); 
 
-CREATE TABLE `polls` (
+CREATE TABLE `st_polls` (
   `poll_id` int(10) NOT NULL AUTO_INCREMENT,
   `poll_pid` int(10) NOT NULL DEFAULT '0',
   `poll_desc` char(100) NOT NULL,
@@ -85,14 +85,14 @@ CREATE TABLE `polls` (
   PRIMARY KEY (`poll_id`)
 ); 
 
-CREATE TABLE `progress` (
+CREATE TABLE `st_progress` (
   `pro_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pro_name` char(70) NOT NULL DEFAULT '',
   `pro_desc` char(70) NOT NULL DEFAULT '',
   PRIMARY KEY (`pro_id`)
 ); 
 
-CREATE TABLE `project` (
+CREATE TABLE `st_project` (
   `prj_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `prj_name` char(30) NOT NULL DEFAULT '',
   `prj_code` int(10) unsigned NOT NULL DEFAULT '0',
@@ -103,7 +103,7 @@ CREATE TABLE `project` (
   PRIMARY KEY (`prj_id`)
 ); 
 
-CREATE TABLE `ras` (
+CREATE TABLE `st_ras` (
   `ras_id` int(10) NOT NULL AUTO_INCREMENT,
   `ras_name` char(100) NOT NULL,
   `ras_code` int(10) NOT NULL DEFAULT '0',
@@ -130,7 +130,7 @@ CREATE TABLE `ras` (
   PRIMARY KEY (`ras_id`)
 ); 
 
-CREATE TABLE `report` (
+CREATE TABLE `st_report` (
   `rep_id` int(10) NOT NULL AUTO_INCREMENT,
   `rep_user` int(10) NOT NULL DEFAULT '0',
   `rep_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -140,7 +140,7 @@ CREATE TABLE `report` (
   PRIMARY KEY (`rep_id`)
 ); 
 
-CREATE TABLE `status` (
+CREATE TABLE `st_status` (
   `strp_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `strp_week` int(10) unsigned NOT NULL DEFAULT '0',
   `strp_name` int(10) unsigned NOT NULL DEFAULT '0',
@@ -157,7 +157,7 @@ CREATE TABLE `status` (
   PRIMARY KEY (`strp_id`)
 ); 
 
-CREATE TABLE `themes` (
+CREATE TABLE `st_themes` (
   `theme_id` int(10) NOT NULL AUTO_INCREMENT,
   `theme_name` char(40) NOT NULL DEFAULT '',
   `theme_title` char(40) NOT NULL DEFAULT '',
@@ -165,7 +165,7 @@ CREATE TABLE `themes` (
   PRIMARY KEY (`theme_id`)
 ); 
 
-CREATE TABLE `titles` (
+CREATE TABLE `st_titles` (
   `tit_id` int(10) NOT NULL AUTO_INCREMENT,
   `tit_name` char(60) NOT NULL DEFAULT '',
   `tit_level` int(10) NOT NULL DEFAULT '0',
@@ -173,7 +173,7 @@ CREATE TABLE `titles` (
   PRIMARY KEY (`tit_id`)
 ); 
 
-CREATE TABLE `todo` (
+CREATE TABLE `st_todo` (
   `todo_id` int(10) NOT NULL AUTO_INCREMENT,
   `todo_name` char(255) NOT NULL,
   `todo_class` int(10) NOT NULL DEFAULT '0',
@@ -191,14 +191,14 @@ CREATE TABLE `todo` (
   PRIMARY KEY (`todo_id`)
 ); 
 
-CREATE TABLE `type` (
+CREATE TABLE `st_type` (
   `typ_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `typ_name` char(70) NOT NULL DEFAULT '',
   `typ_desc` char(70) NOT NULL DEFAULT '',
   PRIMARY KEY (`typ_id`)
 ); 
 
-CREATE TABLE `users` (
+CREATE TABLE `st_users` (
   `usr_id` int(8) NOT NULL AUTO_INCREMENT,
   `usr_level` int(1) NOT NULL DEFAULT '2',
   `usr_disabled` int(1) NOT NULL DEFAULT '0',
@@ -226,7 +226,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`usr_id`)
 ); 
 
-CREATE TABLE `weeks` (
+CREATE TABLE `st_weeks` (
   `wk_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `wk_date` date NOT NULL,
   PRIMARY KEY (`wk_id`)

@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login('2');
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_Admin);
 
   $package = "epics.php";
 
-  logaccess($_SESSION['uid'], $package, "Viewing the Data Center Location table");
+  logaccess($db, $_SESSION['uid'], $package, "Viewing the Data Center Location table");
 
 ?>
 <!DOCTYPE HTML>
@@ -34,7 +38,7 @@
 <script type="text/javascript">
 
 <?php
-  if (check_userlevel(1)) {
+  if (check_userlevel($db, $AL_Developer)) {
 ?>
 function delete_epic( p_script_url ) {
   var answer = confirm("Deleting an Epic will also delete all associated User Stories\n\nDelete this Epic?")

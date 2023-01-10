@@ -20,7 +20,7 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
       $formVars['id']       = clean($_GET['id'], 10);
       $formVars['week']     = clean($_GET['startweek'], 10);
       $formVars['user']     = clean($_GET['user'], 10);
@@ -70,8 +70,8 @@
 
       $q_string  = "select wk_id,wk_date ";
       $q_string .= "from weeks where wk_id = " . $formVars['week'];
-      $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_weeks = mysql_fetch_array($q_weeks);
+      $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_weeks = mysqli_fetch_array($q_weeks);
 
       $ym_date = explode("-", $a_weeks['wk_date']);
       $ym_convert = (5 - $formVars['day']) * 86400;
@@ -97,14 +97,14 @@
 
         if ($formVars['update'] == 1) {
           $query = "update status set " .$q_string . " where strp_id = " . $formVars['id'];
-          logaccess($_SESSION['username'], "status.report.mysql.php", "Updating status record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user']);
+          logaccess($db, $_SESSION['username'], "status.report.mysql.php", "Updating status record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user']);
         } else {
           $query = "insert into status set strp_id = NULL," . $q_string;
-          logaccess($_SESSION['username'], "status.report.mysql.php", "Adding status record: week=" . $formVars['week'] . " user=" . $formVars['user']);
+          logaccess($db, $_SESSION['username'], "status.report.mysql.php", "Adding status record: week=" . $formVars['week'] . " user=" . $formVars['user']);
 
         }
 
-        $insert = mysql_query($query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysql_error()));
+        $insert = mysqli_query($db, $query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysqli_error($db)));
       }
     }
 
@@ -122,15 +122,15 @@
   $q_string  = "select usr_template ";
   $q_string .= "from users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
 // Retrieve the class headers. Start with 5 as 1-4 are obsolete (but still used)
   $q_string  = "select cls_id,cls_name,cls_project,cls_help ";
   $q_string .= "from class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_class = mysql_fetch_array($q_class)) {
+  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_class = mysqli_fetch_array($q_class)) {
     if ($a_class['cls_id'] == $formVars['class']) {
       $checked = " checked";
     } else {
@@ -152,8 +152,8 @@
     $q_string .= "from status ";
     $q_string .= "where strp_name = " . $formVars['user'] . " and strp_class = " . $a_class['cls_id'] . " and strp_week = " . $formVars['week'] . " ";
     $q_string .= "order by strp_project,strp_day ";
-    $q_task = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ($a_task = mysql_fetch_assoc($q_task)) {
+    $q_task = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_task = mysqli_fetch_assoc($q_task)) {
 
       if ($a_task['strp_save']) {
         $ready = "class=\"ui-state-highlight\"";
@@ -167,8 +167,8 @@
       $q_string  = "select prj_desc ";
       $q_string .= "from project ";
       $q_string .= "where prj_id = " . $a_task['strp_project'];
-      $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_project = mysql_fetch_assoc($q_project);
+      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_project = mysqli_fetch_assoc($q_project);
       if ($a_project['prj_desc'] != $c_project && $a_class['cls_project'] == 1) {
         $output .= "<tr>";
         $output .= "<td class=\"ui-widget-content delete\">*</td>";
@@ -176,7 +176,7 @@
         $output .= "</tr>";
         $c_project = $a_project['prj_desc'];
       }
-      mysql_free_result($q_project);
+      mysqli_free_result($q_project);
 
 // Set up the daily check.
       $daily_output = "<tr>";
@@ -188,28 +188,28 @@
       $q_string  = "select pro_name ";
       $q_string .= "from progress ";
       $q_string .= "where pro_id = " . $a_task['strp_progress'];
-      $q_progress = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_progress = mysql_fetch_array($q_progress);
+      $q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_progress = mysqli_fetch_array($q_progress);
 
       $daily_output .= $a_progress[0] . ": ";
-      mysql_free_result($q_progress);
+      mysqli_free_result($q_progress);
 
 // Retrieve the Jira tag
       $q_string  = "select epic_jira,user_jira ";
       $q_string .= "from userstories ";
       $q_string .= "left join epics on epics.epic_id = userstories.user_epic ";
       $q_string .= "where user_id = " . $a_task['strp_jira'];
-      $q_userstories = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      if (mysql_num_rows($q_userstories) > 0) {
-        $a_userstories = mysql_fetch_array($q_userstories);
+      $q_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_userstories) > 0) {
+        $a_userstories = mysqli_fetch_array($q_userstories);
 
         $daily_output .= $a_userstories['epic_jira'] . "/" . $a_userstories['user_jira'] . ": ";
-        mysql_free_result($q_userstories);
+        mysqli_free_result($q_userstories);
       }
 
       $daily_output .= "<a href=\"#\" onclick=\"show_file('status.report.fill.php?id=";
       $daily_output .= $a_task['strp_id'] . "&user=" . $formVars['user'] . "');" . "\">";
-      $daily_output .= mysql_real_escape_string($a_task['strp_task']) . "</a></td>";
+      $daily_output .= mysqli_real_escape_string($db, $a_task['strp_task']) . "</a></td>";
 
       $daily_output .= "<td " . $ready . " title=\"Day:Hours Worked. Green = Status email active.";
       $daily_output .= " * = Quarterly Accomplishment\">" . $weekday[$a_task['strp_day']] . ":";
@@ -232,10 +232,10 @@
       $weektot[$a_task['strp_day']] += $a_task['strp_time'];
       $total += $a_task['strp_time'];
     }
-    mysql_free_result($q_task);
+    mysqli_free_result($q_task);
   }
 
-  mysql_free_result($q_class);
+  mysqli_free_result($q_class);
   $output .= "<tr>";
   $output .= "<td colspan=3 class=\"ui-widget-content button\"><b>Total Hours: </b>" . number_format((($total * 15) / 60), 2, '.', ',') . "</td>";
   $output .= "</tr>";
@@ -243,7 +243,7 @@
 
 ?>
 
-document.getElementById('from_mysql').innerHTML = '<?php print mysql_real_escape_string($output); ?>';
+document.getElementById('from_mysql').innerHTML = '<?php print mysqli_real_escape_string($db, $output); ?>';
 
 if (navigator.appName == "Microsoft Internet Explorer") {
   document.getElementById('prjready').className = "ui-widget-content";

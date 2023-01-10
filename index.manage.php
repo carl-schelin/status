@@ -10,7 +10,7 @@
 
   $package = "index.manage.php";
 
-  logaccess($formVars['username'], $package, "Checking out the index.");
+  logaccess($db, $formVars['username'], $package, "Checking out the index.");
 
 ?>
 <!DOCTYPE HTML>

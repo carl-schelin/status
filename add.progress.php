@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "add.progress.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
 ?>
 <!DOCTYPE HTML>
@@ -38,14 +42,14 @@ if (isset($_POST['progress'])) {
   $formVars['pro_name'] = clean($_POST['progress'], 70);
   $formVars['pro_desc'] = clean($_POST['desc'], 70);
 
-  logaccess($_SESSION['username'], "add.progress.php", "Adding progress: " . $formVars['pro_name']);
+  logaccess($db, $_SESSION['username'], "add.progress.php", "Adding progress: " . $formVars['pro_name']);
 
   $q_string = "insert into progress set " . 
     "pro_id   =   " . " NULL"               . ", " . 
     "pro_name = \"" . $formVars['pro_name'] . "\", " . 
     "pro_desc = \"" . $formVars['pro_desc'] . "\"";
 
-  mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 }
 
@@ -85,13 +89,13 @@ if (isset($_POST['progress'])) {
 $q_string  = "select pro_id,pro_name,pro_desc ";
 $q_string .= "from progress ";
 $q_string .= "order by pro_id";
-$q_progress = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-while ($a_progress = mysql_fetch_array($q_progress)) {
+$q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_progress = mysqli_fetch_array($q_progress)) {
 
   print "<tr>\n";
   print "  <td class=\"ui-widget-content\">" . $a_progress['pro_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_progress['pro_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_progress['pro_desc']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_progress['pro_name']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_progress['pro_desc']) . "</td>\n";
   print "</tr>\n";
   $count++;
 
@@ -103,7 +107,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysql_free_result($q_progress);
+mysqli_free_result($q_progress);
 
 ?>
 </table>

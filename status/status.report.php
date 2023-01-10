@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "status.report.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $formVars['user']      = clean($_GET["user"], 10);
   $formVars['group']     = clean($_GET["group"], 10);
@@ -29,8 +33,8 @@
     $thisweek = date('Y-m-d', mktime(0, 0, 0, date('m'), date("d") + $friday, date("Y")));
 
     $q_string = "select wk_id,wk_date from weeks where wk_date = \"" . $thisweek . "\"";
-    $q_weeks = mysql_query($q_string);
-    $a_weeks = mysql_fetch_array($q_weeks);
+    $q_weeks = mysqli_query($db, $q_string);
+    $a_weeks = mysqli_fetch_array($q_weeks);
 
     $formVars['startweek'] = $a_weeks['wk_id'];
   }
@@ -39,43 +43,43 @@
     $formVars['group'] = 0;
   }
 
-  logaccess($_SESSION['username'], "status.report.php", "Adding status data: startweek=" . $formVars['startweek'] . " user=" . $formVars['user']);
+  logaccess($db, $_SESSION['username'], "status.report.php", "Adding status data: startweek=" . $formVars['startweek'] . " user=" . $formVars['user']);
 
   $dow = date('w');
 
   $q_string  = "select usr_id,usr_name ";
   $q_string .= "from users";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_users = mysql_fetch_array($q_users)) {
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_users = mysqli_fetch_array($q_users)) {
     if ($_SESSION['username'] == $a_users['usr_name']) {
       $formVars['id'] = $a_users['usr_id'];
     }
   }
 
   if ($formVars['user'] != $formVars['id']) {
-    check_login($AL_Supervisor);
-    logaccess($_SESSION['username'], "status.report.php", "Escalated privileged access to " . $formVars['id']);
+    check_login($db, $AL_Supervisor);
+    logaccess($db, $_SESSION['username'], "status.report.php", "Escalated privileged access to " . $formVars['id']);
   }
 
   $q_string  = "select usr_template,usr_projects ";
   $q_string .= "from users ";
   $q_string .= "where usr_id = \"" . $formVars['user'] . "\"";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   $q_string  = "select COUNT(cls_id) ";
   $q_string .= "from class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_class = mysql_fetch_array($q_class);
+  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_class = mysqli_fetch_array($q_class);
 
   $numclass = $a_class['COUNT(cls_id)'];
 
   $q_string  = "select cls_id ";
   $q_string .= "from class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_class = mysql_fetch_array($q_class);
+  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_class = mysqli_fetch_array($q_class);
 
   $class = $a_class['cls_id'];
 
@@ -321,15 +325,15 @@ function textCounter(field,cntfield,maxlimit) {
 // Show the week
   $q_string  = "select wk_date ";
   $q_string .= "from weeks where wk_id = " . $formVars['startweek'];
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_weeks = mysql_fetch_array($q_weeks);
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_weeks = mysqli_fetch_array($q_weeks);
 
 // Show the user
   $q_string  = "select usr_first,usr_last,usr_group ";
   $q_string .= "from users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $username = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $username = mysqli_fetch_array($q_users);
 
   print "<tr>\n";
   echo "  <th class=\"ui-state-default\" title=\"The week tasks will be recorded for. Click the &lt; and &gt; to move to different weeks. Click the date to go to your timecard.\" colspan=2><b><a href=\"" . $Statusroot . "/status.report.php?startweek=" . ($formVars['startweek'] - 1) . "&user=" . $formVars['user'] . "\">Prior Week &lt;</a> ";
@@ -359,8 +363,8 @@ function textCounter(field,cntfield,maxlimit) {
   $q_string .= "from project ";
   $q_string .= "where prj_group = " . $username['usr_group'] . " and prj_close = 0 ";
   $q_string .= "order by prj_desc";
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_project = mysql_fetch_array($q_project)) {
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_project = mysqli_fetch_array($q_project)) {
 
     if (strlen($a_users['usr_projects']) == 0) {
       print "  <option value=\"" . $a_project['prj_id'] . "\">" . $a_project['prj_desc'] . "</option>\n";
@@ -380,8 +384,8 @@ function textCounter(field,cntfield,maxlimit) {
   $q_string  = "select pro_id,pro_name ";
   $q_string .= "from progress ";
   $q_string .= "order by pro_id";
-  $q_progress = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_progress = mysql_fetch_array($q_progress) ) {
+  $q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_progress = mysqli_fetch_array($q_progress) ) {
     print "  <option value=\"" . $a_progress['pro_id'] . "\">" . $a_progress['pro_name'] . "</option>\n";
   }
 ?>
@@ -394,8 +398,8 @@ function textCounter(field,cntfield,maxlimit) {
   $q_string  = "select typ_id,typ_name ";
   $q_string .= "from type ";
   $q_string .= "order by typ_id";
-  $q_type = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_type = mysql_fetch_array($q_type) ) {
+  $q_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_type = mysqli_fetch_array($q_type) ) {
     print "  <option value=\"" . $a_type['typ_id'] . "\">" . $a_type['typ_name'] . "</option>\n";
   }
 ?>
@@ -409,8 +413,8 @@ function textCounter(field,cntfield,maxlimit) {
   $q_string .= "from epics ";
   $q_string .= "where epic_user = 5 and epic_closed = 0 ";
   $q_string .= "order by epic_jira ";
-  $q_epics = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_epics = mysql_fetch_array($q_epics)) {
+  $q_epics = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_epics = mysqli_fetch_array($q_epics)) {
     print "  <option value=\"" . $a_epics['epic_id'] . "\">" . $a_epics['epic_jira'] . " - " . $a_epics['epic_title'] . "</option>\n";
   }
 ?>
@@ -421,8 +425,8 @@ function textCounter(field,cntfield,maxlimit) {
   $q_string .= "from userstories ";
   $q_string .= "where user_user = 5 and user_epic = 0 and user_closed = 0 ";
   $q_string .= "order by user_jira ";
-  $q_userstories = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_userstories = mysql_fetch_array($q_userstories)) {
+  $q_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_userstories = mysqli_fetch_array($q_userstories)) {
     print "  <option value=\"" . $a_userstories['user_id'] . "\">" . $a_userstories['user_jira'] . " - " . $a_userstories['user_task'] . "</option>\n";
   }
 ?>

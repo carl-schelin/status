@@ -20,18 +20,18 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
 
       $formVars['group'] = clean($_GET['group'], 10);
 
-      logaccess($_SESSION['username'], "copy.project.mysql.php", "Copying record " . $formVars['id'] . " to " . $formVars['group'] . " in project");
+      logaccess($db, $_SESSION['username'], "copy.project.mysql.php", "Copying record " . $formVars['id'] . " to " . $formVars['group'] . " in project");
 
 // Retrieve the selected project
       $q_string  = "select prj_name,prj_code,prj_snow,prj_task,prj_desc ";
       $q_string .= "from project ";
       $q_string .= "where prj_id = " . $formVars['id'];
-      $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_project = mysql_fetch_array($q_project);
+      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_project = mysqli_fetch_array($q_project);
 
 // Once the project is captured, save it as a new element.
 
@@ -44,7 +44,7 @@
         "prj_desc  = \"" . $a_project['prj_desc'] . "\", " . 
         "prj_group = "   . $formVars['group'];
 
-      $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+      $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     }
   }
 

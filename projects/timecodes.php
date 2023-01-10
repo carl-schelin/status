@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "timecodes.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
 #######
 # Ready the group information to be displayed.
@@ -22,15 +26,15 @@
   $q_string  = "select grp_id,grp_name ";
   $q_string .= "from groups ";
   $q_string .= "where grp_id=" . $_SESSION['group'];
-  $q_groups = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_groups = mysql_fetch_array($q_groups);
+  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_groups = mysqli_fetch_array($q_groups);
   $user_group = $a_groups['grp_name'];
   $user_groupid = $a_groups['grp_id'];
 
   $q_string  = "select grp_id,grp_name ";
   $q_string .= "from groups ";
   $q_string .= "where grp_id not like " . $_SESSION['group'];
-  $q_groups = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 ?>
 <!DOCTYPE HTML>
@@ -66,8 +70,8 @@
   $q_string .= "from project ";
   $q_string .= "where prj_group = $user_groupid ";
   $q_string .= "order by prj_name,prj_task";
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ( $a_project = mysql_fetch_array($q_project) ) {
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_project = mysqli_fetch_array($q_project) ) {
     if ($a_project['prj_close'] == 1) {
       $tdclass = " class=\"ui-state-error\"";
     } else {
@@ -83,7 +87,7 @@
   }
   print "</table>\n";
 
-  while ( $a_groups = mysql_fetch_array($q_groups) ) {
+  while ( $a_groups = mysqli_fetch_array($q_groups) ) {
     print "<table>\n";
     print "<tr>\n";
     print "  <th class=\"ui-state-default\" colspan=5 align=center>" . $a_groups['grp_name'] . "</th>\n";
@@ -100,8 +104,8 @@
     $q_string .= "from project ";
     $q_string .= "where prj_group = " . $a_groups['grp_id'] . " ";
     $q_string .= "order by prj_name,prj_task";
-    $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ( $a_project = mysql_fetch_array($q_project) ) {
+    $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ( $a_project = mysqli_fetch_array($q_project) ) {
       if ($a_project['prj_close'] == 1) {
         $tdclass = " class=\"ui-state-error\"";
       } else {

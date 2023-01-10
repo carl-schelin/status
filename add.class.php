@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "add.class.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $DEBUG = 0;
 
@@ -43,7 +47,7 @@ if (isset($_POST['class'])) {
   $formVars['cls_title']       = clean($_POST['title'],      100);
   $formVars['cls_help']        = clean($_POST['help'],       100);
 
-  logaccess($_SESSION['username'], "add.class.php", "Adding class: " . $formVars['cls_name']);
+  logaccess($db, $_SESSION['username'], "add.class.php", "Adding class: " . $formVars['cls_name']);
 
   $q_string = "insert into class set " . 
     "cls_id       = NULL, " . 
@@ -53,7 +57,7 @@ if (isset($_POST['class'])) {
     "cls_title    = \"" . $formVars['cls_title']    . "\"," . 
     "cls_help     = \"" . $formVars['cls_help']     . "\" ";
 
-  mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 }
 
@@ -97,16 +101,16 @@ if (isset($_POST['class'])) {
 $q_string  = "select cls_id,cls_name,cls_template,cls_project,cls_title,cls_help ";
 $q_string .= "from class ";
 $q_string .= "order by cls_id";
-$q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-while ($a_class = mysql_fetch_array($q_class)) {
+$q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_class = mysqli_fetch_array($q_class)) {
 
   print "<tr>\n";
   print "  <td class=\"ui-widget-content\">" . $a_class['cls_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_class['cls_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_class['cls_template']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_class['cls_project']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_class['cls_title']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_class['cls_help']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_name']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_template']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_project']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_title']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_class['cls_help']) . "</td>\n";
   print "</tr>\n";
   $count++;
 
@@ -118,7 +122,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysql_free_result($q_class);
+mysqli_free_result($q_class);
 
 ?>
 </table>

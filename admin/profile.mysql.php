@@ -39,10 +39,10 @@
       $formVars['usr_reset'] = 0;
     }
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
       if ($formVars['update'] == 1) {
         if (strlen($formVars['usr_last']) > 0) {
-          logaccess($_SESSION['username'], $package, "Building the query.");
+          logaccess($db, $_SESSION['username'], $package, "Building the query.");
 
           $q_string = 
             "usr_first       = \"" . $formVars['usr_first']     . "\"," .
@@ -55,7 +55,7 @@
             "usr_phone       = \"" . $formVars['usr_phone']     . "\"";
 
           if (strlen($formVars['usr_passwd']) > 0 && $formVars['usr_passwd'] === $formVars['usr_reenter']) {
-            logaccess($_SESSION['username'], $package, "Resetting user " . $formVars['usr_last'] . " password.");
+            logaccess($db, $_SESSION['username'], $package, "Resetting user " . $formVars['usr_last'] . " password.");
             $q_string .= ",usr_passwd = '" . MD5($formVars['usr_passwd']) . "' ";
           }
 
@@ -64,9 +64,9 @@
             $message = "Account settings updated.";
           }
 
-          logaccess($_SESSION['username'], $package, "Saving Changes to: " . $formVars['usr_last']);
+          logaccess($db, $_SESSION['username'], $package, "Saving Changes to: " . $formVars['usr_last']);
 
-          mysql_query($query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysql_error()));
+          mysqli_query($db, $query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysqli_error($db)));
 
           print "alert('" . $message . "');\n";
         } else {
@@ -74,7 +74,7 @@
         }
       }
     } else {
-      logaccess($_SESSION['username'], $package, "Unauthorized access.");
+      logaccess($db, $_SESSION['username'], $package, "Unauthorized access.");
     }
   }
 

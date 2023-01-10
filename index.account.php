@@ -10,7 +10,7 @@
 
   $package = "index.account.php";
 
-  logaccess($formVars['username'], $package, "Checking out the index.");
+  logaccess($db, $formVars['username'], $package, "Checking out the index.");
 
 ?>
 <!DOCTYPE HTML>
@@ -44,7 +44,7 @@
 </div>
 
 <?php
-    if (check_userlevel($AL_Admin)) {
+    if (check_userlevel($db, $AL_Admin)) {
 ?>
 <div class="main ui-widget-content">
 
@@ -61,7 +61,7 @@
 </div>
 
 <?php
-    if (check_userlevel($AL_Developer)) {
+    if (check_userlevel($db, $AL_Developer)) {
       print "<div class=\"main ui-widget-content\">\n";
 
       print "<h2>Development Tasks</h2>\n\n";

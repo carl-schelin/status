@@ -1,0 +1,298 @@
+
+
+alter table status add column strp_jira int(10) not null default 0 after strp_name;
+
+create table epics (
+  epic_id int(10) not null auto_increment,
+  epic_jira char(60) not null default '',
+  epic_title char(255) not null default '',
+  epic_user int(10) not null default 0,
+  epic_closed int(10) not null default 0,
+  primary key (epic_id)
+);
+
+create table userstories (
+  user_id int(10) not null auto_increment,
+  user_epic int(10) not null default 0,
+  user_jira char(60) not null default '',
+  user_task char(255) not null default '',
+  user_user int(10) not null default 0,
+  user_closed int(10) not null default 0,
+  primary key (user_id)
+);
+
+insert into weeks set wk_id = null,wk_date = '2020-01-10';
+insert into weeks set wk_id = null,wk_date = '2020-01-17';
+insert into weeks set wk_id = null,wk_date = '2020-01-24';
+insert into weeks set wk_id = null,wk_date = '2020-01-31';
+insert into weeks set wk_id = null,wk_date = '2020-02-07';
+insert into weeks set wk_id = null,wk_date = '2020-02-14';
+insert into weeks set wk_id = null,wk_date = '2020-02-21';
+insert into weeks set wk_id = null,wk_date = '2020-02-28';
+insert into weeks set wk_id = null,wk_date = '2020-03-06';
+insert into weeks set wk_id = null,wk_date = '2020-03-13';
+insert into weeks set wk_id = null,wk_date = '2020-03-20';
+insert into weeks set wk_id = null,wk_date = '2020-03-27';
+insert into weeks set wk_id = null,wk_date = '2020-04-03';
+insert into weeks set wk_id = null,wk_date = '2020-04-10';
+insert into weeks set wk_id = null,wk_date = '2020-04-17';
+insert into weeks set wk_id = null,wk_date = '2020-04-24';
+insert into weeks set wk_id = null,wk_date = '2020-05-01';
+insert into weeks set wk_id = null,wk_date = '2020-05-08';
+insert into weeks set wk_id = null,wk_date = '2020-05-15';
+insert into weeks set wk_id = null,wk_date = '2020-05-22';
+insert into weeks set wk_id = null,wk_date = '2020-05-29';
+insert into weeks set wk_id = null,wk_date = '2020-06-05';
+insert into weeks set wk_id = null,wk_date = '2020-06-12';
+insert into weeks set wk_id = null,wk_date = '2020-06-19';
+insert into weeks set wk_id = null,wk_date = '2020-06-26';
+insert into weeks set wk_id = null,wk_date = '2020-07-03';
+insert into weeks set wk_id = null,wk_date = '2020-07-10';
+insert into weeks set wk_id = null,wk_date = '2020-07-17';
+insert into weeks set wk_id = null,wk_date = '2020-07-24';
+insert into weeks set wk_id = null,wk_date = '2020-07-31';
+insert into weeks set wk_id = null,wk_date = '2020-08-07';
+insert into weeks set wk_id = null,wk_date = '2020-08-14';
+insert into weeks set wk_id = null,wk_date = '2020-08-21';
+insert into weeks set wk_id = null,wk_date = '2020-08-28';
+insert into weeks set wk_id = null,wk_date = '2020-09-04';
+insert into weeks set wk_id = null,wk_date = '2020-09-11';
+insert into weeks set wk_id = null,wk_date = '2020-09-18';
+insert into weeks set wk_id = null,wk_date = '2020-09-25';
+insert into weeks set wk_id = null,wk_date = '2020-10-02';
+insert into weeks set wk_id = null,wk_date = '2020-10-09';
+insert into weeks set wk_id = null,wk_date = '2020-10-16';
+insert into weeks set wk_id = null,wk_date = '2020-10-23';
+insert into weeks set wk_id = null,wk_date = '2020-10-30';
+insert into weeks set wk_id = null,wk_date = '2020-11-06';
+insert into weeks set wk_id = null,wk_date = '2020-11-13';
+insert into weeks set wk_id = null,wk_date = '2020-11-20';
+insert into weeks set wk_id = null,wk_date = '2020-11-27';
+insert into weeks set wk_id = null,wk_date = '2020-12-04';
+insert into weeks set wk_id = null,wk_date = '2020-12-11';
+insert into weeks set wk_id = null,wk_date = '2020-12-18';
+insert into weeks set wk_id = null,wk_date = '2020-12-25';
+insert into weeks set wk_id = null,wk_date = '2021-01-01';
+insert into weeks set wk_id = null,wk_date = '2021-01-08';
+insert into weeks set wk_id = null,wk_date = '2021-01-15';
+insert into weeks set wk_id = null,wk_date = '2021-01-22';
+insert into weeks set wk_id = null,wk_date = '2021-01-29';
+insert into weeks set wk_id = null,wk_date = '2021-02-05';
+insert into weeks set wk_id = null,wk_date = '2021-02-12';
+insert into weeks set wk_id = null,wk_date = '2021-02-19';
+insert into weeks set wk_id = null,wk_date = '2021-02-26';
+insert into weeks set wk_id = null,wk_date = '2021-03-05';
+insert into weeks set wk_id = null,wk_date = '2021-03-12';
+insert into weeks set wk_id = null,wk_date = '2021-03-19';
+insert into weeks set wk_id = null,wk_date = '2021-03-26';
+insert into weeks set wk_id = null,wk_date = '2021-04-02';
+insert into weeks set wk_id = null,wk_date = '2021-04-09';
+insert into weeks set wk_id = null,wk_date = '2021-04-16';
+insert into weeks set wk_id = null,wk_date = '2021-04-23';
+insert into weeks set wk_id = null,wk_date = '2021-04-30';
+insert into weeks set wk_id = null,wk_date = '2021-05-07';
+insert into weeks set wk_id = null,wk_date = '2021-05-14';
+insert into weeks set wk_id = null,wk_date = '2021-05-21';
+insert into weeks set wk_id = null,wk_date = '2021-05-28';
+insert into weeks set wk_id = null,wk_date = '2021-06-04';
+insert into weeks set wk_id = null,wk_date = '2021-06-11';
+insert into weeks set wk_id = null,wk_date = '2021-06-18';
+insert into weeks set wk_id = null,wk_date = '2021-06-25';
+insert into weeks set wk_id = null,wk_date = '2021-07-02';
+insert into weeks set wk_id = null,wk_date = '2021-07-09';
+insert into weeks set wk_id = null,wk_date = '2021-07-16';
+insert into weeks set wk_id = null,wk_date = '2021-07-23';
+insert into weeks set wk_id = null,wk_date = '2021-07-30';
+insert into weeks set wk_id = null,wk_date = '2021-08-06';
+insert into weeks set wk_id = null,wk_date = '2021-08-13';
+insert into weeks set wk_id = null,wk_date = '2021-08-20';
+insert into weeks set wk_id = null,wk_date = '2021-08-27';
+insert into weeks set wk_id = null,wk_date = '2021-09-03';
+insert into weeks set wk_id = null,wk_date = '2021-09-10';
+insert into weeks set wk_id = null,wk_date = '2021-09-17';
+insert into weeks set wk_id = null,wk_date = '2021-09-24';
+insert into weeks set wk_id = null,wk_date = '2021-10-01';
+insert into weeks set wk_id = null,wk_date = '2021-10-08';
+insert into weeks set wk_id = null,wk_date = '2021-10-15';
+insert into weeks set wk_id = null,wk_date = '2021-10-22';
+insert into weeks set wk_id = null,wk_date = '2021-10-29';
+insert into weeks set wk_id = null,wk_date = '2021-11-05';
+insert into weeks set wk_id = null,wk_date = '2021-11-12';
+insert into weeks set wk_id = null,wk_date = '2021-11-19';
+insert into weeks set wk_id = null,wk_date = '2021-11-26';
+insert into weeks set wk_id = null,wk_date = '2021-12-03';
+insert into weeks set wk_id = null,wk_date = '2021-12-10';
+insert into weeks set wk_id = null,wk_date = '2021-12-17';
+insert into weeks set wk_id = null,wk_date = '2021-12-24';
+insert into weeks set wk_id = null,wk_date = '2021-12-31';
+insert into weeks set wk_id = null,wk_date = '2022-01-07';
+insert into weeks set wk_id = null,wk_date = '2022-01-14';
+insert into weeks set wk_id = null,wk_date = '2022-01-21';
+insert into weeks set wk_id = null,wk_date = '2022-01-28';
+insert into weeks set wk_id = null,wk_date = '2022-02-04';
+insert into weeks set wk_id = null,wk_date = '2022-02-11';
+insert into weeks set wk_id = null,wk_date = '2022-02-18';
+insert into weeks set wk_id = null,wk_date = '2022-02-25';
+insert into weeks set wk_id = null,wk_date = '2022-03-04';
+insert into weeks set wk_id = null,wk_date = '2022-03-11';
+insert into weeks set wk_id = null,wk_date = '2022-03-18';
+insert into weeks set wk_id = null,wk_date = '2022-03-25';
+insert into weeks set wk_id = null,wk_date = '2022-04-01';
+insert into weeks set wk_id = null,wk_date = '2022-04-08';
+insert into weeks set wk_id = null,wk_date = '2022-04-15';
+insert into weeks set wk_id = null,wk_date = '2022-04-22';
+insert into weeks set wk_id = null,wk_date = '2022-04-29';
+insert into weeks set wk_id = null,wk_date = '2022-05-06';
+insert into weeks set wk_id = null,wk_date = '2022-05-13';
+insert into weeks set wk_id = null,wk_date = '2022-05-20';
+insert into weeks set wk_id = null,wk_date = '2022-05-27';
+insert into weeks set wk_id = null,wk_date = '2022-06-03';
+insert into weeks set wk_id = null,wk_date = '2022-06-10';
+insert into weeks set wk_id = null,wk_date = '2022-06-17';
+insert into weeks set wk_id = null,wk_date = '2022-06-24';
+insert into weeks set wk_id = null,wk_date = '2022-07-01';
+insert into weeks set wk_id = null,wk_date = '2022-07-08';
+insert into weeks set wk_id = null,wk_date = '2022-07-15';
+insert into weeks set wk_id = null,wk_date = '2022-07-22';
+insert into weeks set wk_id = null,wk_date = '2022-07-29';
+insert into weeks set wk_id = null,wk_date = '2022-08-05';
+insert into weeks set wk_id = null,wk_date = '2022-08-12';
+insert into weeks set wk_id = null,wk_date = '2022-08-19';
+insert into weeks set wk_id = null,wk_date = '2022-08-26';
+insert into weeks set wk_id = null,wk_date = '2022-09-02';
+insert into weeks set wk_id = null,wk_date = '2022-09-09';
+insert into weeks set wk_id = null,wk_date = '2022-09-16';
+insert into weeks set wk_id = null,wk_date = '2022-09-23';
+insert into weeks set wk_id = null,wk_date = '2022-09-30';
+insert into weeks set wk_id = null,wk_date = '2022-10-07';
+insert into weeks set wk_id = null,wk_date = '2022-10-14';
+insert into weeks set wk_id = null,wk_date = '2022-10-21';
+insert into weeks set wk_id = null,wk_date = '2022-10-28';
+insert into weeks set wk_id = null,wk_date = '2022-11-04';
+insert into weeks set wk_id = null,wk_date = '2022-11-11';
+insert into weeks set wk_id = null,wk_date = '2022-11-18';
+insert into weeks set wk_id = null,wk_date = '2022-11-25';
+insert into weeks set wk_id = null,wk_date = '2022-12-02';
+insert into weeks set wk_id = null,wk_date = '2022-12-09';
+insert into weeks set wk_id = null,wk_date = '2022-12-16';
+insert into weeks set wk_id = null,wk_date = '2022-12-23';
+insert into weeks set wk_id = null,wk_date = '2022-12-30';
+insert into weeks set wk_id = null,wk_date = '2023-01-06';
+insert into weeks set wk_id = null,wk_date = '2023-01-13';
+insert into weeks set wk_id = null,wk_date = '2023-01-20';
+insert into weeks set wk_id = null,wk_date = '2023-01-27';
+insert into weeks set wk_id = null,wk_date = '2023-02-03';
+insert into weeks set wk_id = null,wk_date = '2023-02-10';
+insert into weeks set wk_id = null,wk_date = '2023-02-17';
+insert into weeks set wk_id = null,wk_date = '2023-02-24';
+insert into weeks set wk_id = null,wk_date = '2023-03-03';
+insert into weeks set wk_id = null,wk_date = '2023-03-10';
+insert into weeks set wk_id = null,wk_date = '2023-03-17';
+insert into weeks set wk_id = null,wk_date = '2023-03-24';
+insert into weeks set wk_id = null,wk_date = '2023-03-31';
+insert into weeks set wk_id = null,wk_date = '2023-04-07';
+insert into weeks set wk_id = null,wk_date = '2023-04-14';
+insert into weeks set wk_id = null,wk_date = '2023-04-21';
+insert into weeks set wk_id = null,wk_date = '2023-04-28';
+insert into weeks set wk_id = null,wk_date = '2023-05-05';
+insert into weeks set wk_id = null,wk_date = '2023-05-12';
+insert into weeks set wk_id = null,wk_date = '2023-05-19';
+insert into weeks set wk_id = null,wk_date = '2023-05-26';
+insert into weeks set wk_id = null,wk_date = '2023-06-02';
+insert into weeks set wk_id = null,wk_date = '2023-06-09';
+insert into weeks set wk_id = null,wk_date = '2023-06-16';
+insert into weeks set wk_id = null,wk_date = '2023-06-23';
+insert into weeks set wk_id = null,wk_date = '2023-06-30';
+insert into weeks set wk_id = null,wk_date = '2023-07-07';
+insert into weeks set wk_id = null,wk_date = '2023-07-14';
+insert into weeks set wk_id = null,wk_date = '2023-07-21';
+insert into weeks set wk_id = null,wk_date = '2023-07-28';
+insert into weeks set wk_id = null,wk_date = '2023-08-04';
+insert into weeks set wk_id = null,wk_date = '2023-08-11';
+insert into weeks set wk_id = null,wk_date = '2023-08-18';
+insert into weeks set wk_id = null,wk_date = '2023-08-25';
+insert into weeks set wk_id = null,wk_date = '2023-09-01';
+insert into weeks set wk_id = null,wk_date = '2023-09-08';
+insert into weeks set wk_id = null,wk_date = '2023-09-15';
+insert into weeks set wk_id = null,wk_date = '2023-09-22';
+insert into weeks set wk_id = null,wk_date = '2023-09-29';
+insert into weeks set wk_id = null,wk_date = '2023-10-06';
+insert into weeks set wk_id = null,wk_date = '2023-10-13';
+insert into weeks set wk_id = null,wk_date = '2023-10-20';
+insert into weeks set wk_id = null,wk_date = '2023-10-27';
+insert into weeks set wk_id = null,wk_date = '2023-11-03';
+insert into weeks set wk_id = null,wk_date = '2023-11-10';
+insert into weeks set wk_id = null,wk_date = '2023-11-17';
+insert into weeks set wk_id = null,wk_date = '2023-11-24';
+insert into weeks set wk_id = null,wk_date = '2023-12-01';
+insert into weeks set wk_id = null,wk_date = '2023-12-08';
+insert into weeks set wk_id = null,wk_date = '2023-12-15';
+insert into weeks set wk_id = null,wk_date = '2023-12-22';
+insert into weeks set wk_id = null,wk_date = '2023-12-29';
+
+Changed the mysql functions to mysqli. Need some db connections as well.
+
+Changed mysql_real_escape_string() to mysqli_real_escape_string($db);
+Changed mysql_query() to mysqli_query($db);
+Changed mysql_error() to mysqli_error($db);
+
+Don't need connection string:
+
+Changed mysql_num_rows() to mysqli_num_rows();
+Changed mysql_fetch_array() to mysqli_fetch_array();
+Changed mysql_fetch_row() to mysqli_fetch_row();
+Changed mysql_free_result() to mysqli_free_result();
+
+For the connection string:
+
+Changed: mysql_connect($server,$user,$pass); to $r_db = mysqli_connect($p_server, $p_user, $p_pass, $p_database);
+Changed: mysql_select_db($database,$db); to mysqli_select_db($r_db, $p_database);
+
+
+Add the db_connect() function to the function.php script.
+
+In the scripts, added a connection and updated the check_login() function to include the $db. Also reverse so that function.php comes before check.php due to the dbconnect function
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
+
+Update the logaccess function to include the passed $db. Update the function as well of course.
+
+Update the check_userlevel() function to add $db. Update the function as well.
+
+
+| bandf            |
+| cande            |
+| class            |
+| epics            |
+| events           |
+| grouplist        |
+| groups           |
+| levels           |
+| log              |
+| polls            |
+| progress         |
+| project          |
+| ras              |
+| report           |
+| status           |
+| themes           |
+| titles           |
+| todo             |
+| type             |
+| users            |
+| userstories      |
+| weeks            |
+
+
+Time to rename the tables in the status management app. Groups was a problem with newer mysql.
+
+
+rename table bandf to st_bandf;
+
+
+
+
+

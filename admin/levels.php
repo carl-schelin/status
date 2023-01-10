@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_Admin);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_Admin);
 
   $package = "levels.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
 ?>
 <!DOCTYPE HTML>
@@ -27,7 +31,7 @@
 <script type="text/javascript">
 <?php
 
-  if (check_userlevel($AL_Admin)) {
+  if (check_userlevel($db, $AL_Admin)) {
 ?>
 function delete_level( p_script_url ) {
   var question;

@@ -19,19 +19,19 @@
       $formVars['id'] = clean($_GET['id'], 10);
     }
 
-    if (check_userlevel(1)) {
-      logaccess($_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from userstories");
+    if (check_userlevel($db, $AL_Developer)) {
+      logaccess($db, $_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from userstories");
 
       $q_string  = "delete ";
       $q_string .= "from userstories ";
       $q_string .= "where user_id = " . $formVars['id'];
-      $insert = mysql_query($q_string) or die($q_string . ": " . mysql_error());
+      $insert = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
 
       print "alert('User Story deleted.');\n";
 
       print "clear_fields();\n";
     } else {
-      logaccess($_SESSION['uid'], $package, "Access denied");
+      logaccess($db, $_SESSION['uid'], $package, "Access denied");
     }
   }
 ?>

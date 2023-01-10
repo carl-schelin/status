@@ -19,18 +19,18 @@
       $formVars['id'] = clean($_GET['id'], 10);
     }
 
-    if (check_userlevel(2)) {
-      logaccess($_SESSION['uid'], $package, "Requesting record " . $formVars['id'] . " from epics");
+    if (check_userlevel($db, $AL_Admin)) {
+      logaccess($db, $_SESSION['uid'], $package, "Requesting record " . $formVars['id'] . " from epics");
 
       $q_string  = "select epic_jira,epic_title,epic_closed ";
       $q_string .= "from epics ";
       $q_string .= "where epic_id = " . $formVars['id'];
-      $q_epics = mysql_query($q_string) or die (mysql_error());
-      $a_epics = mysql_fetch_array($q_epics);
-      mysql_free_result($q_epics);
+      $q_epics = mysqli_query($db, $q_string) or die (mysqli_error($db));
+      $a_epics = mysqli_fetch_array($q_epics);
+      mysqli_free_result($q_epics);
 
-      print "document.epics.epic_jira.value = '"       . mysql_real_escape_string($a_epics['epic_jira'])       . "';\n";
-      print "document.epics.epic_title.value = '"      . mysql_real_escape_string($a_epics['epic_title'])      . "';\n";
+      print "document.epics.epic_jira.value = '"       . mysqli_real_escape_string($db, $a_epics['epic_jira'])       . "';\n";
+      print "document.epics.epic_title.value = '"      . mysqli_real_escape_string($db, $a_epics['epic_title'])      . "';\n";
 
       if ($a_epics['epic_closed']) {
         print "document.epics.epic_closed.checked = true;\n";
@@ -41,7 +41,7 @@
       print "document.epics.id.value = " . $formVars['id'] . ";\n";
 
     } else {
-      logaccess($_SESSION['uid'], $package, "Unauthorized access.");
+      logaccess($db, $_SESSION['uid'], $package, "Unauthorized access.");
     }
   }
 ?>

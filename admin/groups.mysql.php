@@ -20,7 +20,7 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_Admin)) {
+    if (check_userlevel($db, $AL_Admin)) {
       if ($formVars['update'] == 0 || $formVars['update'] == 1) {
         $formVars['id']               = clean($_GET['id'],                10);
         $formVars['grp_name']         = clean($_GET['grp_name'],         100);
@@ -38,21 +38,21 @@
         }
 
         if (strlen($formVars['grp_name']) > 0) {
-          logaccess($_SESSION['username'], $package, "Building the query.");
+          logaccess($db, $_SESSION['username'], $package, "Building the query.");
 
 # get old group manager.
           $q_string  = "select grp_manager ";
           $q_string .= "from groups ";
           $q_string .= "where grp_id = " . $formVars['id'] . " ";
-          $q_groups = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-          if (mysql_num_rows($q_groups) > 0) {
-            $a_groups = mysql_fetch_array($q_groups);
+          $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          if (mysqli_num_rows($q_groups) > 0) {
+            $a_groups = mysqli_fetch_array($q_groups);
 # got it, now update everyone in the same group with the same old manager assuming the group already exists.
             $q_string  = "update ";
             $q_string .= "users ";
             $q_string .= "set usr_manager = " . $formVars['grp_manager'] . " ";
             $q_string .= "where usr_group = " . $formVars['id'] . " and usr_manager = " . $a_groups['grp_manager'] . " ";
-            $result = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+            $result = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
           }
 
 # all done. now update groups with the new information.
@@ -73,9 +73,9 @@
             $message = "Group updated.";
           }
 
-          logaccess($_SESSION['username'], $package, "Saving Changes to: " . $formVars['grp_name']);
+          logaccess($db, $_SESSION['username'], $package, "Saving Changes to: " . $formVars['grp_name']);
 
-          mysql_query($query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysql_error()));
+          mysqli_query($db, $query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysqli_error($db)));
 
           print "alert('" . $message . "');\n";
         } else {
@@ -110,7 +110,7 @@
 
       $title  = "<table class=\"ui-styled-table\">";
       $title .= "<tr>";
-      if (check_userlevel($AL_Admin)) {
+      if (check_userlevel($db, $AL_Admin)) {
         $title .= "  <th class=\"ui-state-default\">Del</th>";
       }
       $title .= "  <th class=\"ui-state-default\">Id</th>";
@@ -126,9 +126,9 @@
       $q_string .= "from groups ";
       $q_string .= "left join users on users.usr_id = groups.grp_manager ";
       $q_string .= "order by grp_name";
-      $q_groups = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      if (mysql_num_rows($q_groups) > 0) {
-        while ($a_groups = mysql_fetch_array($q_groups)) {
+      $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_groups) > 0) {
+        while ($a_groups = mysqli_fetch_array($q_groups)) {
 
           $linkstart = "<a href=\"#\" onclick=\"show_file('groups.fill.php?id="  . $a_groups['grp_id'] . "');jQuery('#dialogGroup').dialog('open');\">";
           $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_line('groups.del.php?id=" . $a_groups['grp_id'] . "');\">";
@@ -140,7 +140,7 @@
           }
 
           $group .= "<tr>";
-          if (check_userlevel($AL_Admin)) {
+          if (check_userlevel($db, $AL_Admin)) {
             $group .= "  <td class=\"" . $class . " delete\">" . $linkdel   . "</td>";
           }
           $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_groups['grp_id']           . $linkend . "</td>";
@@ -157,11 +157,11 @@
         $group .= "</tr>";
       }
 
-      mysql_free_result($q_groups);
+      mysqli_free_result($q_groups);
 
       $group .= "</table>";
 
-      print "document.getElementById('group_mysql').innerHTML = '"     . mysql_real_escape_string($group)     . "';\n\n";
+      print "document.getElementById('group_mysql').innerHTML = '"     . mysqli_real_escape_string($db, $group)     . "';\n\n";
 
       print "document.groups.grp_name.value = '';\n";
       print "document.groups.grp_email.value = '';\n";
@@ -169,7 +169,7 @@
       print "document.groups.grp_disabled[0].selected = true;\n";
       print "document.groups.grp_report.value = '';\n";
     } else {
-      logaccess($_SESSION['username'], $package, "Unauthorized access.");
+      logaccess($db, $_SESSION['username'], $package, "Unauthorized access.");
     }
   }
 ?>

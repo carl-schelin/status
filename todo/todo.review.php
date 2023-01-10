@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "todo.review.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $formVars['user']      = clean($_GET['user'], 10);
   $formVars['group']     = clean($_GET['group'], 4);
@@ -23,19 +27,19 @@
     $formVars['user'] = 1;
   }
 
-  logaccess($_SESSION['username'], "todo.review.php", "Viewing the todo review page: user=" . $user . " group=" . $formVars['group']);
+  logaccess($db, $_SESSION['username'], "todo.review.php", "Viewing the todo review page: user=" . $user . " group=" . $formVars['group']);
 
   $q_string  = "select usr_id,usr_group ";
   $q_string .= "from users ";
   $q_string .= "where usr_name = '" . $_SESSION['username'] . "'";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   $formVars['id'] = $a_users['usr_id'];
 
   if ($formVars['user'] != $formVars['id']) {
-    logaccess($_SESSION['username'], "todo.review.php", "Escalated privileged access to " . $formVars['id']);
-    check_login($AL_Supervisor);
+    logaccess($db, $_SESSION['username'], "todo.review.php", "Escalated privileged access to " . $formVars['id']);
+    check_login($db, $AL_Supervisor);
   }
 
 ?>

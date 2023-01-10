@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "add.bandf.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $DEBUG=0;
 
@@ -21,18 +25,18 @@
   $q_string  = "select usr_id ";
   $q_string .= "from users ";
   $q_string .= "where usr_name = '" . $_SESSION['username'] . "'";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   $formVars['id'] = $a_users['usr_id'];
 
 // Get all the weeks into an array
   $q_string  = "select wk_id,wk_date ";
   $q_string .= "from weeks";
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $week = 0;
-  while ( $a_weeks = mysql_fetch_array($q_weeks) ) {
+  while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
     $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
   }
   $weektot = count($weekval) + 1;
@@ -41,9 +45,9 @@
   $q_string  = "select bf_week ";
   $q_string .= "from bandf ";
   $q_string .= "order by bf_week";
-  $q_bandf = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_bandf = mysql_fetch_array($q_bandf) ) {
+  while ( $a_bandf = mysqli_fetch_array($q_bandf) ) {
     $week = $a_bandf['bf_week'];
   }
 
@@ -150,8 +154,8 @@ function clear_fields() {
   $q_string .= "from users ";
   $q_string .= "where usr_level = 1 ";
   $q_string .= "order by usr_last";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_users = mysql_fetch_array($q_users)) {
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_users = mysqli_fetch_array($q_users)) {
     print "<option value=" . $a_users['usr_id'] . ">" . $a_users['usr_last'] . ", " . $a_users['usr_first'] . "</option>\n";
   }
   print "</select></td>\n";

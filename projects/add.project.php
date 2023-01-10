@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "add.project.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $formVars['group'] = clean($_GET['group'], 10);
 
@@ -76,7 +80,7 @@ if (isset($_POST['project'])) {
   $formVars['prj_desc']  = clean($_POST['desc'], 100);
   $formVars['prj_group'] = clean($_POST['group'], 10);
 
-  logaccess($_SESSION['username'], "add.project.php", "Adding project: " . $formVars['prj_name']);
+  logaccess($db, $_SESSION['username'], "add.project.php", "Adding project: " . $formVars['prj_name']);
 
   $q_string = "insert into project " . 
     "set prj_id = NULL, " . 
@@ -87,7 +91,7 @@ if (isset($_POST['project'])) {
     "prj_desc  = \"" . $formVars['prj_desc']  . "\", " .
     "prj_group = "   . $formVars['prj_group'];
 
-  mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 }
 ?>
@@ -137,8 +141,8 @@ if (isset($_POST['project'])) {
 $q_string  = "select prj_id,prj_name,prj_code,prj_snow,prj_task,prj_desc ";
 $q_string .= "from project ";
 $q_string .= "order by prj_name";
-$q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-while ($a_project = mysql_fetch_array($q_project)) {
+$q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_project = mysqli_fetch_array($q_project)) {
 
   print "<tr>\n";
   print "  <td class=\"ui-widget-content\">" . $a_project['prj_id'] . "</td>\n";
@@ -158,7 +162,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysql_free_result($q_project);
+mysqli_free_result($q_project);
 
 ?>
 </table>

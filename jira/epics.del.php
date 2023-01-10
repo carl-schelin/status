@@ -19,19 +19,19 @@
       $formVars['id'] = clean($_GET['id'], 10);
     }
 
-    if (check_userlevel(1)) {
-      logaccess($_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from epics");
+    if (check_userlevel($db, $AL_Developer)) {
+      logaccess($db, $_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from epics");
 
       $q_string  = "delete ";
       $q_string .= "from epics ";
       $q_string .= "where epic_id = " . $formVars['id'];
-      $insert = mysql_query($q_string) or die($q_string . ": " . mysql_error());
+      $insert = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
 
       print "alert('Epic deleted.');\n";
 
       print "clear_fields();\n";
     } else {
-      logaccess($_SESSION['uid'], $package, "Access denied");
+      logaccess($db, $_SESSION['uid'], $package, "Access denied");
     }
   }
 ?>

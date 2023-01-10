@@ -20,7 +20,7 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
       $formVars['id']               = clean($_GET['id'],               10);
       $formVars['week']             = clean($_GET['week'],             10);
       $formVars['user']             = clean($_GET['user'],             10);
@@ -39,7 +39,7 @@
       $formVars['assign']           = clean($_GET['assign'],           10);
       $formVars['group']            = clean($_GET['group'],            10);
 
-      logaccess($_SESSION['username'], "todo.mysql.php", "Accessing script. id:" . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+      logaccess($db, $_SESSION['username'], "todo.mysql.php", "Accessing script. id:" . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
 
       if (!isset($_GET['week'])) {
         $formVars['week'] = 112;
@@ -107,29 +107,29 @@
           $q_string  = "select usr_email ";
           $q_string .= "from users ";
           $q_string .= "where usr_id = " . $formVars['assign'];
-          $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-          $a_users = mysql_fetch_array($q_users);
+          $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          $a_users = mysqli_fetch_array($q_users);
           $usermail = $a_users['usr_email'];
 
-          logaccess($_SESSION['username'], "todo.mysql.php", "Todo Debug1 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+          logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug1 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
 
           $q_string  = "select usr_first,usr_last ";
           $q_string .= "from users ";
           $q_string .= "where usr_id = " . $formVars['user'];
-          $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-          $a_users = mysql_fetch_array($q_users);
+          $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          $a_users = mysqli_fetch_array($q_users);
           $assignedby = $a_users['usr_first'] . " " . $a_users['usr_last'];
 
-          logaccess($_SESSION['username'], "todo.mysql.php", "Todo Debug2 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+          logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug2 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
 
           $q_string  = "select wk_date ";
           $q_string .= "from weeks ";
           $q_string .= "where wk_id = " . $formVars['week'];
-          $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-          $a_weeks = mysql_fetch_array($q_weeks);
+          $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          $a_weeks = mysqli_fetch_array($q_weeks);
           $dueweek = $a_weeks['wk_date'];
 
-          logaccess($_SESSION['username'], "todo.mysql.php", "Todo Debug3 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+          logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug3 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
           $body  = "<html>";
           $body .= "<body>";
           $body .= "<p>You have been assigned the following task by " . $assignedby . " which is due " . $dueweek . ".</p>";
@@ -140,16 +140,16 @@
 
           $body = wordwrap($body, 70);
 
-          logaccess($_SESSION['username'], "todo.mysql.php", "Todo Debug4 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+          logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug4 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
           $headers = 'MIME-Version: 1.0' . "\r\n";
           $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 
-          logaccess($_SESSION['username'], "todo.mysql.php", "Todo Debug5 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+          logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug5 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
           mail($usermail, "Item Added to your Todo List", $body, $headers);
 
           $query_user = $formVars['assign'];
 
-          logaccess($_SESSION['username'], "todo.mysql.php", "Todo Debug6 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+          logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug6 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
         }
 
         $query_status = "insert into status set " .
@@ -183,20 +183,20 @@
       if ($formVars['update'] == 0) {
         $q_string = "insert into todo set todo_id = NULL," . $query_todo;
 
-        $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-        logaccess($_SESSION['username'], "todo.mysql.php", "Adding todo record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+        $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+        logaccess($db, $_SESSION['username'], "todo.mysql.php", "Adding todo record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
       }
       if ($formVars['update'] == 1) {
         $q_string = "update todo set " . $query_todo . " where todo_id = " . $formVars['id'];
 
-        logaccess($_SESSION['username'], "todo.mysql.php", "Updating todo record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
-        $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+        logaccess($db, $_SESSION['username'], "todo.mysql.php", "Updating todo record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+        $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       }
       if ($formVars['update'] == 2) {
         $q_string = $query_status;
 
-        logaccess($_SESSION['username'], "todo.mysql.php", "Adding status record: week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
-        $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+        logaccess($db, $_SESSION['username'], "todo.mysql.php", "Adding status record: week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
+        $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       }
     }
   }
@@ -224,15 +224,15 @@
   $q_string  = "select usr_template ";
   $q_string .= "from users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_users = mysql_fetch_array($q_users);
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_users = mysqli_fetch_array($q_users);
 
   // Retrieve the class headers. Start with 5 as 1-4 are obsolete (but still used)
   $q_string  = "select cls_id,cls_name,cls_project,cls_help ";
   $q_string .= "from class ";
   $q_string .= "where cls_template = " . $a_users['usr_template'];
-  $q_class = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_class = mysql_fetch_array($q_class)) {
+  $q_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_class = mysqli_fetch_array($q_class)) {
     if ($a_class['cls_id'] == $formVars['class']) {
       $checked = " checked";
     } else {
@@ -257,15 +257,15 @@
     $q_string .= "and todo_group = " . $_SESSION['group'] . " ";
     $q_string .= "and todo_class = " . $a_class['cls_id'] . " ";
     $q_string .= "order by todo_project,todo_due,todo_day,todo_status,todo_priority,todo_name ";
-    $q_todo = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ($a_todo = mysql_fetch_assoc($q_todo)) {
+    $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_todo = mysqli_fetch_assoc($q_todo)) {
 
 // Retreive the project information for this entry
       $q_string  = "select prj_desc ";
       $q_string .= "from project ";
       $q_string .= "where prj_id = " . $a_todo['todo_project'];
-      $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_project = mysql_fetch_assoc($q_project);
+      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_project = mysqli_fetch_assoc($q_project);
       if ($a_project['prj_desc'] != $c_project && $a_class['cls_project'] == 1) {
         $output .= "<tr>";
         $output .= "<td class=\"delete ui-widget-content\">*</td>";
@@ -273,7 +273,7 @@
         $output .= "</tr>";
         $c_project = $a_project['prj_desc'];
       }
-      mysql_free_result($q_project);
+      mysqli_free_result($q_project);
 
       if ($a_todo['todo_completed'] > 0) {
         $tdclass = "ui-state-highlight";
@@ -313,13 +313,13 @@
       } else {
         $daily_output .= "Required - ";
       }
-      $daily_output .= $a_todo['todo_priority'] . " - " . mysql_real_escape_string($a_todo['todo_name']) . "</a>" . "</td>";
+      $daily_output .= $a_todo['todo_priority'] . " - " . mysqli_real_escape_string($db, $a_todo['todo_name']) . "</a>" . "</td>";
 
       $q_string  = "select wk_date ";
       $q_string .= "from weeks ";
       $q_string .= "where wk_id = " . $a_todo['todo_due'];
-      $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_weeks = mysql_fetch_assoc($q_weeks);
+      $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_weeks = mysqli_fetch_assoc($q_weeks);
 
       if ($a_todo['todo_save'] == 1) {
         $tdclass = "ui-widget-content";
@@ -335,17 +335,17 @@
 
       $output .= $daily_output;
     }
-    mysql_free_result($q_todo);
+    mysqli_free_result($q_todo);
   }
 }
 
-mysql_free_result($q_class);
+mysqli_free_result($q_class);
 
 $output .= "</table>";
 
 ?>
 
-document.getElementById('from_mysql').innerHTML = '<?php print mysql_real_escape_string($output); ?>';
+document.getElementById('from_mysql').innerHTML = '<?php print mysqli_real_escape_string($db, $output); ?>';
 
 document.taskmgr.id.value = 0;
 

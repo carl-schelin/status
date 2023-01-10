@@ -20,7 +20,7 @@
       $formVars['update'] = -1;
     }
 
-    if (check_userlevel($AL_User)) {
+    if (check_userlevel($db, $AL_User)) {
       $formVars['id']       = clean($_GET['id'], 10);
       $formVars['name']     = clean($_GET['name'], 255);
       $formVars['code']     = clean($_GET['code'], 10);
@@ -42,8 +42,8 @@
       $q_string  = "select usr_projects ";
       $q_string .= "from users ";
       $q_string .= "where usr_id = " . $_SESSION['uid'];
-      $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      $a_users = mysql_fetch_array($q_users);
+      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_users = mysqli_fetch_array($q_users);
 
       $new_projects = '';
       $matches[0] = '';
@@ -51,8 +51,8 @@
       $q_string .= "from project ";
       $q_string .= "where prj_group = " . $_SESSION['group'] . " ";
       $q_string .= "order by prj_id";
-      $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-      while ($a_project = mysql_fetch_array($q_project)) {
+      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ($a_project = mysqli_fetch_array($q_project)) {
 
 # regex check
         $projectid = "/:" . $a_project['prj_id'] . ":/i";
@@ -63,7 +63,7 @@
 
         if ($matches[0] == ":" . $a_project['prj_id'] . ":") {
           if ($formVars['id'] == $a_project['prj_id']) {
-            logaccess($_SESSION['username'], "edit.project.mysql.php", "record " . $formVars['personal']);
+            logaccess($db, $_SESSION['username'], "edit.project.mysql.php", "record " . $formVars['personal']);
             if ($formVars['personal'] == "true") {
               $new_projects .= ":" . $a_project['prj_id'] . ":";
             }
@@ -86,9 +86,9 @@
       $q_string  = "update users set ";
       $q_string .= "usr_projects = \"" . $new_projects . "\" ";
       $q_string .= "where usr_id = " . $_SESSION['uid'];
-      $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+      $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-      logaccess($_SESSION['username'], "edit.project.mysql.php", "Editing record " . $formVars['id'] . " in project");
+      logaccess($db, $_SESSION['username'], "edit.project.mysql.php", "Editing record " . $formVars['id'] . " in project");
 
       $query = "update project set " . 
         "prj_name      = \"" . $formVars['name']  . "\", " . 
@@ -99,7 +99,7 @@
         "prj_close     =   " . $formVars['close'] . " " . 
         "where prj_id  =   " . $formVars['id'];
 
-      $insert = mysql_query($query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysql_error()));
+      $insert = mysqli_query($db, $query) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $query . "&mysql=" . mysqli_error($db)));
     }
   }
 

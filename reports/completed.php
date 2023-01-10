@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "users.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   if (isset($_GET['sort'])) {
     $orderby = "order by " . clean($_GET['sort'], 30) . " ";
@@ -64,14 +68,14 @@
   $q_string .= "left join project on project.prj_id = todo.todo_project ";
   $q_string .= "where todo_user = " . $user . " ";
   $q_string .= $orderby;
-  $q_todo = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_todo = mysql_fetch_array($q_todo) ) {
+  $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_todo = mysqli_fetch_array($q_todo) ) {
 
     $q_string  = "select wk_date ";
     $q_string .= "from weeks ";
     $q_string .= "where wk_id = " . $a_todo['todo_due'] . " ";
-    $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    $a_weeks = mysql_fetch_array($q_weeks);
+    $q_weeks = mysqli_query($db, ,$q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_weeks = mysqli_fetch_array($q_weeks);
 
     print "<tr>\n";
     print "  <td class=\"ui-widget-content\">" . $a_todo['prj_desc'] . "</td>\n";

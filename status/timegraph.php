@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "timegraph.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   global $deg;
 
@@ -86,16 +90,16 @@
 
 
   if ($formVars['group'] != 0) {
-    if (check_userlevel($AL_Supervisor)) {
+    if (check_userlevel($db, $AL_Supervisor)) {
       $q_string = "select usr_id from users where usr_supervisor = " . $formVars['user'];
     }
-    if (check_userlevel($AL_Manager)) {
+    if (check_userlevel($db, $AL_Manager)) {
       $q_string = "select usr_id from users where usr_manager = " . $formVars['user'];
     }
-    if (check_userlevel($AL_Director)) {
+    if (check_userlevel($db, $AL_Director)) {
       $q_string = "select usr_id from users where usr_director = " . $formVars['user'];
     }
-    if (check_userlevel($AL_VicePresident)) {
+    if (check_userlevel($db, $AL_VicePresident)) {
       $q_string = "select usr_id from users where usr_vicepresident = " . $formVars['user'];
     }
   
@@ -108,8 +112,8 @@
     $prtor = "";
     $u_string = "";
   
-    $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    while ($a_users = mysql_fetch_array($q_users)) {
+    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_users = mysqli_fetch_array($q_users)) {
       $u_string .= $prtor . "strp_name = " . $a_users['usr_id'];
       if ($prtor == "") {
         $prtor = " or ";
@@ -126,14 +130,14 @@
   $q_string  = "select strp_project,strp_time ";
   $q_string .= "from status ";
   $q_string .= "where strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and (" . $u_string . ")";
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_status = mysql_fetch_array($q_status)) {
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_status = mysqli_fetch_array($q_status)) {
 
     $q_string  = "select prj_code,prj_task ";
     $q_string .= "from project ";
     $q_string .= "where prj_id = " . $a_status['strp_project'];
-    $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    $a_project = mysql_fetch_array($q_project);
+    $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_project = mysqli_fetch_array($q_project);
 
     if ($a_project['prj_code'] == 7884) {
 

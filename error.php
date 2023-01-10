@@ -10,7 +10,7 @@
 
   $package = "error.php";
 
-  logaccess($formVars['username'], $package, "Accessing the script.");
+  logaccess($db, $formVars['username'], $package, "Accessing the script.");
 
   $headers  = "From: Status Management <root@" . $Sitehttp . ">\r\n";
   $headers .= "MIME-Version: 1.0\r\n";
@@ -18,8 +18,8 @@
   $headers .= "Reply-To: " . $Sitedev . "\r\n";
 
   $formVars['script'] = clean($_GET['script'], 60);
-  $formVars['error'] = mysql_real_escape_string(clean($_GET['error'], 1024));
-  $formVars['mysql'] = mysql_real_escape_string(clean($_GET['mysql'], 1024));
+  $formVars['error'] = mysqli_real_escape_string($db, clean($_GET['error'], 1024));
+  $formVars['mysql'] = mysqli_real_escape_string($db, clean($_GET['mysql'], 1024));
 
   $body  = "<p>Error generated in " . $formVars['script'] . "</p>\n\n";
   $body .= "<p>Query String:</br></br>";

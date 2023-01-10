@@ -13,7 +13,7 @@
   <li id="tm_applications"><a href="<?php print $Siteroot; ?>/index.apps.php">Applications</a>
     <ul>
 <?php
-  if (check_userlevel($AL_Supervisor)) {
+  if (check_userlevel($db, $AL_Supervisor)) {
     print "  <li><a href=\"" . $Statusroot . "/managers.php\">Management View</a></li>\n";
   }
 ?>

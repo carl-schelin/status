@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "show.project.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $formVars['project']   = clean($_GET['project'], 10);
   $formVars['startweek'] = clean($_GET['startweek'], 10);
@@ -21,15 +25,15 @@
 
   $q_string  = "select usr_id,usr_name ";
   $q_string .= "from users";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_users = mysql_fetch_array($q_users)) {
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_users = mysqli_fetch_array($q_users)) {
     $userval[$a_users['usr_id']] = $a_users['usr_name'];
   }
 
   $q_string  = "select wk_id,wk_date ";
   $q_string .= "from weeks";
-  $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_weeks = mysql_fetch_array($q_weeks)) {
+  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_weeks = mysqli_fetch_array($q_weeks)) {
     $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
   }
 
@@ -55,8 +59,8 @@
   $q_string  = "select prj_name,prj_code,prj_task,prj_desc ";
   $q_string .= "from project ";
   $q_string .= "where prj_id = " . $formVars['project'];
-  $q_project = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  $a_project = mysql_fetch_array($q_project);
+  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_project = mysqli_fetch_array($q_project);
 
   print "<tr>\n";
   print "  <th class=\"ui-state-default\" colspan=2>" . $a_project['prj_desc'] . "</th>\n";
@@ -70,8 +74,8 @@
   $q_string .= "from status ";
   $q_string .= "where strp_type = 0 and strp_project = " . $formVars['project'] . " and (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_status = mysql_fetch_array($q_status)) {
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_status = mysqli_fetch_array($q_status)) {
     print $header;
     print "<tr>\n";
     print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
@@ -88,8 +92,8 @@
   $q_string .= "from status ";
   $q_string .= "where strp_type = 1 and strp_project = " . $formVars['project'] . " and (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_status = mysql_fetch_array($q_status)) {
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_status = mysqli_fetch_array($q_status)) {
     print $header;
     print "<tr>\n";
     print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
@@ -107,7 +111,7 @@
   $q_string .= "(strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
 
-  while ($a_status = mysql_fetch_array($q_status)) {
+  while ($a_status = mysqli_fetch_array($q_status)) {
     print $header;
     print "<tr>\n";
     print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
@@ -125,7 +129,7 @@
   $q_string .= "(strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
 
-  while ($a_status = mysql_fetch_array($q_status)) {
+  while ($a_status = mysqli_fetch_array($q_status)) {
     print $header;
     print "<tr>\n";
     print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
@@ -143,9 +147,9 @@
   $q_string .= "from todo ";
   $q_string .= "where todo_completed = 0 and todo_project = " . $formVars['project'] . " ";
   $q_string .= "order by todo_due";
-  $q_todo = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ($a_todo = mysql_fetch_array($q_todo)) {
+  while ($a_todo = mysqli_fetch_array($q_todo)) {
     print $header;
     print "<tr>\n";
     print "  <td class=\"ui-widget-content\">" . $a_todo['todo_name'] . " (" . $userval[$a_todo['todo_user']] . ")</td>\n";

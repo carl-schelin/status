@@ -7,19 +7,23 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "search.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $q_string  = "select usr_id,usr_name ";
   $q_string .= "from users";
-  $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_users = mysql_fetch_row($q_users) ) {
+  while ( $a_users = mysqli_fetch_row($q_users) ) {
     if ($_SESSION['username'] == $a_users[1]) {
       $formVars['id'] = $a_users[0];
     }
@@ -74,26 +78,26 @@ if (strlen($formVars['task']) > 0) {
   $q_string .= "from status ";
   $q_string .= "where strp_task like \"%" . $formVars['task'] . "%\" ";
   $q_string .= "order by strp_week,strp_task";
-  $q_status = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-  while ($a_status = mysql_fetch_array($q_status)) {
+  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_status = mysqli_fetch_array($q_status)) {
 
     print "<tr>\n";
 
     $q_string  = "select usr_name ";
     $q_string .= "from users ";
     $q_string .= "where usr_id = " . $a_status['strp_name'];
-    $q_users = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    $a_users = mysql_fetch_array($q_users);
+    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_users = mysqli_fetch_array($q_users);
 
     print "  <td class=\"ui-widget-content\">" . $a_users['usr_name'] . "</td>\n";
 
     $q_string  = "select wk_date from weeks where wk_id = " . $a_status['strp_week'];
-    $q_weeks = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-    $a_weeks = mysql_fetch_array($q_weeks);
+    $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_weeks = mysqli_fetch_array($q_weeks);
 
     print "  <td class=\"ui-widget-content\">" . $a_weeks['wk_date'] . "</td>\n";
 
-    print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_status['strp_task']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_status['strp_task']) . "</td>\n";
     print "</tr>\n";
     $count++;
 
@@ -105,7 +109,7 @@ if (strlen($formVars['task']) > 0) {
     print "</tr>\n";
   }
 
-  mysql_free_result($q_status);
+  mysqli_free_result($q_status);
 
   print "</table>\n";
 

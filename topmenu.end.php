@@ -15,7 +15,7 @@ if (isset($_SESSION['username'])) {
       <li><a href="<?php print $Reportroot; ?>/users.php">User Status Logs</a></li>
       <li><a href="<?php print $Loginroot; ?>/logout.php">Logout (<?php print $_SESSION['username']; ?>)</a></li>
 <?php
-    if (check_userlevel($AL_Admin)) {
+    if (check_userlevel($db, $AL_Admin)) {
 ?>
       <li><a href="">-------------------------</a></li>
       <li><a href="<?php print $Adminroot; ?>/users.php">User Management</a></li>

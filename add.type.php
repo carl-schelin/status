@@ -7,13 +7,17 @@
 
   include('settings.php');
   $called = 'no';
-  include($Loginpath . '/check.php');
   include($Sitepath . '/function.php');
-  check_login($AL_User);
+  include($Loginpath . '/check.php');
+
+# connect to the database
+  $db = db_connect($DBserver, $DBname, $DBuser, $DBpassword);
+
+  check_login($db, $AL_User);
 
   $package = "add.type.php";
 
-  logaccess($_SESSION['username'], $package, "Accessing script");
+  logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
 ?>
 <!DOCTYPE HTML>
@@ -39,11 +43,11 @@ if (isset($_POST['type'])) {
   $formVars['typ_name'] = clean($_POST['type'], 70);
   $formVars['typ_desc'] = clean($_POST['desc'], 70);
 
-  logaccess($_SESSION['username'], "add.type.php", "Adding type: " . $formVars['typ_name']);
+  logaccess($db, $_SESSION['username'], "add.type.php", "Adding type: " . $formVars['typ_name']);
 
   $q_string  = "insert into type set ";
   $q_string .= "typ_id = NULL, typ_name = \"" . $formVars['typ_name'] . "\", typ_desc = \"" . $formVars['typ_desc'] . "\"";
-  mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+  mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 }
 
@@ -83,13 +87,13 @@ if (isset($_POST['type'])) {
 $q_string  = "select typ_id,typ_name,typ_desc ";
 $q_string .= "from type ";
 $q_string .= "order by typ_id";
-$q_type = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
-while ($a_type = mysql_fetch_array($q_type)) {
+$q_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_type = mysqli_fetch_array($q_type)) {
 
   print "<tr>\n";
   print "  <td class=\"ui-widget-content\">" . $a_type['typ_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_type['typ_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysql_real_escape_string($a_type['typ_desc']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_type['typ_name']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_type['typ_desc']) . "</td>\n";
   print "</tr>\n";
   $count++;
 
@@ -101,7 +105,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysql_free_result($q_type);
+mysqli_free_result($q_type);
 
 ?>
 </table>

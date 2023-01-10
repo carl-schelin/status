@@ -19,19 +19,19 @@
       $formVars['id'] = clean($_GET['id'], 10);
     }
 
-    if (check_userlevel($AL_Admin)) {
-      logaccess($_SESSION['username'], $package, "Deleting " . $formVars['id'] . " from levels");
+    if (check_userlevel($db, $AL_Admin)) {
+      logaccess($db, $_SESSION['username'], $package, "Deleting " . $formVars['id'] . " from levels");
 
       $q_string  = "delete ";
       $q_string .= "from levels ";
       $q_string .= "where lvl_id = " . $formVars['id'];
-      $insert = mysql_query($q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysql_error()));
+      $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
       print "alert('Level deleted.');\n";
 
       print "clear_fields();\n";
     } else {
-      logaccess($_SESSION['username'], $package, "Access denied");
+      logaccess($db, $_SESSION['username'], $package, "Access denied");
     }
   }
 ?>
