@@ -49,10 +49,10 @@
             "user_closed      =   " . $formVars['user_closed'];
 
           if ($formVars['update'] == 0) {
-            $query = "insert into userstories set user_id = NULL, " . $q_string;
+            $query = "insert into st_userstories set user_id = NULL, " . $q_string;
           }
           if ($formVars['update'] == 1) {
-            $query = "update userstories set " . $q_string . " where user_id = " . $formVars['id'];
+            $query = "update st_userstories set " . $q_string . " where user_id = " . $formVars['id'];
           }
 
           logaccess($db, $_SESSION['uid'], $package, "Saving Changes to: " . $formVars['user_jira']);
@@ -108,21 +108,21 @@
       $output .= "</tr>";
 
       $q_string  = "select user_id,user_jira,user_task,user_closed ";
-      $q_string .= "from userstories ";
+      $q_string .= "from st_userstories ";
       $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = 0 ";
       $q_string .= "order by user_jira ";
-      $q_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
-      if (mysqli_num_rows($q_userstories) > 0) {
-        while ($a_userstories = mysqli_fetch_array($q_userstories)) {
+      $q_st_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+      if (mysqli_num_rows($q_st_userstories) > 0) {
+        while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
 
-          $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
-          $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_userstories['user_id'] . "');\">";
+          $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
+          $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
           $linkend   = "</a>";
 
           $class = 'ui-widget-content';
 
           $closed = 'No';
-          if ($a_userstories['user_closed']) {
+          if ($a_st_userstories['user_closed']) {
             $closed = 'Yes';
           }
 
@@ -130,8 +130,8 @@
           if (check_userlevel($db, $AL_Developer)) {
             $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
           }
-          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_userstories['user_jira']  . $linkend . "</td>";
-          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_userstories['user_task'] . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
           $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed . $linkend . "</td>";
           $output .= "</tr>";
 
@@ -154,21 +154,21 @@
           $output .= "</tr>";
 
           $q_string  = "select user_id,user_jira,user_task,user_closed ";
-          $q_string .= "from userstories ";
+          $q_string .= "from st_userstories ";
           $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $a_st_epics['epic_id'] . " and user_closed = 0 ";
           $q_string .= "order by user_jira ";
-          $q_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
-          if (mysqli_num_rows($q_userstories) > 0) {
-            while ($a_userstories = mysqli_fetch_array($q_userstories)) {
+          $q_st_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+          if (mysqli_num_rows($q_st_userstories) > 0) {
+            while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
 
-              $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
-              $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_userstories['user_id'] . "');\">";
+              $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
+              $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
               $linkend   = "</a>";
 
               $class = 'ui-widget-content';
 
               $closed = 'No';
-              if ($a_userstories['user_closed']) {
+              if ($a_st_userstories['user_closed']) {
                 $class = 'ui-status-highlight';
                 $closed = 'Yes';
               }
@@ -177,8 +177,8 @@
               if (check_userlevel($db, $AL_Developer)) {
                 $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
               }
-              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_userstories['user_jira']  . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_userstories['user_task'] . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
               $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed . $linkend . "</td>";
               $output .= "</tr>";
 
@@ -193,7 +193,7 @@
 
       $output .= "</table>";
 
-      mysqli_free_result($q_userstories);
+      mysqli_free_result($q_st_userstories);
 
       print "document.userstories.user_jira.value = '';\n";
       print "document.userstories.user_task.value = '';\n";

@@ -425,12 +425,12 @@ function textCounter(field,cntfield,maxlimit) {
   <td class="ui-widget-content" colspan="2">Jira User Story: <select name="user_jira">
 <?php
   $q_string  = "select user_id,user_jira,user_task ";
-  $q_string .= "from userstories ";
+  $q_string .= "from st_userstories ";
   $q_string .= "where user_user = 5 and user_epic = 0 and user_closed = 0 ";
   $q_string .= "order by user_jira ";
-  $q_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_userstories = mysqli_fetch_array($q_userstories)) {
-    print "  <option value=\"" . $a_userstories['user_id'] . "\">" . $a_userstories['user_jira'] . " - " . $a_userstories['user_task'] . "</option>\n";
+  $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
+    print "  <option value=\"" . $a_st_userstories['user_id'] . "\">" . $a_st_userstories['user_jira'] . " - " . $a_st_userstories['user_task'] . "</option>\n";
   }
 ?>
 </select></td>

@@ -20,10 +20,10 @@
     }
 
     if (check_userlevel($db, $AL_Developer)) {
-      logaccess($db, $_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from userstories");
+      logaccess($db, $_SESSION['uid'], $package, "Deleting " . $formVars['id'] . " from st_userstories");
 
       $q_string  = "delete ";
-      $q_string .= "from userstories ";
+      $q_string .= "from st_userstories ";
       $q_string .= "where user_id = " . $formVars['id'];
       $insert = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
 

@@ -20,23 +20,23 @@
     }
 
     if (check_userlevel($db, $AL_Admin)) {
-      logaccess($db, $_SESSION['uid'], $package, "Requesting record " . $formVars['id'] . " from userstories");
+      logaccess($db, $_SESSION['uid'], $package, "Requesting record " . $formVars['id'] . " from st_userstories");
 
       $q_string  = "select user_epic,user_jira,user_task,user_closed ";
-      $q_string .= "from userstories ";
+      $q_string .= "from st_userstories ";
       $q_string .= "where user_id = " . $formVars['id'];
-      $q_userstories = mysqli_query($db, $q_string) or die (mysqli_error($db));
-      $a_userstories = mysqli_fetch_array($q_userstories);
-      mysqli_free_result($q_userstories);
+      $q_st_userstories = mysqli_query($db, $q_string) or die (mysqli_error($db));
+      $a_st_userstories = mysqli_fetch_array($q_st_userstories);
+      mysqli_free_result($q_st_userstories);
 
-      $epic = return_Index($a_userstories['user_epic'], "select epic_id from epics where epic_user = " . $_SESSION['uid'] . " order by epic_jira");
+      $epic = return_Index($a_st_userstories['user_epic'], "select epic_id from epics where epic_user = " . $_SESSION['uid'] . " order by epic_jira");
 
-      print "document.userstories.user_jira.value = '"       . mysqli_real_escape_string($db, $a_userstories['user_jira'])       . "';\n";
-      print "document.userstories.user_task.value = '"      . mysqli_real_escape_string($db, $a_userstories['user_task'])      . "';\n";
+      print "document.userstories.user_jira.value = '"       . mysqli_real_escape_string($db, $a_st_userstories['user_jira'])       . "';\n";
+      print "document.userstories.user_task.value = '"      . mysqli_real_escape_string($db, $a_st_userstories['user_task'])      . "';\n";
 
       print "document.userstories.user_epic['" . $epic . "'].selected = true;\n";
 
-      if ($a_userstories['user_closed']) {
+      if ($a_st_userstories['user_closed']) {
         print "document.userstories.user_closed.checked = true;\n";
       } else {
         print "document.userstories.user_closed.checked = false;\n";

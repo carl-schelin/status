@@ -197,15 +197,15 @@
 
 // Retrieve the Jira tag
       $q_string  = "select epic_jira,user_jira ";
-      $q_string .= "from userstories ";
-      $q_string .= "left join st_epics on st_epics.epic_id = userstories.user_epic ";
+      $q_string .= "from st_userstories ";
+      $q_string .= "left join st_epics on st_epics.epic_id = st_userstories.user_epic ";
       $q_string .= "where user_id = " . $a_task['strp_jira'];
-      $q_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      if (mysqli_num_rows($q_userstories) > 0) {
-        $a_userstories = mysqli_fetch_array($q_userstories);
+      $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_st_userstories) > 0) {
+        $a_st_userstories = mysqli_fetch_array($q_st_userstories);
 
-        $daily_output .= $a_userstories['epic_jira'] . "/" . $a_userstories['user_jira'] . ": ";
-        mysqli_free_result($q_userstories);
+        $daily_output .= $a_st_userstories['epic_jira'] . "/" . $a_st_userstories['user_jira'] . ": ";
+        mysqli_free_result($q_st_userstories);
       }
 
       $daily_output .= "<a href=\"#\" onclick=\"show_file('status.report.fill.php?id=";
