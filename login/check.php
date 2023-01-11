@@ -12,7 +12,7 @@ if (isset($_SESSION['username'])) {
     $q_string  = "select usr_id,usr_level,usr_disabled,usr_name,usr_first,usr_last,";
     $q_string .= "usr_group,usr_reset,theme_name ";
     $q_string .= "from users ";
-    $q_string .= "left join themes on themes.theme_id = users.usr_theme ";
+    $q_string .= "left join st_themes on st_themes.theme_id = users.usr_theme ";
     $q_string .= "where usr_name = '$username_s'"; 
     $q_users = mysqli_query($p_db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($p_db)));
     $a_users = mysqli_fetch_array($q_users);

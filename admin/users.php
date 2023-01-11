@@ -321,11 +321,11 @@ $(document).ready( function() {
   <td class="ui-widget-content">Theme <select name="usr_theme">
 <?php
   $q_string  = "select theme_id,theme_title ";
-  $q_string .= "from themes ";
+  $q_string .= "from st_themes ";
   $q_string .= "order by theme_title";
-  $q_themes = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_themes = mysqli_fetch_array($q_themes)) {
-    print "<option value=\"" . $a_themes['theme_id'] . "\">" . $a_themes['theme_title'] . "</option>\n";
+  $q_st_themes = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_themes = mysqli_fetch_array($q_st_themes)) {
+    print "<option value=\"" . $a_st_themes['theme_id'] . "\">" . $a_st_themes['theme_title'] . "</option>\n";
   }
 ?>
 </select></td>
