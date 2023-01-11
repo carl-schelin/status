@@ -35,7 +35,7 @@
       $levels   = return_Index($a_users['usr_level'],    "select lvl_id from st_levels where lvl_disabled = 0 order by lvl_id");
       $theme    = return_Index($a_users['usr_theme'],    "select theme_id from st_themes order by theme_title") - 1;
       $manager  = return_Index($a_users['usr_manager'],  "select usr_id from users where usr_disabled = 0 order by usr_last,usr_first");
-      $title    = return_Index($a_users['usr_title'],    "select tit_id from titles order by tit_id");
+      $title    = return_Index($a_users['usr_title'],    "select tit_id from st_titles order by tit_name");
 
       print "document.user.usr_name.value = '"       . mysqli_real_escape_string($db, $a_users['usr_name'])     . "';\n";
       print "document.user.usr_first.value = '"      . mysqli_real_escape_string($db, $a_users['usr_first'])    . "';\n";

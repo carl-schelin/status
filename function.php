@@ -181,7 +181,7 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
   $q_string  = "select ras_id,ras_name,ras_code,ras_link,ras_status,ras_date,ras_manager,ras_resource,ras_group,";
   $q_string .= "ras_jan,ras_feb,ras_mar,ras_apr,ras_may,ras_jun,ras_jul,ras_aug,ras_sep,";
   $q_string .= "ras_oct,ras_nov,ras_dec,ras_closed ";
-  $q_string .= "from ras ";
+  $q_string .= "from st_ras ";
   $q_string .= "left join users on ras_resource = users.usr_id ";
   $q_string .= "where ras_name not like \"%PTO%\" and ras_group = " . $ras_group . " and ras_resource = " . $ras_resource . " and ras_code = " . $ras_code . " ";
   $q_string .= "order by ras_id desc";

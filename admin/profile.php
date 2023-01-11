@@ -143,11 +143,11 @@ $(document).ready( function() {
 <option value="0">Unassigned</option>
 <?php
   $q_string  = "select tit_id,tit_name ";
-  $q_string .= "from titles ";
-  $q_string .= "order by tit_id ";
-  $q_titles = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_titles = mysqli_fetch_array($q_titles)) {
-    print "<option value=\"" . $a_titles['tit_id'] . "\">" . $a_titles['tit_name'] . "</option>\n";
+  $q_string .= "from st_titles ";
+  $q_string .= "order by tit_name ";
+  $q_st_titles = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_titles = mysqli_fetch_array($q_st_titles)) {
+    print "<option value=\"" . $a_st_titles['tit_id'] . "\">" . $a_st_titles['tit_name'] . "</option>\n";
   }
 ?>
 </select></td>
