@@ -112,13 +112,13 @@
     }
 
     $q_string  = "select rep_timestamp ";
-    $q_string .= "from report ";
+    $q_string .= "from st_report ";
     $q_string .= "where rep_user = " . $a_users['usr_id'] . " ";
     $q_string .= "order by rep_timestamp";
-    $q_report = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ($a_report = mysqli_fetch_array($q_report)) {
+    $q_st_report = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_st_report = mysqli_fetch_array($q_st_report)) {
       $reportcount++;
-      $reportweek = explode(" ", $a_report['rep_timestamp']);
+      $reportweek = explode(" ", $a_st_report['rep_timestamp']);
     }
 
     print "<tr>\n";
