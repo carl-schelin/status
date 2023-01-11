@@ -20,10 +20,10 @@
     }
 
     if (check_userlevel($db, $AL_Admin)) {
-      logaccess($db, $_SESSION['username'], $package, "Deleting " . $formVars['id'] . " from levels");
+      logaccess($db, $_SESSION['username'], $package, "Deleting " . $formVars['id'] . " from st_levels");
 
       $q_string  = "delete ";
-      $q_string .= "from levels ";
+      $q_string .= "from st_levels ";
       $q_string .= "where lvl_id = " . $formVars['id'];
       $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 

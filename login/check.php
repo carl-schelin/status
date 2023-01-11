@@ -23,13 +23,13 @@ if (isset($_SESSION['username'])) {
     $pwreset    = $a_users['usr_reset'];
 
     $q_string  = "select lvl_disabled ";
-    $q_string .= "from levels ";
+    $q_string .= "from st_levels ";
     $q_string .= "where lvl_level = '$user_level'"; 
-    $q_levels = mysqli_query($p_db, $q_string);
-    $a_levels = mysqli_fetch_array($q_levels);
+    $q_st_levels = mysqli_query($p_db, $q_string);
+    $a_st_levels = mysqli_fetch_array($q_st_levels);
 
 # see if the user is disabled
-    $disabled = $a_levels['lvl_disabled'];
+    $disabled = $a_st_levels['lvl_disabled'];
 
 # Set this to 1 to put the system into maintenance mode.
     $maintenance = 0;

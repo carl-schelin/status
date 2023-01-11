@@ -309,12 +309,12 @@ $(document).ready( function() {
 <option value="0">Unassigned</option>
 <?php
   $q_string  = "select lvl_id,lvl_name ";
-  $q_string .= "from levels ";
+  $q_string .= "from st_levels ";
   $q_string .= "where lvl_disabled = 0 ";
   $q_string .= "order by lvl_id";
-  $q_levels = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_levels = mysqli_fetch_array($q_levels)) {
-    print "<option value=\"" . $a_levels['lvl_id'] . "\">" . $a_levels['lvl_name'] . "</option>\n";
+  $q_st_levels = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_levels = mysqli_fetch_array($q_st_levels)) {
+    print "<option value=\"" . $a_st_levels['lvl_id'] . "\">" . $a_st_levels['lvl_name'] . "</option>\n";
   }
 ?>
 </select></td>
