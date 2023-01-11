@@ -66,11 +66,11 @@
 #######
 
   $q_string  = "select typ_id,typ_name ";
-  $q_string .= "from type";
-  $q_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_type = mysqli_fetch_array($q_type)) {
+  $q_string .= "from st_type";
+  $q_st_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_type = mysqli_fetch_array($q_st_type)) {
 
-    $type[$a_type['typ_id']] = $a_type['typ_name'];
+    $type[$a_st_type['typ_id']] = $a_st_type['typ_name'];
   }
   $type[0] = "N/A";
 

@@ -45,7 +45,7 @@ if (isset($_POST['type'])) {
 
   logaccess($db, $_SESSION['username'], "add.type.php", "Adding type: " . $formVars['typ_name']);
 
-  $q_string  = "insert into type set ";
+  $q_string  = "insert into st_type set ";
   $q_string .= "typ_id = NULL, typ_name = \"" . $formVars['typ_name'] . "\", typ_desc = \"" . $formVars['typ_desc'] . "\"";
   mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
@@ -85,15 +85,15 @@ if (isset($_POST['type'])) {
 <?php
 
 $q_string  = "select typ_id,typ_name,typ_desc ";
-$q_string .= "from type ";
+$q_string .= "from st_type ";
 $q_string .= "order by typ_id";
-$q_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_type = mysqli_fetch_array($q_type)) {
+$q_st_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_st_type = mysqli_fetch_array($q_st_type)) {
 
   print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_type['typ_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_type['typ_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_type['typ_desc']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . $a_st_type['typ_id'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_name']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_desc']) . "</td>\n";
   print "</tr>\n";
   $count++;
 
@@ -105,7 +105,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysqli_free_result($q_type);
+mysqli_free_result($q_st_type);
 
 ?>
 </table>
