@@ -187,13 +187,13 @@
 
 // Retrieve the status of the task for this entry
       $q_string  = "select pro_name ";
-      $q_string .= "from progress ";
+      $q_string .= "from st_progress ";
       $q_string .= "where pro_id = " . $a_task['strp_progress'];
-      $q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_progress = mysqli_fetch_array($q_progress);
+      $q_st_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_progress = mysqli_fetch_array($q_st_progress);
 
-      $daily_output .= $a_progress[0] . ": ";
-      mysqli_free_result($q_progress);
+      $daily_output .= $a_st_progress[0] . ": ";
+      mysqli_free_result($q_st_progress);
 
 // Retrieve the Jira tag
       $q_string  = "select epic_jira,user_jira ";

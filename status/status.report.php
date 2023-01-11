@@ -385,11 +385,11 @@ function textCounter(field,cntfield,maxlimit) {
   <option selected value="0">N/A
 <?php
   $q_string  = "select pro_id,pro_name ";
-  $q_string .= "from progress ";
+  $q_string .= "from st_progress ";
   $q_string .= "order by pro_id";
-  $q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_progress = mysqli_fetch_array($q_progress) ) {
-    print "  <option value=\"" . $a_progress['pro_id'] . "\">" . $a_progress['pro_name'] . "</option>\n";
+  $q_st_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_progress = mysqli_fetch_array($q_st_progress) ) {
+    print "  <option value=\"" . $a_st_progress['pro_id'] . "\">" . $a_st_progress['pro_name'] . "</option>\n";
   }
 ?>
 </select></td>

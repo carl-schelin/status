@@ -134,11 +134,11 @@
   
   $progress = 0; 
   $q_string  = "select pro_id,pro_name ";
-  $q_string .= "from progress";
-  $q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_string .= "from st_progress";
+  $q_st_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_progress = mysqli_fetch_array($q_progress) ) {
-    $progval[$a_progress['pro_id']] = $a_progress['pro_name'];
+  while ( $a_st_progress = mysqli_fetch_array($q_st_progress) ) {
+    $progval[$a_st_progress['pro_id']] = $a_st_progress['pro_name'];
   }
 
 #######

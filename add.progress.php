@@ -44,7 +44,7 @@ if (isset($_POST['progress'])) {
 
   logaccess($db, $_SESSION['username'], "add.progress.php", "Adding progress: " . $formVars['pro_name']);
 
-  $q_string = "insert into progress set " . 
+  $q_string = "insert into st_progress set " . 
     "pro_id   =   " . " NULL"               . ", " . 
     "pro_name = \"" . $formVars['pro_name'] . "\", " . 
     "pro_desc = \"" . $formVars['pro_desc'] . "\"";
@@ -87,15 +87,15 @@ if (isset($_POST['progress'])) {
 <?php
 
 $q_string  = "select pro_id,pro_name,pro_desc ";
-$q_string .= "from progress ";
+$q_string .= "from st_progress ";
 $q_string .= "order by pro_id";
-$q_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_progress = mysqli_fetch_array($q_progress)) {
+$q_st_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_st_progress = mysqli_fetch_array($q_st_progress)) {
 
   print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_progress['pro_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_progress['pro_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_progress['pro_desc']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . $a_st_progress['pro_id'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_name']) . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_desc']) . "</td>\n";
   print "</tr>\n";
   $count++;
 
@@ -107,7 +107,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysqli_free_result($q_progress);
+mysqli_free_result($q_st_progress);
 
 ?>
 </table>
