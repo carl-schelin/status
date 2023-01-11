@@ -74,10 +74,10 @@
 #######
 
       $q_string  = "select wk_id,wk_date ";
-      $q_string .= "from weeks";
-      $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
-        $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
+      $q_string .= "from st_weeks";
+      $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ( $a_st_weeks = mysqli_fetch_array($q_st_weeks) ) {
+        $weekval[$a_st_weeks['wk_id']] = $a_st_weeks['wk_date'];
       }
 
 #######

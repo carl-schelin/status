@@ -91,11 +91,13 @@ if (strlen($formVars['task']) > 0) {
 
     print "  <td class=\"ui-widget-content\">" . $a_users['usr_name'] . "</td>\n";
 
-    $q_string  = "select wk_date from weeks where wk_id = " . $a_status['strp_week'];
-    $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_weeks = mysqli_fetch_array($q_weeks);
+    $q_string  = "select wk_date ";
+    $q_string .= "from st_weeks ";
+    $q_string .= "where wk_id = " . $a_status['strp_week'] . " ";
+    $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
-    print "  <td class=\"ui-widget-content\">" . $a_weeks['wk_date'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_weeks['wk_date'] . "</td>\n";
 
     print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_status['strp_task']) . "</td>\n";
     print "</tr>\n";

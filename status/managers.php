@@ -26,11 +26,13 @@
   $friday = 5 - $today;
   $thisweek = date('Y-m-d', mktime(0, 0, 0, date('m'), date("d") + $friday, date("Y")));
 
-  $q_string = "select wk_id,wk_date from weeks where wk_date = \"" . $thisweek . "\"";
-  $q_weeks = mysqli_query($db, $q_string);
-  $a_weeks = mysqli_fetch_array($q_weeks);
+  $q_string  = "select wk_id,wk_date ";
+  $q_string .= "from st_weeks ";
+  $q_string .= "where wk_date = \"" . $thisweek . "\" ";
+  $q_st_weeks = mysqli_query($db, $q_string);
+  $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
-  $currentweek = $a_weeks['wk_id'];
+  $currentweek = $a_st_weeks['wk_id'];
 ###
 
 ######
@@ -104,12 +106,12 @@
 #######
 
   $q_string  = "select wk_id,wk_date ";
-  $q_string .= "from weeks";
-  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_string .= "from st_weeks";
+  $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $week = 0;
-  while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
-    $weekval[$a_weeks['wk_id']] = $a_weeks['wk_date'];
+  while ( $a_st_weeks = mysqli_fetch_array($q_st_weeks) ) {
+    $weekval[$a_st_weeks['wk_id']] = $a_st_weeks['wk_date'];
   }
   $weektot = count($weekval) + 1;
 

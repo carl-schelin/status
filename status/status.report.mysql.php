@@ -69,11 +69,12 @@
 # figure out the yearmon variable in order to track things for a specific month.
 
       $q_string  = "select wk_id,wk_date ";
-      $q_string .= "from weeks where wk_id = " . $formVars['week'];
-      $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_weeks = mysqli_fetch_array($q_weeks);
+      $q_string .= "from st_weeks ";
+      $q_string .= "where wk_id = " . $formVars['week'] . " ";
+      $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
-      $ym_date = explode("-", $a_weeks['wk_date']);
+      $ym_date = explode("-", $a_st_weeks['wk_date']);
       $ym_convert = (5 - $formVars['day']) * 86400;
       $finaldate = date('Ym', mktime(0, 0, 0, $ym_date[1], $ym_date[2], $ym_date[0]) - $ym_convert);
 

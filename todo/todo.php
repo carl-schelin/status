@@ -33,12 +33,14 @@
   $friday = 5 - $today;
   $thisweek = date('Y-m-d', mktime(0, 0, 0, date('m'), date("d") + $friday, date("Y")));
 
-  $q_string = "select wk_id,wk_date from weeks where wk_date = \"" . $thisweek . "\"";
-  $q_weeks = mysqli_query($db, $q_string);
-  $a_weeks = mysqli_fetch_array($q_weeks);
+  $q_string = "select wk_id,wk_date ";
+  $q_string .= "from st_weeks ";
+  $q_string .= "where wk_date = \"" . $thisweek . "\" ";
+  $q_st_weeks = mysqli_query($db, $q_string);
+  $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
   if ($formVars['week'] == 0) {
-    $formVars['week'] = $a_weeks['wk_id'];
+    $formVars['week'] = $a_st_weeks['wk_id'];
   }
 ###
 
@@ -242,10 +244,10 @@ function textCounter(field,cntfield,maxlimit) {
 
 // Show the week
   $q_string  = "select wk_date ";
-  $q_string .= "from weeks ";
+  $q_string .= "from st_weeks ";
   $q_string .= "where wk_id = " . $formVars['week'] . " ";
-  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $weekname = mysqli_fetch_array($q_weeks);
+  $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $weekname = mysqli_fetch_array($q_st_weeks);
 
 // Show the user
   $q_string  = "select usr_first,usr_last,usr_group ";
@@ -317,16 +319,16 @@ function textCounter(field,cntfield,maxlimit) {
   <td class="ui-widget-content" title="The week the todo item is due." colspan=3> Due Date: <select name="duedate">
   <option value="0">N/A
 <?php
-  $q_weeks = mysqli_query($db, "select * from weeks") or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_weeks = mysqli_query($db, "select * from st_weeks") or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_weeks = mysqli_fetch_array($q_weeks) ) {
-    if ($a_weeks['wk_id'] == $formVars['week']) {
+  while ( $a_st_weeks = mysqli_fetch_array($q_st_weeks) ) {
+    if ($a_st_weeks['wk_id'] == $formVars['week']) {
       $selected = "selected ";
     } else {
       $selected = "";
     }
 
-    print "  <option " . $selected . "value=\"$a_weeks[0]\">$a_weeks[1]</option>\n";
+    print "  <option " . $selected . "value=\"$a_st_weeks[0]\">$a_st_weeks[1]</option>\n";
   }
 ?>
 </select></td>

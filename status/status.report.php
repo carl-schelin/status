@@ -32,11 +32,13 @@
     $friday = 5 - $today;
     $thisweek = date('Y-m-d', mktime(0, 0, 0, date('m'), date("d") + $friday, date("Y")));
 
-    $q_string = "select wk_id,wk_date from weeks where wk_date = \"" . $thisweek . "\"";
-    $q_weeks = mysqli_query($db, $q_string);
-    $a_weeks = mysqli_fetch_array($q_weeks);
+    $q_string  = "select wk_id,wk_date ";
+    $q_string .= "from st_weeks ";
+    $q_string .= "where wk_date = \"" . $thisweek . "\" ";
+    $q_st_weeks = mysqli_query($db, $q_string);
+    $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
-    $formVars['startweek'] = $a_weeks['wk_id'];
+    $formVars['startweek'] = $a_st_weeks['wk_id'];
   }
 
   if ($formVars['group'] == '') {
@@ -324,9 +326,10 @@ function textCounter(field,cntfield,maxlimit) {
 
 // Show the week
   $q_string  = "select wk_date ";
-  $q_string .= "from weeks where wk_id = " . $formVars['startweek'];
-  $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_weeks = mysqli_fetch_array($q_weeks);
+  $q_string .= "from st_weeks ";
+  $q_string .= "where wk_id = " . $formVars['startweek'] . " ";
+  $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
 // Show the user
   $q_string  = "select usr_first,usr_last,usr_group ";
@@ -338,7 +341,7 @@ function textCounter(field,cntfield,maxlimit) {
   print "<tr>\n";
   echo "  <th class=\"ui-state-default\" title=\"The week tasks will be recorded for. Click the &lt; and &gt; to move to different weeks. Click the date to go to your timecard.\" colspan=2><b><a href=\"" . $Statusroot . "/status.report.php?startweek=" . ($formVars['startweek'] - 1) . "&user=" . $formVars['user'] . "\">Prior Week &lt;</a> ";
 
-  print "<a href=\"" . $Statusroot . "/timecard.php?startweek=" . $formVars['startweek'] . "&endweek=" . $formVars['startweek'] . "&user=" . $formVars['user'] . "&group=0\">Week Ending: " . $a_weeks['wk_date'] . "</a>";
+  print "<a href=\"" . $Statusroot . "/timecard.php?startweek=" . $formVars['startweek'] . "&endweek=" . $formVars['startweek'] . "&user=" . $formVars['user'] . "&group=0\">Week Ending: " . $a_st_weeks['wk_date'] . "</a>";
 
   print " <a href=\"" . $Statusroot . "/status.report.php?startweek=" . ($formVars['startweek'] + 1) . "&user=" . $formVars['user'] . "\">&gt; Next Week</a></b></th>\n";
   print "</tr>\n";
@@ -443,9 +446,9 @@ function textCounter(field,cntfield,maxlimit) {
 <tr>
   <td class="ui-widget-content" title="How long you worked on the task. 15 minute increments." id="timready">Time Worked: <input type="text" name="time" size=3 value="2" onchange="touch_time();"> (15 min increments) <label for="daily"><input type="checkbox" id="daily" name="daily" onchange="show_daily();"> Show selected day</label></td>
 <?php
-# get the current week; $a_weeks['wk_date']
+# get the current week; $a_st_weeks['wk_date']
 # break into a timestamp variable: this is Friday
-  $timestamp = strtotime($a_weeks['wk_date']);
+  $timestamp = strtotime($a_st_weeks['wk_date']);
 # 
 
   $fullweekday[0] = "Sunday";

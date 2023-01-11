@@ -149,10 +149,10 @@
     }
 
     $q_string  = "select wk_date ";
-    $q_string .= "from weeks ";
+    $q_string .= "from st_weeks ";
     $q_string .= "where wk_id = " . $a_st_bandf['bf_week'];
-    $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_weeks = mysqli_fetch_array($q_weeks);
+    $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
     if (check_userlevel($db, $AL_Admin)) {
       $linkdel = "<a href='#' onClick=\"javascript:delete_item('add.bandf.del.php?id=" . $a_st_bandf['bf_id'] . "');\">";
@@ -167,7 +167,7 @@
     $output .= "<tr>";
     $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "x" . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_name['usr_name'] . $linkend . "</td>";
-    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_weeks['wk_date'] . $linkend . "</td>";
+    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_st_weeks['wk_date'] . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . mysqli_real_escape_string($db, $a_st_bandf['bf_text']) . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $dev . $linkend . "</td>";
     $output .= "</tr>";
@@ -215,10 +215,10 @@
     }
 
     $q_string  = "select wk_date ";
-    $q_string .= "from weeks ";
+    $q_string .= "from st_weeks ";
     $q_string .= "where wk_id = " . $a_st_bandf['bf_week'];
-    $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_weeks = mysqli_fetch_array($q_weeks);
+    $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
     if (check_userlevel($db, $AL_Admin)) {
       $linkdel = "<a href=\"#\" onClick=\"javascript:delete_item('add.bandf.del.php?id=" . $a_st_bandf['bf_id'] . "');\">";
@@ -233,7 +233,7 @@
     $output .= "<tr>";
     $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "x" . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_name['usr_name'] . $linkend . "</td>";
-    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_weeks['wk_date'] . $linkend . "</td>";
+    $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $a_st_weeks['wk_date'] . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . mysqli_real_escape_string($db, $a_st_bandf['bf_text']) . $linkend . "</td>";
     $output .= "  <td class=\"ui-widget-content\">" . $linkstart . $dev . $linkend . "</td>";
     $output .= "</tr>";

@@ -86,21 +86,21 @@
           print "alert('" . $message . "');\n";
 
           if ($formVars['usr_disabled'] == 1 ) {
-# clear from grouplist
+# clear from st_grouplist
             $q_string  = "delete ";
-            $q_string .= "from grouplist ";
+            $q_string .= "from st_grouplist ";
             $q_string .= "where gpl_user = " . $formVars['id'];
             mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
           } else {
             $q_string  = "select gpl_id ";
-            $q_string .= "from grouplist ";
+            $q_string .= "from st_grouplist ";
             $q_string .= "where gpl_user = " . $formVars['id'] . " and gpl_group = " . $formVars['usr_group'] . " ";
-            $q_grouplist = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-            if (mysqli_num_rows($q_grouplist) == 0) {
-# if not in the grouplist, add them
+            $q_st_grouplist = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+            if (mysqli_num_rows($q_st_grouplist) == 0) {
+# if not in the st_grouplist, add them
 # removing them will be done elsewhere.
               $q_string  = "insert ";
-              $q_string .= "into grouplist ";
+              $q_string .= "into st_grouplist ";
               $q_string .= "set ";
               $q_string .= "gpl_id = null,";
               $q_string .= "gpl_group = " . $formVars['usr_group'] . ",";

@@ -123,11 +123,11 @@
           logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug2 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
 
           $q_string  = "select wk_date ";
-          $q_string .= "from weeks ";
+          $q_string .= "from st_weeks ";
           $q_string .= "where wk_id = " . $formVars['week'];
-          $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-          $a_weeks = mysqli_fetch_array($q_weeks);
-          $dueweek = $a_weeks['wk_date'];
+          $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          $a_st_weeks = mysqli_fetch_array($q_st_weeks);
+          $dueweek = $a_st_weeks['wk_date'];
 
           logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug3 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
           $body  = "<html>";
@@ -316,10 +316,10 @@
       $daily_output .= $a_todo['todo_priority'] . " - " . mysqli_real_escape_string($db, $a_todo['todo_name']) . "</a>" . "</td>";
 
       $q_string  = "select wk_date ";
-      $q_string .= "from weeks ";
+      $q_string .= "from st_weeks ";
       $q_string .= "where wk_id = " . $a_todo['todo_due'];
-      $q_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_weeks = mysqli_fetch_assoc($q_weeks);
+      $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_weeks = mysqli_fetch_assoc($q_st_weeks);
 
       if ($a_todo['todo_save'] == 1) {
         $tdclass = "ui-widget-content";
@@ -328,7 +328,7 @@
       }
 
       $daily_output .= "<td title=\"Week and Day due plus Estimated hours to complete\" class=\"" . $tdclass . "\">";
-      $daily_output .= $a_weeks['wk_date'] . "&nbsp;" . $weekday[$a_todo['todo_day']] . "&nbsp;";
+      $daily_output .= $a_st_weeks['wk_date'] . "&nbsp;" . $weekday[$a_todo['todo_day']] . "&nbsp;";
       $daily_output .= number_format((($a_todo['todo_time'] * 15) / 60), 2, '.', ',') . "</td>";
 
       $daily_output .= "</tr>";

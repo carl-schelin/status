@@ -46,18 +46,18 @@
   }
 
   $q_string  = "select wk_date ";
-  $q_string .= "from weeks ";
-  $q_string .= "where wk_id = " . $formVars['startweek'];
-  $q_week = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_week = mysqli_fetch_array($q_week);
-  $startname = $a_week['wk_date'];
+  $q_string .= "from st_weeks ";
+  $q_string .= "where wk_id = " . $formVars['startweek'] . " ";
+  $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_weeks = mysqli_fetch_array($q_st_weeks);
+  $startname = $a_st_weeks['wk_date'];
 
   $q_string  = "select wk_date ";
-  $q_string .= "from weeks ";
+  $q_string .= "from st_weeks ";
   $q_string .= "where wk_id = " . $formVars['endweek'];
-  $q_week = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_week = mysqli_fetch_array($q_week);
-  $endname = $a_week['wk_date'];
+  $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_weeks = mysqli_fetch_array($q_st_weeks);
+  $endname = $a_st_weeks['wk_date'];
 
 ?>
 <!DOCTYPE HTML>
