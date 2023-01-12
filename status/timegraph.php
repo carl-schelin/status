@@ -128,52 +128,52 @@
   }
 
   $q_string  = "select strp_project,strp_time ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and (" . $u_string . ")";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_status = mysqli_fetch_array($q_status)) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
 
     $q_string  = "select prj_code,prj_task ";
     $q_string .= "from st_project ";
-    $q_string .= "where prj_id = " . $a_status['strp_project'];
+    $q_string .= "where prj_id = " . $a_st_status['strp_project'];
     $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_st_project = mysqli_fetch_array($q_st_project);
 
     if ($a_st_project['prj_code'] == 7884) {
 
       if ($a_st_project['prj_task'] == "1.1 Tickets") {
-        $data[3] += $a_status['strp_time'];
+        $data[3] += $a_st_status['strp_time'];
       }
 
       if ($a_st_project['prj_task'] == "1.2 Maintenance") {
-        $data[3] += $a_status['strp_time'];
+        $data[3] += $a_st_status['strp_time'];
       }
 
       if ($a_st_project['prj_task'] == "1.3 On-Call") {
-        $data[1] += $a_status['strp_time'];
+        $data[1] += $a_st_status['strp_time'];
       }
 
       if ($a_st_project['prj_task'] == "1.4 Consulting") {
-        $data[3] += $a_status['strp_time'];
+        $data[3] += $a_st_status['strp_time'];
       }
 
       if ($a_st_project['prj_task'] == "2.1 Admin") {
-        $data[2] += $a_status['strp_time'];
+        $data[2] += $a_st_status['strp_time'];
       }
 
       if ($a_st_project['prj_task'] == "2.2 PTO") {
-        $data[2] += $a_status['strp_time'];
+        $data[2] += $a_st_status['strp_time'];
       }
 
       if ($a_st_project['prj_task'] == "2.3 Training") {
-        $data[2] += $a_status['strp_time'];
+        $data[2] += $a_st_status['strp_time'];
       }
     } else {
 // Incidents (code 2839) are added to the On Call bucket
       if ($a_st_project['prj_code'] == 2839) {
-        $data[1] += $a_status['strp_time'];
+        $data[1] += $a_st_status['strp_time'];
       } else {
-        $data[0] += $a_status['strp_time'];
+        $data[0] += $a_st_status['strp_time'];
       }
     }
   }

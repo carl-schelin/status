@@ -79,21 +79,21 @@
   }
 
   $q_string  = "select strp_project,strp_task ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_quarter = 1 and strp_name = " . $formVars['user'] . " and strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " ";
   $q_string .= "order by strp_project,strp_quarter,strp_task";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_status = mysqli_fetch_array($q_status) ) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
 
-    if ($project != $a_status['strp_project']) {
-      $project = $a_status['strp_project'];
+    if ($project != $a_st_status['strp_project']) {
+      $project = $a_st_status['strp_project'];
       if ($project > 0) {
-        print "</p>\n<h5>" . $projval[$a_status['strp_project']] . " (" . $projtask[$a_status['strp_project']] . ")</h5><p>\n";
+        print "</p>\n<h5>" . $projval[$a_st_status['strp_project']] . " (" . $projtask[$a_st_status['strp_project']] . ")</h5><p>\n";
       }
     }
 
     if ($project > 0) {
-      print "<br>&nbsp;<b>- " . $a_status['strp_task'] . "</b>\n";
+      print "<br>&nbsp;<b>- " . $a_st_status['strp_task'] . "</b>\n";
     }
 
   }
@@ -116,27 +116,27 @@
 
   $type = 99;
   $q_string  = "select strp_project,strp_type,strp_task ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_quarter = 0 and strp_name = " . $formVars['user'] . " and strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " ";
   $q_string .= "order by strp_project,strp_type,strp_task";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_status = mysqli_fetch_array($q_status) ) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
 
-    if ($project != $a_status['strp_project']) {
-      $project = $a_status['strp_project'];
+    if ($project != $a_st_status['strp_project']) {
+      $project = $a_st_status['strp_project'];
       $type = 99;
       if ($project > 0) {
-        print "</p>\n<h5>" . $projval[$a_status['strp_project']] . " (" . $projtask[$a_status['strp_project']] . ")</h5><p>\n";
+        print "</p>\n<h5>" . $projval[$a_st_status['strp_project']] . " (" . $projtask[$a_st_status['strp_project']] . ")</h5><p>\n";
       }
     }
 
-    if ($type != $a_status['strp_type']) {
-      $type = $a_status['strp_type'];
-      print "<br><u>" . $typeval[$a_status['strp_type']] . "</u>\n";
+    if ($type != $a_st_status['strp_type']) {
+      $type = $a_st_status['strp_type'];
+      print "<br><u>" . $typeval[$a_st_status['strp_type']] . "</u>\n";
     }
 
     if ($project > 0) {
-      print "<br>&nbsp;- " . $a_status['strp_task'] . "\n";
+      print "<br>&nbsp;- " . $a_st_status['strp_task'] . "\n";
     }
 
   }

@@ -196,17 +196,17 @@ function delete_line( p_script_url ) {
   print "</tr>\n";
 
   $q_string  = "select strp_id,strp_week,strp_class,strp_task ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_name = " . $formVars['user'] . " and strp_week = " . $formVars['startweek'] . " ";
   $q_string .= "order by strp_class,strp_project,strp_task";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_status = mysqli_fetch_array($q_status) ) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
 
     print "<tr>\n";
 
-    print "  <td class=\"ui-widget-content\" id=\"week_" . $a_status['strp_id'] . "\"><select name=\"week_" . $a_status['strp_id'] . "\">\n";
+    print "  <td class=\"ui-widget-content\" id=\"week_" . $a_st_status['strp_id'] . "\"><select name=\"week_" . $a_st_status['strp_id'] . "\">\n";
     for ($i = 0; $i <= $weektot; $i++) {
-      if ($a_status['strp_week'] == $i) {
+      if ($a_st_status['strp_week'] == $i) {
         $selected = " selected";
       } else {
         $selected = "";
@@ -215,9 +215,9 @@ function delete_line( p_script_url ) {
     }
     print "</select></td>\n";
 
-    print "  <td class=\"ui-widget-content\" id=\"clas_" . $a_status['strp_id'] . "\"><select name=\"clas_" . $a_status['strp_id'] . "\">\n";
+    print "  <td class=\"ui-widget-content\" id=\"clas_" . $a_st_status['strp_id'] . "\"><select name=\"clas_" . $a_st_status['strp_id'] . "\">\n";
     for ($i = 1; $i <= $clastot; $i++) {
-      if ($a_status['strp_class'] == $i) {
+      if ($a_st_status['strp_class'] == $i) {
         $selected = " selected";
       } else {
         $selected = "";
@@ -226,10 +226,10 @@ function delete_line( p_script_url ) {
     }
     print "</select></td>\n";
 
-    print "  <td class=\"ui-widget-content\" id=\"task_" . $a_status['strp_id'] . "\"><input type=\"text\" name=\"task_" . $a_status['strp_id'] . "\" size=\"107\" value=\"" . $a_status['strp_task'] . "\"></td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"task_" . $a_st_status['strp_id'] . "\"><input type=\"text\" name=\"task_" . $a_st_status['strp_id'] . "\" size=\"107\" value=\"" . $a_st_status['strp_task'] . "\"></td>\n";
 
-    print "  <td class=\"ui-widget-content delete\" id=\"save_" . $a_status['strp_id'] . "\"><input type=\"button\" value=\"Save\" onClick=\"javascript:attach_file('edit.status.mysql.php?id=" . $a_status['strp_id'] . "&week=' + week_" . $a_status['strp_id'] . ".value + '&class=' + clas_" . $a_status['strp_id'] . ".value + '&task=' + task_" . $a_status['strp_id'] . ".value);\"></td>\n";
-    print "  <td class=\"ui-widget-content delete\" id=\"del_" . $a_status['strp_id'] . "\"><input type=\"button\" value=\"Del\" onClick=\"javascript:delete_line('del.status.mysql.php?id=" . $a_status['strp_id'] . "');\"></td>\n";
+    print "  <td class=\"ui-widget-content delete\" id=\"save_" . $a_st_status['strp_id'] . "\"><input type=\"button\" value=\"Save\" onClick=\"javascript:attach_file('edit.status.mysql.php?id=" . $a_st_status['strp_id'] . "&week=' + week_" . $a_st_status['strp_id'] . ".value + '&class=' + clas_" . $a_st_status['strp_id'] . ".value + '&task=' + task_" . $a_st_status['strp_id'] . ".value);\"></td>\n";
+    print "  <td class=\"ui-widget-content delete\" id=\"del_" . $a_st_status['strp_id'] . "\"><input type=\"button\" value=\"Del\" onClick=\"javascript:delete_line('del.status.mysql.php?id=" . $a_st_status['strp_id'] . "');\"></td>\n";
 
   }
 

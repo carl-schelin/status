@@ -72,17 +72,17 @@
 
 # retrieve status information
     $q_string  = "select strp_save,strp_quarter,strp_week ";
-    $q_string .= "from status ";
+    $q_string .= "from st_status ";
     $q_string .= "where strp_name = " . $a_users['usr_id'] . " ";
     $q_string .= "order by strp_week";
-    $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ( $a_status = mysqli_fetch_array($q_status) ) {
+    $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
       $statuscount++;
-      $statusweek = $a_status['strp_week'];
-      if ($a_status['strp_save'] == 1) {
+      $statusweek = $a_st_status['strp_week'];
+      if ($a_st_status['strp_save'] == 1) {
         $statussave++;
       }
-      if ($a_status['strp_quarter'] == 1) {
+      if ($a_st_status['strp_quarter'] == 1) {
         $statusannual++;
       }
     }

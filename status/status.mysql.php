@@ -45,7 +45,7 @@
 
         logaccess($db, $_SESSION['username'], $logfile, "Updating status record " . $formVars['id'] . ": save=" . $formVars['save']);
 
-        $q_string  = "update status set ";
+        $q_string  = "update st_status set ";
         $q_string .= "strp_save = " . $formVars['save'] . " ";
         $q_string .= "where strp_id = " . $formVars['id'];
         $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
@@ -197,37 +197,37 @@
   $output = "<table class=\"ui-widget-content\">";
 
   $q_string  = "select strp_id,strp_week,strp_name,strp_class,strp_project,strp_progress,strp_task,strp_day,strp_save ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where (($u_string)$managerview) ";
   $q_string .= "and strp_week >= " . $formVars['startweek'] . " ";
   $q_string .= "order by strp_week,strp_class,strp_project,strp_day";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_status = mysqli_fetch_array($q_status) ) {
+  while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
 
     $q_string  = "select usr_last ";
     $q_string .= "from users ";
-    $q_string .= "where usr_id = " . $a_status['strp_name'];
+    $q_string .= "where usr_id = " . $a_st_status['strp_name'];
     $q_username = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_username = mysqli_fetch_array($q_username);
 
-    if ($holdweek != $a_status['strp_week']) {
-      $holdweek = $a_status['strp_week'];
-      if ($a_status['strp_week'] == $formVars['startweek']) {
+    if ($holdweek != $a_st_status['strp_week']) {
+      $holdweek = $a_st_status['strp_week'];
+      if ($a_st_status['strp_week'] == $formVars['startweek']) {
         $output .= "<tr><th class=\"ui-state-default\">Starting on " . $doweek[$startday] . " of Week " . $weekval[$formVars['startweek']] . "</th></tr>";
       }
-      if ($a_status['strp_week'] == $formVars['endweek'] && $startday != 0) {
+      if ($a_st_status['strp_week'] == $formVars['endweek'] && $startday != 0) {
         $output .= "<tr><th class=\"ui-state-default\">Ending on " . $doweek[$startday -1] . " of Week " . $weekval[$formVars['endweek']] . "</th></tr>";
       }
     }
 
-    if (($a_status['strp_week'] == $formVars['startweek'] && $a_status['strp_day'] >= $startday) || ($a_status['strp_week'] == $formVars['endweek'] && $a_status['strp_day'] < $startday)) {
+    if (($a_st_status['strp_week'] == $formVars['startweek'] && $a_st_status['strp_day'] >= $startday) || ($a_st_status['strp_week'] == $formVars['endweek'] && $a_st_status['strp_day'] < $startday)) {
 
 # build the class line
-      if ($class != $a_status['strp_class']) {
-        $class = $a_status['strp_class'];
+      if ($class != $a_st_status['strp_class']) {
+        $class = $a_st_status['strp_class'];
         if ($class > 0) {
-          $output .= "<tr><td class=\"ui-widget-content\"><b>" . $classval[$a_status['strp_class']] . "</b></td></tr>";
+          $output .= "<tr><td class=\"ui-widget-content\"><b>" . $classval[$a_st_status['strp_class']] . "</b></td></tr>";
         }
       }
 
@@ -236,10 +236,10 @@
       if ($class > 0) {
         if ($classprj[$class] == 1) {
           $pre = "&nbsp;&nbsp;&nbsp;&nbsp;- ";
-          if ($project != $a_status['strp_project']) {
-            $project = $a_status['strp_project'];
+          if ($project != $a_st_status['strp_project']) {
+            $project = $a_st_status['strp_project'];
             if ($project > 0) {
-              $output .= "<tr><td class=\"ui-widget-content\"><b>&nbsp;&nbsp;* " . $projval[$a_status['strp_project']] . "</b></td></tr>";
+              $output .= "<tr><td class=\"ui-widget-content\"><b>&nbsp;&nbsp;* " . $projval[$a_st_status['strp_project']] . "</b></td></tr>";
             }
           }
         } else {
@@ -249,7 +249,7 @@
 
 # build the detail line
 # build title line for the mouse-over
-      if ($a_status['strp_save']) {
+      if ($a_st_status['strp_save']) {
         $ready = " class=\"ui-state-highlight\"";
         $title = " title=\"Click to remove from Status e-mail\"";
         $save = 0;
@@ -261,17 +261,17 @@
 
 # 
       $output .= "<tr><td" . $ready . $title . ">" . $pre;
-      if ($a_status['strp_progress'] > 0) {
-        $output .= $progval[$a_status['strp_progress']] . ": ";
+      if ($a_st_status['strp_progress'] > 0) {
+        $output .= $progval[$a_st_status['strp_progress']] . ": ";
       }
       $output .= "<a href=\"#\" onclick=\"show_file('status.mysql.php";
-        $output .= "?id=" . $a_status['strp_id'];
+        $output .= "?id=" . $a_st_status['strp_id'];
         $output .= "&startweek=" . $formVars['startweek'];
         $output .= "&endweek=" . $formVars['endweek'];
         $output .= "&user=" . $formVars['user'];
         $output .= "&group=" . $formVars['group'];
         $output .= "&save=" . $save;
-      $output .= "');\">" . $a_status['strp_task'] . "</a>";
+      $output .= "');\">" . $a_st_status['strp_task'] . "</a>";
 
 # add the user name if a manager is looking
       if ($formVars['group'] != 0) {

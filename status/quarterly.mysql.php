@@ -40,7 +40,7 @@
       if ($formVars['save'] >= 0) {
 
         logaccess($db, $_SESSION['username'], "quarterly.mysql.php", "Updating status record " . $formVars['id'] . ": save=" . $formVars['save']);
-        $q_string  = "update status set ";
+        $q_string  = "update st_status set ";
         $q_string .= "strp_quarter = " . $formVars['save'] . " ";
         $q_string .= "where strp_id = " . $formVars['id'];
         $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
@@ -50,7 +50,7 @@
       if ($formVars['move'] > 0) {
 
         logaccess($db, $_SESSION['username'], "quarterly.mysql.php", "Updating status record " . $formVars['id'] . ": move=" . $formVars['move']);
-        $q_string  = "update status set ";
+        $q_string  = "update st_status set ";
         $q_string .= "strp_type = " . $formVars['move'] . " ";
         $q_string .= "where strp_id = " . $formVars['id'];
         $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
@@ -200,20 +200,20 @@
   $output = "<table width=80%>";
 
   $q_string = "select strp_id,strp_week,strp_name,strp_class,strp_project,strp_progress,strp_task,strp_day,strp_type,strp_quarter ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where (($u_string)$managerview) and (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_project,strp_type,strp_week";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_status = mysqli_fetch_array($q_status) ) {
+  while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
 
     $q_string  = "select usr_last ";
     $q_string .= "from users ";
-    $q_string .= "where usr_id = " . $a_status['strp_name'];
+    $q_string .= "where usr_id = " . $a_st_status['strp_name'];
     $q_username = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_username = mysqli_fetch_array($q_username);
 
-    if ($project != $a_status['strp_project']) {
+    if ($project != $a_st_status['strp_project']) {
       if ($project > 0) {
         $output .= $tablened . "</div><table class\"ui-widget-content\"><tr><th class=\"ui-state-default\" align=left><u>";
         $output .= "<a href=\"javascript:;\" onmousedown=\"toggleDiv('" . $projval[$project] . "');\">" . $projval[$project] . " (" . $projectcount . "/" . $quarterlycount . ")</a>";
@@ -225,15 +225,15 @@
       $projectcount = 0;
       $quarterlycount = 0;
       $statustype = -1;
-      $project = $a_status['strp_project'];
+      $project = $a_st_status['strp_project'];
     }
 
-    if ($statustype != $a_status['strp_type']) {
-      $projectoutput .= "<tr><td class=\"ui-widget-content\" colspan=2>&nbsp;+<i><b>" . $type[$a_status['strp_type']] . "</b></i></td></tr>";
-      $statustype = $a_status['strp_type'];
+    if ($statustype != $a_st_status['strp_type']) {
+      $projectoutput .= "<tr><td class=\"ui-widget-content\" colspan=2>&nbsp;+<i><b>" . $type[$a_st_status['strp_type']] . "</b></i></td></tr>";
+      $statustype = $a_st_status['strp_type'];
     }
 
-    if ($a_status['strp_quarter']) {
+    if ($a_st_status['strp_quarter']) {
       $ready = " class=\"ui-state-highlight\"";
       $title = " title=\"Click to remove from Quarterly Accomplishments. ^ to move task up, v to move task down.\"";
       $save = 0;
@@ -244,51 +244,51 @@
     }
     $projectoutput .= "<tr><td" . $ready . $title . ">";
 
-    if ($a_status['strp_type'] == 0) {
+    if ($a_st_status['strp_type'] == 0) {
       $typeup = 3;
       $typedown = 1;
     }
-    if ($a_status['strp_type'] == 1) {
+    if ($a_st_status['strp_type'] == 1) {
       $typeup = 3;
       $typedown = 2;
     }
-    if ($a_status['strp_type'] == 2) {
+    if ($a_st_status['strp_type'] == 2) {
       $typeup = 1;
       $typedown = 3;
     }
-    if ($a_status['strp_type'] == 3) {
+    if ($a_st_status['strp_type'] == 3) {
       $typeup = 2;
       $typedown = 1;
     }
 
-    $projectoutput .= "<a href=\"#\" onclick=\"show_file('quarterly.mysql.php?id=" . $a_status['strp_id'] . "&startweek=" . $formVars['startweek'];
+    $projectoutput .= "<a href=\"#\" onclick=\"show_file('quarterly.mysql.php?id=" . $a_st_status['strp_id'] . "&startweek=" . $formVars['startweek'];
     $projectoutput .= "&endweek=" . $formVars['endweek'] . "&user=" . $formVars['user'] . "&group=" . $formVars['group'];
     $projectoutput .= "&save=-1&move=" . $typeup . "');\">^</a>";
 
-    $projectoutput .= "<a href=\"#\" onclick=\"show_file('quarterly.mysql.php?id=" . $a_status['strp_id'] . "&startweek=" . $formVars['startweek'];
+    $projectoutput .= "<a href=\"#\" onclick=\"show_file('quarterly.mysql.php?id=" . $a_st_status['strp_id'] . "&startweek=" . $formVars['startweek'];
     $projectoutput .= "&endweek=" . $formVars['endweek'] . "&user=" . $formVars['user'] . "&group=" . $formVars['group'];
     $projectoutput .= "&save=-1&move=" . $typedown . "');\">v</a>&nbsp;- ";
 
-    if ($a_status['strp_progress'] > 0) {
-      $projectoutput .= $progval[$a_status['strp_progress']] . ": ";
+    if ($a_st_status['strp_progress'] > 0) {
+      $projectoutput .= $progval[$a_st_status['strp_progress']] . ": ";
     }
-    $projectoutput .= "<a href=\"#\" onclick=\"show_file('quarterly.mysql.php?id=" . $a_status['strp_id'];
+    $projectoutput .= "<a href=\"#\" onclick=\"show_file('quarterly.mysql.php?id=" . $a_st_status['strp_id'];
     $projectoutput .= "&startweek=" . $formVars['startweek'] . "&endweek=" . $formVars['endweek'] . "&user=" . $formVars['user'] . "&group=" . $formVars['group'];
-    $projectoutput .= "&save=" . $save . "');\">" . mysqli_real_escape_string($db, $a_status['strp_task']) . "</a>";
+    $projectoutput .= "&save=" . $save . "');\">" . mysqli_real_escape_string($db, $a_st_status['strp_task']) . "</a>";
     if ($formVars['group'] > 0) {
       $projectoutput .= " (" . $a_username['usr_last'] . ")";
     }
-    $projectoutput .= "</td><td" . $ready . " title=\"Click to jump to the status report for this week so you can make changes to the text if needed.\"><a href=\"" . $Statusroot . "/status.report.php?startweek=" . $a_status['strp_week'] . "&user=" . $formVars['user'] . "\">" . $weekval[$a_status['strp_week']] . "</td></tr>";
+    $projectoutput .= "</td><td" . $ready . " title=\"Click to jump to the status report for this week so you can make changes to the text if needed.\"><a href=\"" . $Statusroot . "/status.report.php?startweek=" . $a_st_status['strp_week'] . "&user=" . $formVars['user'] . "\">" . $weekval[$a_st_status['strp_week']] . "</td></tr>";
 
-    $quarterlytotal += $a_status['strp_quarter'];
-    $quarterlycount += $a_status['strp_quarter'];
+    $quarterlytotal += $a_st_status['strp_quarter'];
+    $quarterlycount += $a_st_status['strp_quarter'];
     $totalcount++;
     $projectcount++;
     $tablened = "</table>";
 
   }
 
-  if ($project != $a_status['strp_project']) {
+  if ($project != $a_st_status['strp_project']) {
     if ($project > 0) {
       $output .= $tablened . "</div><table class=\"ui-widget-content\"><tr><th class=\"ui-state-default\" align=left><u>";
       $output .= "<a href=\"javascript:;\" onmousedown=\"toggleDiv('" . $projval[$project] . "');\">" . $projval[$project] . " (" . $projectcount . "/" . $quarterlycount . ")</a>";
@@ -300,7 +300,7 @@
     $projectcount = 0;
     $quarterlycount = 0;
     $statustype = -1;
-    $project = $a_status['strp_project'];
+    $project = $a_st_status['strp_project'];
   }
 
   $output .= "</table>";

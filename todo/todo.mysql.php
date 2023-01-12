@@ -152,7 +152,7 @@
           logaccess($db, $_SESSION['username'], "todo.mysql.php", "Todo Debug6 " . $formVars['id'] . ": user=" . $formVars['user'] . " assign=" . $formVars['assign']);
         }
 
-        $query_status = "insert into status set " .
+        $query_status = "insert into st_status set " .
           "strp_id        = NULL, " .
           "strp_week      = "   . $formVars['week']     . ", " .
           "strp_name      = "   . $formVars['user']     . ", " .

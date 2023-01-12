@@ -199,30 +199,31 @@
   $first = 0;
   $body = '';
 
-  $q_string =  "select strp_id,strp_week,strp_name,strp_class,strp_project,strp_progress,strp_task,strp_day from status ";
+  $q_string  =  "select strp_id,strp_week,strp_name,strp_class,strp_project,strp_progress,strp_task,strp_day ";
+  $q_string .= "from st_status ";
   $q_string .= "where ($u_string) ";
   $q_string .= "and strp_week >= " . $formVars['startweek'] . " and strp_save = 1 ";
   $q_string .= "order by strp_week,strp_class,strp_project,strp_day";
 
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_status = mysqli_fetch_array($q_status) ) {
+  while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
 
-    if ($holdweek != $a_status['strp_week']) {
-      $holdweek = $a_status['strp_week'];
-      if ($a_status['strp_week'] == $formVars['startweek']) {
-        $body .= "* Starting on " . $doweek[$startday] . " of Week " . $weekval[$a_status['strp_week']] . "\n";
+    if ($holdweek != $a_st_status['strp_week']) {
+      $holdweek = $a_st_status['strp_week'];
+      if ($a_st_status['strp_week'] == $formVars['startweek']) {
+        $body .= "* Starting on " . $doweek[$startday] . " of Week " . $weekval[$a_st_status['strp_week']] . "\n";
       }
-      if ($a_status['strp_week'] == $formVars['endweek'] && $startday != 0) {
-        $body .= "\n* Ending on " . $doweek[$startday - 1] . " of Week " . $weekval[$a_status['strp_week']] . "\n";
+      if ($a_st_status['strp_week'] == $formVars['endweek'] && $startday != 0) {
+        $body .= "\n* Ending on " . $doweek[$startday - 1] . " of Week " . $weekval[$a_st_status['strp_week']] . "\n";
       }
     }
 
-    if (($a_status['strp_week'] == $formVars['startweek'] && $a_status['strp_day'] >= $startday) || ($a_status['strp_week'] == $formVars['endweek'] && $a_status['strp_day'] < $startday)) {
-      if ($class != $a_status['strp_class']) {
-        $class = $a_status['strp_class'];
+    if (($a_st_status['strp_week'] == $formVars['startweek'] && $a_st_status['strp_day'] >= $startday) || ($a_st_status['strp_week'] == $formVars['endweek'] && $a_st_status['strp_day'] < $startday)) {
+      if ($class != $a_st_status['strp_class']) {
+        $class = $a_st_status['strp_class'];
         if ($class > 0) {
-          $body .= "\n" . $classval[$a_status['strp_class']] . "\n";
+          $body .= "\n" . $classval[$a_st_status['strp_class']] . "\n";
         }
       }
    
@@ -230,10 +231,10 @@
       if ($class > 0) {
         if ($classprj[$class] == 1) {
           $pre = "    - ";
-          if ($project != $a_status['strp_project']) {
-            $project = $a_status['strp_project'];
+          if ($project != $a_st_status['strp_project']) {
+            $project = $a_st_status['strp_project'];
             if ($project > 0) {
-              $body .= $linefeed . "* " . $projval[$a_status['strp_project']] . "\n";
+              $body .= $linefeed . "* " . $projval[$a_st_status['strp_project']] . "\n";
             }
             $linefeed = "\n";
           }
@@ -243,10 +244,10 @@
       }
 
       $body .= $pre;
-      if ($a_status['strp_progress'] > 0) {
-        $body .= $progval[$a_status['strp_progress']] . ": ";
+      if ($a_st_status['strp_progress'] > 0) {
+        $body .= $progval[$a_st_status['strp_progress']] . ": ";
       }
-      $body .= $a_status['strp_task'] . "\n";
+      $body .= $a_st_status['strp_task'] . "\n";
     }
   }
 

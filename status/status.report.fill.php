@@ -42,12 +42,12 @@
 
 // Retrieve the task array
       $q_string  = "select * ";
-      $q_string .= "from status ";
+      $q_string .= "from st_status ";
       $q_string .= "where strp_id = " . $formVars['id'];
-      $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_status = mysqli_fetch_array($q_status);
+      $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_status = mysqli_fetch_array($q_st_status);
 
-      mysqli_free_result($q_status);
+      mysqli_free_result($q_st_status);
 
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
@@ -60,7 +60,7 @@
       $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
         if (strlen($a_users['usr_projects']) == 0) {
-          if ($a_st_project['prj_id'] == $a_status['strp_project']) {
+          if ($a_st_project['prj_id'] == $a_st_status['strp_project']) {
             $project = $count;
           } else {
             $count++;
@@ -68,7 +68,7 @@
         } else {
           $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
           if (preg_match($projectid, $a_users['usr_projects'])) {
-            if ($a_st_project['prj_id'] == $a_status['strp_project']) {
+            if ($a_st_project['prj_id'] == $a_st_status['strp_project']) {
               $project = $count;
             } else {
               $count++;
@@ -81,16 +81,16 @@
 
 ?>
 
-document.taskmgr.project['<?php print $project; ?>'].selected = true;
-document.taskmgr.report['<?php print $a_status['strp_class'] - $class; ?>'].checked = true;
-document.taskmgr.progress['<?php print $a_status['strp_progress']; ?>'].selected = true;
-document.taskmgr.tcktype['<?php print $a_status['strp_type']; ?>'].selected = true;
-document.taskmgr.day['<?php print $a_status['strp_day']; ?>'].checked = true;
-document.taskmgr.task.value = "<?php print mysqli_real_escape_string($db, $a_status['strp_task']); ?>";
-document.taskmgr.save.checked = <?php if ($a_status['strp_save']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.quarter.checked = <?php if ($a_status['strp_quarter']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.time.value = <?php print $a_status['strp_time']; ?>;
-document.taskmgr.id.value = <?php print $a_status['strp_id']; ?>;
+document.taskmgr.project['<?php          print $project; ?>'].selected = true;
+document.taskmgr.report['<?php           print $a_st_status['strp_class'] - $class; ?>'].checked = true;
+document.taskmgr.progress['<?php         print $a_st_status['strp_progress']; ?>'].selected = true;
+document.taskmgr.tcktype['<?php          print $a_st_status['strp_type']; ?>'].selected = true;
+document.taskmgr.day['<?php              print $a_st_status['strp_day']; ?>'].checked = true;
+document.taskmgr.task.value = "<?php     print mysqli_real_escape_string($db, $a_st_status['strp_task']); ?>";
+document.taskmgr.save.checked = <?php    if ($a_st_status['strp_save']) { print "true"; } else { print "false"; }; ?>;
+document.taskmgr.quarter.checked = <?php if ($a_st_status['strp_quarter']) { print "true"; } else { print "false"; }; ?>;
+document.taskmgr.time.value = <?php      print $a_st_status['strp_time']; ?>;
+document.taskmgr.id.value = <?php        print $a_st_status['strp_id']; ?>;
 document.taskmgr.update.disabled = false;
 document.taskmgr.copy.disabled = false;
 

@@ -71,15 +71,15 @@
   $header .= "</tr>\n";
 
   $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_type = 0 and strp_project = " . $formVars['project'] . " and (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_status = mysqli_fetch_array($q_status)) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
     print $header;
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
-    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_status['strp_week']] . "&nbsp;" . number_format((($a_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_status['strp_task'] . " (" . $userval[$a_st_status['strp_name']] . ")</td>\n";
+    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_st_status['strp_week']] . "&nbsp;" . number_format((($a_st_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
     print "</tr>\n";
     $header = "";
   }
@@ -89,15 +89,15 @@
   $header .= "</tr>\n";
 
   $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_type = 1 and strp_project = " . $formVars['project'] . " and (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_status = mysqli_fetch_array($q_status)) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
     print $header;
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
-    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_status['strp_week']] . "&nbsp;" . number_format((($a_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_status['strp_task'] . " (" . $userval[$a_st_status['strp_name']] . ")</td>\n";
+    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_st_status['strp_week']] . "&nbsp;" . number_format((($a_st_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
     print "</tr>\n";
     $header = "";
   }
@@ -106,16 +106,17 @@
   $header .= "  <th class=\"ui-state-default\" align=left colspan=2><i>Reactive</i></th>\n";
   $header .= "</tr>\n";
 
-  $q_string  = "select strp_name,strp_week,strp_time,strp_task from status ";
+  $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_type = 2 and strp_project = " . $formVars['project'] . " and ";
   $q_string .= "(strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
 
-  while ($a_status = mysqli_fetch_array($q_status)) {
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
     print $header;
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
-    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_status['strp_week']] . "&nbsp;" . number_format((($a_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_status['strp_task'] . " (" . $userval[$a_st_status['strp_name']] . ")</td>\n";
+    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_st_status['strp_week']] . "&nbsp;" . number_format((($a_st_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
     print "</tr>\n";
     $header = "";
   }
@@ -124,16 +125,17 @@
   $header .= "  <th class=\"ui-state-default\" align=left colspan=2><i>Proactive</i></th>\n";
   $header .= "</tr>\n";
 
-  $q_string  = "select strp_name,strp_week,strp_time,strp_task from status ";
+  $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_type = 3 and strp_project = " . $formVars['project'] . " and ";
   $q_string .= "(strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") ";
   $q_string .= "order by strp_week";
 
-  while ($a_status = mysqli_fetch_array($q_status)) {
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
     print $header;
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . " (" . $userval[$a_status['strp_name']] . ")</td>\n";
-    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_status['strp_week']] . "&nbsp;" . number_format((($a_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_status['strp_task'] . " (" . $userval[$a_st_status['strp_name']] . ")</td>\n";
+    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_st_status['strp_week']] . "&nbsp;" . number_format((($a_st_status['strp_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
     print "</tr>\n";
     $header = "";
   }

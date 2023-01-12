@@ -61,23 +61,23 @@
 
   $q_string  = "select strp_name,strp_class,strp_type,strp_progress,strp_project,";
   $q_string .= "strp_day,strp_time,strp_task,strp_save,strp_quarter ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_name = " . $formVars['user'] . " and strp_week = " . $formVars['startweek'] . " ";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_status = mysqli_fetch_array($q_status)) {
-    $q_string = "insert into status set " . 
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
+    $q_string = "insert into st_status set " . 
       "strp_id       = "   . "NULL"                      . ", " . 
       "strp_week     = "   . $formVars['endweek']        . ", " . 
-      "strp_name     = "   . $a_status['strp_name']      . ", " . 
-      "strp_class    = "   . $a_status['strp_class']     . ", " . 
-      "strp_type     = "   . $a_status['strp_type']      . ", " . 
-      "strp_progress = "   . $a_status['strp_progress']  . ", " . 
-      "strp_project  = "   . $a_status['strp_project']   . ", " . 
-      "strp_day      = "   . $a_status['strp_day']       . ", " . 
-      "strp_time     = "   . $a_status['strp_time']      . ", " . 
-      "strp_task     = \"" . $a_status['strp_task']      . "\", " . 
-      "strp_save     = "   . $a_status['strp_save']      . ", " . 
-      "strp_quarter  = "   . $a_status['strp_quarter'];
+      "strp_name     = "   . $a_st_status['strp_name']      . ", " . 
+      "strp_class    = "   . $a_st_status['strp_class']     . ", " . 
+      "strp_type     = "   . $a_st_status['strp_type']      . ", " . 
+      "strp_progress = "   . $a_st_status['strp_progress']  . ", " . 
+      "strp_project  = "   . $a_st_status['strp_project']   . ", " . 
+      "strp_day      = "   . $a_st_status['strp_day']       . ", " . 
+      "strp_time     = "   . $a_st_status['strp_time']      . ", " . 
+      "strp_task     = \"" . $a_st_status['strp_task']      . "\", " . 
+      "strp_save     = "   . $a_st_status['strp_save']      . ", " . 
+      "strp_quarter  = "   . $a_st_status['strp_quarter'];
 
     mysqli_query($db, $q_string);
   }

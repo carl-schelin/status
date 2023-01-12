@@ -58,12 +58,12 @@
 #######
 
   $q_string  = "select strp_week ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_name = " . $formVars['id'] . " ";
   $q_string .= "order by strp_week ";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_status = mysqli_fetch_array($q_status) ) {
-    $week = $a_status['strp_week'];
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
+    $week = $a_st_status['strp_week'];
   }
 
   if ($week == 0) {

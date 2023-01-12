@@ -75,17 +75,17 @@ if (strlen($formVars['task']) > 0) {
 // Retrieve the task array
   $count = 0;
   $q_string  = "select strp_name,strp_week,strp_task ";
-  $q_string .= "from status ";
+  $q_string .= "from st_status ";
   $q_string .= "where strp_task like \"%" . $formVars['task'] . "%\" ";
   $q_string .= "order by strp_week,strp_task";
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_status = mysqli_fetch_array($q_status)) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
 
     print "<tr>\n";
 
     $q_string  = "select usr_name ";
     $q_string .= "from users ";
-    $q_string .= "where usr_id = " . $a_status['strp_name'];
+    $q_string .= "where usr_id = " . $a_st_status['strp_name'];
     $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_users = mysqli_fetch_array($q_users);
 
@@ -93,13 +93,13 @@ if (strlen($formVars['task']) > 0) {
 
     $q_string  = "select wk_date ";
     $q_string .= "from st_weeks ";
-    $q_string .= "where wk_id = " . $a_status['strp_week'] . " ";
+    $q_string .= "where wk_id = " . $a_st_status['strp_week'] . " ";
     $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
     print "  <td class=\"ui-widget-content\">" . $a_st_weeks['wk_date'] . "</td>\n";
 
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_status['strp_task']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_status['strp_task']) . "</td>\n";
     print "</tr>\n";
     $count++;
 
@@ -111,7 +111,7 @@ if (strlen($formVars['task']) > 0) {
     print "</tr>\n";
   }
 
-  mysqli_free_result($q_status);
+  mysqli_free_result($q_st_status);
 
   print "</table>\n";
 

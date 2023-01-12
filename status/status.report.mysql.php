@@ -97,10 +97,10 @@
           "strp_yearmon   = "   . $finaldate;
 
         if ($formVars['update'] == 1) {
-          $query = "update status set " .$q_string . " where strp_id = " . $formVars['id'];
+          $query = "update st_status set " .$q_string . " where strp_id = " . $formVars['id'];
           logaccess($db, $_SESSION['username'], "status.report.mysql.php", "Updating status record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user']);
         } else {
-          $query = "insert into status set strp_id = NULL," . $q_string;
+          $query = "insert into st_status set strp_id = NULL," . $q_string;
           logaccess($db, $_SESSION['username'], "status.report.mysql.php", "Adding status record: week=" . $formVars['week'] . " user=" . $formVars['user']);
 
         }
@@ -150,7 +150,7 @@
 
 // Retrieve the task array
     $q_string  = "select strp_id,strp_jira,strp_task,strp_progress,strp_project,strp_day,strp_time,strp_save,strp_quarter ";
-    $q_string .= "from status ";
+    $q_string .= "from st_status ";
     $q_string .= "where strp_name = " . $formVars['user'] . " and strp_class = " . $a_st_class['cls_id'] . " and strp_week = " . $formVars['week'] . " ";
     $q_string .= "order by strp_project,strp_day ";
     $q_task = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));

@@ -211,11 +211,11 @@
     $dailytot[6] = 0;
 
     $q_string  = "select strp_day,strp_time ";
-    $q_string .= "from status ";
+    $q_string .= "from st_status ";
     $q_string .= "where strp_project = " . $a_st_project['prj_id'] . " and strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and (" . $u_string . ")";
-    $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ( $a_status = mysqli_fetch_array($q_status) ) {
-      $dailytot[$a_status['strp_day']] += $a_status['strp_time'];
+    $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
+      $dailytot[$a_st_status['strp_day']] += $a_st_status['strp_time'];
     }
 
     for ($i = 0; $i < 7; $i++) {

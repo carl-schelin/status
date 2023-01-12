@@ -85,15 +85,15 @@
 <?php
 
   $q_string  = "select strp_task,usr_first,usr_last ";
-  $q_string .= "from status ";
-  $q_string .= "left join users on users.usr_id = status.strp_name ";
+  $q_string .= "from st_status ";
+  $q_string .= "left join users on users.usr_id = st_status.strp_name ";
   $q_string .= "where strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and strp_project = " . $a_st_project['prj_id'] . " and usr_group = " . $formVars['group'];
-  $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_status = mysqli_fetch_array($q_status)) {
+  $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_status = mysqli_fetch_array($q_st_status)) {
 
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_status['usr_last'] . ", " . $a_status['usr_first'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_status['strp_task'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_status['usr_last'] . ", " . $a_st_status['usr_first'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_status['strp_task'] . "</td>\n";
     print "</tr>\n";
 
   }

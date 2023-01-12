@@ -121,14 +121,14 @@ while ($a_groups = mysqli_fetch_array($q_groups)) {
       $prototal = 0;
       $subtotal = 0;
       $q_string  = "select strp_time ";
-      $q_string .= "from status ";
+      $q_string .= "from st_status ";
       $q_string .= "where (strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . ") and " . $query . " strp_project = " . $projid[$i] . " ";
-      $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      while ($a_status = mysqli_fetch_array($q_status)) {
+      $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ($a_st_status = mysqli_fetch_array($q_st_status)) {
         if ($projcode[$i] == 7884 || $projcode[$i] == 2839) {
-          $subtotal += $a_status['strp_time'];
+          $subtotal += $a_st_status['strp_time'];
         } else {
-          $prototal += $a_status['strp_time'];
+          $prototal += $a_st_status['strp_time'];
         }
       }
 
