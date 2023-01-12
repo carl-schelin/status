@@ -67,22 +67,22 @@
   print "</tr>\n";
 
   $q_string  = "select prj_id,prj_name,prj_code,prj_snow,prj_task,prj_desc,prj_close ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
   $q_string .= "where prj_group = $user_groupid ";
   $q_string .= "order by prj_name,prj_task";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_project = mysqli_fetch_array($q_project) ) {
-    if ($a_project['prj_close'] == 1) {
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
+    if ($a_st_project['prj_close'] == 1) {
       $tdclass = " class=\"ui-state-error\"";
     } else {
       $tdclass = " class=\"ui-widget-content\"";
     }
     print "<tr>\n";
-    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_code'] . "</a></td>\n";
-    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_snow'] . "</a></td>\n";
-    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_name'] . "</a></td>\n";
-    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_task'] . "</a></td>\n";
-    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_desc'] . "</a></td>\n";
+    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_code'] . "</a></td>\n";
+    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_snow'] . "</a></td>\n";
+    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_name'] . "</a></td>\n";
+    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_task'] . "</a></td>\n";
+    print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_desc'] . "</a></td>\n";
     print "</tr>\n";
   }
   print "</table>\n";
@@ -101,22 +101,22 @@
     print "</tr>\n";
 
     $q_string  = "select prj_id,prj_name,prj_code,prj_snow,prj_task,prj_desc,prj_close ";
-    $q_string .= "from project ";
+    $q_string .= "from st_project ";
     $q_string .= "where prj_group = " . $a_groups['grp_id'] . " ";
     $q_string .= "order by prj_name,prj_task";
-    $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ( $a_project = mysqli_fetch_array($q_project) ) {
-      if ($a_project['prj_close'] == 1) {
+    $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
+      if ($a_st_project['prj_close'] == 1) {
         $tdclass = " class=\"ui-state-error\"";
       } else {
         $tdclass = " class=\"ui-widget-content\"";
       }
       print "<tr>\n";
-      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_code'] . "</a></td>\n";
-      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_snow'] . "</a></td>\n";
-      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_name'] . "</a></td>\n";
-      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_task'] . "</a></td>\n";
-      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_project['prj_desc'] . "</a></td>\n";
+      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_code'] . "</a></td>\n";
+      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_snow'] . "</a></td>\n";
+      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_name'] . "</a></td>\n";
+      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_task'] . "</a></td>\n";
+      print "  <td" . $tdclass . "><a href=\"" . $Projectroot . "/show.project.php?project=" . $a_st_project['prj_id'] . "&startweek=0&endweek=999\">" . $a_st_project['prj_desc'] . "</a></td>\n";
       print "</tr>\n";
     }
     print "</table>\n";

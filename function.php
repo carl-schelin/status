@@ -157,7 +157,7 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
     $divyearmon = date('Ym', mktime(0, 0, 0, $i + 1, 0, $divyear));
     $q_string  = "select strp_time ";
     $q_string .= "from status ";
-    $q_string .= "left join project on project.prj_id = status.strp_project ";
+    $q_string .= "left join st_project on st_project.prj_id = status.strp_project ";
     $q_string .= "where prj_code = " . $ras_code . " and strp_yearmon = " . $divyearmon . " and strp_name = " . $ras_resource;
     $q_divstatus = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     while ($a_divstatus = mysqli_fetch_array($q_divstatus)) {

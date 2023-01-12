@@ -54,21 +54,21 @@
       $count = 1;
 
       $q_string  = "select prj_id ";
-      $q_string .= "from project ";
+      $q_string .= "from st_project ";
       $q_string .= "where prj_group = " . $_SESSION['group'] . " and prj_close = 0 ";
       $q_string .= "order by prj_desc";
-      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      while ( $a_project = mysqli_fetch_array($q_project) ) {
+      $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
         if (strlen($a_users['usr_projects']) == 0) {
-          if ($a_project['prj_id'] == $a_status['strp_project']) {
+          if ($a_st_project['prj_id'] == $a_status['strp_project']) {
             $project = $count;
           } else {
             $count++;
           }
         } else {
-          $projectid = "/:" . $a_project['prj_id'] . ":/i";
+          $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
           if (preg_match($projectid, $a_users['usr_projects'])) {
-            if ($a_project['prj_id'] == $a_status['strp_project']) {
+            if ($a_st_project['prj_id'] == $a_status['strp_project']) {
               $project = $count;
             } else {
               $count++;

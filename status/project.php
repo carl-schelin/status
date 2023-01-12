@@ -70,12 +70,12 @@
 # Retrieve all the projects into the projval array
   $project = 0;
   $q_string  = "select prj_id,prj_desc,prj_task ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
   $q_string .= "order by prj_name,prj_task";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_project = mysqli_fetch_array($q_project) ) {
-    $projval[$a_project['prj_id']] = $a_project['prj_desc'];
-    $projtask[$a_project['prj_id']] = $a_project['prj_task'];
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
+    $projval[$a_st_project['prj_id']] = $a_st_project['prj_desc'];
+    $projtask[$a_st_project['prj_id']] = $a_st_project['prj_task'];
   }
 
   $q_string  = "select strp_project,strp_task ";

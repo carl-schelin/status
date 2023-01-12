@@ -100,27 +100,27 @@ print "</tr>\n";
 
 $matches[0] = '';
 $q_string  = "select prj_id,prj_name,prj_code,prj_snow,prj_task,prj_desc,prj_close ";
-$q_string .= "from project ";
+$q_string .= "from st_project ";
 $q_string .= "where prj_group = " . $a_groups['grp_id'] . " ";
 $q_string .= "order by prj_name,prj_desc,prj_task,prj_code ";
-$q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_project = mysqli_fetch_array($q_project)) {
+$q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_st_project = mysqli_fetch_array($q_st_project)) {
 
-  $prj_id = $a_project['prj_id'];
+  $prj_id = $a_st_project['prj_id'];
   print "<tr>\n";
 
-  print "  <td class=\"ui-widget-content\" id=\"name_" . $prj_id . "\"><input type=\"text\" name=\"name_"   .$prj_id."\" size=\"40\" value=\"".$a_project['prj_name']."\"></td>\n";
-  print "  <td class=\"ui-widget-content\" id=\"proj_" . $prj_id . "\"><input type=\"text\" name=\"project_".$prj_id."\" size=\"5\" value=\"".$a_project['prj_code']."\"></td>\n";
-  print "  <td class=\"ui-widget-content\" id=\"snow_" . $prj_id . "\"><input type=\"text\" name=\"snow_"   .$prj_id."\" size=\"5\" value=\"".$a_project['prj_snow']."\"></td>\n";
-  print "  <td class=\"ui-widget-content\" id=\"task_" . $prj_id . "\"><input type=\"text\" name=\"task_"   .$prj_id."\" size=\"30\" value=\"".$a_project['prj_task']."\"></td>\n";
-  print "  <td class=\"ui-widget-content\" id=\"desc_" . $prj_id . "\"><input type=\"text\" name=\"desc_"   .$prj_id."\" size=\"25\" value=\"".$a_project['prj_desc']."\"></td>\n";
+  print "  <td class=\"ui-widget-content\" id=\"name_" . $prj_id . "\"><input type=\"text\" name=\"name_"   .$prj_id."\" size=\"40\" value=\"".$a_st_project['prj_name']."\"></td>\n";
+  print "  <td class=\"ui-widget-content\" id=\"proj_" . $prj_id . "\"><input type=\"text\" name=\"project_".$prj_id."\" size=\"5\"  value=\"".$a_st_project['prj_code']."\"></td>\n";
+  print "  <td class=\"ui-widget-content\" id=\"snow_" . $prj_id . "\"><input type=\"text\" name=\"snow_"   .$prj_id."\" size=\"5\"  value=\"".$a_st_project['prj_snow']."\"></td>\n";
+  print "  <td class=\"ui-widget-content\" id=\"task_" . $prj_id . "\"><input type=\"text\" name=\"task_"   .$prj_id."\" size=\"30\" value=\"".$a_st_project['prj_task']."\"></td>\n";
+  print "  <td class=\"ui-widget-content\" id=\"desc_" . $prj_id . "\"><input type=\"text\" name=\"desc_"   .$prj_id."\" size=\"25\" value=\"".$a_st_project['prj_desc']."\"></td>\n";
   if (preg_match("/:" . $prj_id . ":/i", $a_users['usr_projects'])) {
     $checked = "checked ";
   } else {
     $checked = "";
   }
   print "  <td class=\"ui-widget-content delete\" title=\"Select this project for your Personal Project Menu\" id=\"pers_" . $prj_id . "\" align=center><input type=\"checkbox\" name=\"pers_"  . $prj_id . "\" $checked></td>\n";
-  if ($a_project['prj_close']) {
+  if ($a_st_project['prj_close']) {
     $checked = "checked ";
   } else {
     $checked = "";
@@ -161,20 +161,20 @@ while ($a_groups = mysqli_fetch_array($q_groups)) {
   print "</tr>\n";
 
   $q_string  = "select * ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
   $q_string .= "where prj_group = " . $a_groups['grp_id'] . " ";
   $q_string .= "order by prj_name,prj_desc,prj_task,prj_code ";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_project = mysqli_fetch_array($q_project) ) {
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
 
-    $prj_id = $a_project['prj_id'];
+    $prj_id = $a_st_project['prj_id'];
     print "<tr>\n";
 
-    print "  <td class=\"ui-widget-content\" id=\"name_" . $prj_id . "\">" . $a_project['prj_name'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\" id=\"proj_" . $prj_id . "\">" . $a_project['prj_code'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\" id=\"snow_" . $prj_id . "\">" . $a_project['prj_snow'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\" id=\"task_" . $prj_id . "\">" . $a_project['prj_task'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\" id=\"desc_" . $prj_id . "\">" . $a_project['prj_desc'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"name_" . $prj_id . "\">" . $a_st_project['prj_name'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"proj_" . $prj_id . "\">" . $a_st_project['prj_code'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"snow_" . $prj_id . "\">" . $a_st_project['prj_snow'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"task_" . $prj_id . "\">" . $a_st_project['prj_task'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"desc_" . $prj_id . "\">" . $a_st_project['prj_desc'] . "</td>\n";
     print "  <td class=\"ui-widget-content delete\" title=\"Copy this project into your group list.\" id=\"copy_" . $prj_id . "\"><input type=\"button\" value=\"Copy\" onClick=\"javascript:attach_file('copy.project.mysql.php?id=" . $prj_id . "&group=" . $formVars['group'] . "')\"></td>\n";
 
     print "</tr>\n";

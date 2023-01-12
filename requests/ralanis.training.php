@@ -48,13 +48,13 @@
   }
 
   $q_string  = "select prj_id ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
   $q_string .= "where prj_code = 7884 and prj_task like \"%Training%\"";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_project = mysqli_fetch_array($q_project);
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_project = mysqli_fetch_array($q_st_project);
 
-  if ($a_project['prj_id'] == '') {
-    $a_project['prj_id'] = 0;
+  if ($a_st_project['prj_id'] == '') {
+    $a_st_project['prj_id'] = 0;
   }
 
 ?>
@@ -87,7 +87,7 @@
   $q_string  = "select strp_task,usr_first,usr_last ";
   $q_string .= "from status ";
   $q_string .= "left join users on users.usr_id = status.strp_name ";
-  $q_string .= "where strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and strp_project = " . $a_project['prj_id'] . " and usr_group = " . $formVars['group'];
+  $q_string .= "where strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and strp_project = " . $a_st_project['prj_id'] . " and usr_group = " . $formVars['group'];
   $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_status = mysqli_fetch_array($q_status)) {
 

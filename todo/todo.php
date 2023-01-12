@@ -281,32 +281,32 @@ function textCounter(field,cntfield,maxlimit) {
 // Generate the project array.
 
   $q_string  = "select prj_id,prj_desc ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
   $q_string .= "where prj_group = " . $_SESSION['group'] . " and prj_close = 0 ";
   $q_string .= "order by prj_desc";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ($a_project = mysqli_fetch_array($q_project)) {
+  while ($a_st_project = mysqli_fetch_array($q_st_project)) {
 
     if (strlen($a_users['usr_projects']) == 0) {
-      print "  <option value=\"" . $a_project['prj_id'] . "\">" . $a_project['prj_desc'] . "</option>\n";
+      print "  <option value=\"" . $a_st_project['prj_id'] . "\">" . $a_st_project['prj_desc'] . "</option>\n";
     } else {
-      $projectid = "/:" . $a_project['prj_id'] . ":/i";
+      $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
       if (preg_match($projectid, $a_users['usr_projects'])) {
-        print "  <option value=\"" . $a_project['prj_id'] . "\">" . $a_project['prj_desc'] . "</option>\n";
+        print "  <option value=\"" . $a_st_project['prj_id'] . "\">" . $a_st_project['prj_desc'] . "</option>\n";
       }
     }
   }
 
 # old way:
 #  $q_string  = "select prj_id,prj_desc ";
-#  $q_string .= "from project ";
+#  $q_string .= "from st_project ";
 #  $q_string .= "where prj_group = " . $_SESSION['group'] . " and prj_close = 0 ";
 #  $q_string .= "order by prj_desc";
-#  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+#  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-#  while ($a_project = mysqli_fetch_array($q_project)) {
-#    print "  <option value=\"" . $a_project['prj_id'] . "\">" . $a_project['prj_desc'] . "</option>\n";
+#  while ($a_st_project = mysqli_fetch_array($q_st_project)) {
+#    print "  <option value=\"" . $a_st_project['prj_id'] . "\">" . $a_st_project['prj_desc'] . "</option>\n";
 #  }
 
 ?>

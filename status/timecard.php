@@ -184,23 +184,23 @@
 // Retrieve the requested data
 
   $q_string  = "select prj_id,prj_code,prj_snow,prj_name,prj_task,prj_desc ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
   $q_string .= "order by prj_code,prj_task";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_project = mysqli_fetch_array($q_project) ) {
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
 
     $class = "ui-widget-content";
-    if ($a_project['prj_code'] == '7884' && $a_project['prj_task'] == '1.2 Maintenance') {
+    if ($a_st_project['prj_code'] == '7884' && $a_st_project['prj_task'] == '1.2 Maintenance') {
       $class = "ui-state-highlight";
     }
 
     $project_total = 0;
     $output = "<tr>";
-    $output .= "  <td class=\"" . $class . "\">" . $a_project['prj_code'] . "</td>";
-    $output .= "  <td class=\"" . $class . "\">" . $a_project['prj_snow'] . "</td>";
-    $output .= "  <td class=\"" . $class . "\">" . $a_project['prj_name'] . "</td>";
-    $output .= "  <td class=\"" . $class . "\">" . $a_project['prj_task'] . "</td>";
-    $output .= "  <td class=\"" . $class . "\">" . $a_project['prj_desc'] . "</td>";
+    $output .= "  <td class=\"" . $class . "\">" . $a_st_project['prj_code'] . "</td>";
+    $output .= "  <td class=\"" . $class . "\">" . $a_st_project['prj_snow'] . "</td>";
+    $output .= "  <td class=\"" . $class . "\">" . $a_st_project['prj_name'] . "</td>";
+    $output .= "  <td class=\"" . $class . "\">" . $a_st_project['prj_task'] . "</td>";
+    $output .= "  <td class=\"" . $class . "\">" . $a_st_project['prj_desc'] . "</td>";
 
     $dailytot[0] = 0;
     $dailytot[1] = 0;
@@ -212,7 +212,7 @@
 
     $q_string  = "select strp_day,strp_time ";
     $q_string .= "from status ";
-    $q_string .= "where strp_project = " . $a_project['prj_id'] . " and strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and (" . $u_string . ")";
+    $q_string .= "where strp_project = " . $a_st_project['prj_id'] . " and strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and (" . $u_string . ")";
     $q_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     while ( $a_status = mysqli_fetch_array($q_status) ) {
       $dailytot[$a_status['strp_day']] += $a_status['strp_time'];

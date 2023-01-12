@@ -82,7 +82,7 @@ if (isset($_POST['project'])) {
 
   logaccess($db, $_SESSION['username'], "add.project.php", "Adding project: " . $formVars['prj_name']);
 
-  $q_string = "insert into project " . 
+  $q_string = "insert into st_project " . 
     "set prj_id = NULL, " . 
     "prj_name  = \"" . $formVars['prj_name']  . "\", " . 
     "prj_code  = "   . $formVars['prj_code']  . "," . 
@@ -139,18 +139,18 @@ if (isset($_POST['project'])) {
 <?php
 
 $q_string  = "select prj_id,prj_name,prj_code,prj_snow,prj_task,prj_desc ";
-$q_string .= "from project ";
+$q_string .= "from st_project ";
 $q_string .= "order by prj_name";
-$q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_project = mysqli_fetch_array($q_project)) {
+$q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+while ($a_st_project = mysqli_fetch_array($q_st_project)) {
 
   print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_project['prj_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The description as shown in the drop down menus in the Status Management app\">" . $a_project['prj_desc'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_project['prj_code'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_project['prj_snow'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project name as seen in iConnect\">" . $a_project['prj_name'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project task as seen in iConnect\">" . $a_project['prj_task'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\">" . $a_st_project['prj_id'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\" title=\"The description as shown in the drop down menus in the Status Management app\">" . $a_st_project['prj_desc'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_st_project['prj_code'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_st_project['prj_snow'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\" title=\"The project name as seen in iConnect\">" . $a_st_project['prj_name'] . "</td>\n";
+  print "  <td class=\"ui-widget-content\" title=\"The project task as seen in iConnect\">" . $a_st_project['prj_task'] . "</td>\n";
   print "</tr>\n";
   $count++;
 
@@ -162,7 +162,7 @@ if ($count == 0) {
   print "</tr>\n";
 }
 
-mysqli_free_result($q_project);
+mysqli_free_result($q_st_project);
 
 ?>
 </table>

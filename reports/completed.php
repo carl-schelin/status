@@ -64,8 +64,8 @@
 
   $q_string  = "select todo_id,todo_name,prj_desc,todo_entered,todo_due,wk_date,todo_priority ";
   $q_string .= "from todo ";
-  $q_string .= "left join st_weeks on st_weeks.wk_id = todo.todo_completed ";
-  $q_string .= "left join project on project.prj_id = todo.todo_project ";
+  $q_string .= "left join st_weeks   on st_weeks.wk_id    = todo.todo_completed ";
+  $q_string .= "left join st_project on st_project.prj_id = todo.todo_project ";
   $q_string .= "where todo_user = " . $user . " ";
   $q_string .= $orderby;
   $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));

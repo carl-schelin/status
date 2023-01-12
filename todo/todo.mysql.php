@@ -262,18 +262,18 @@
 
 // Retreive the project information for this entry
       $q_string  = "select prj_desc ";
-      $q_string .= "from project ";
+      $q_string .= "from st_project ";
       $q_string .= "where prj_id = " . $a_todo['todo_project'];
-      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_project = mysqli_fetch_assoc($q_project);
-      if ($a_project['prj_desc'] != $c_project && $a_st_class['cls_project'] == 1) {
+      $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_project = mysqli_fetch_assoc($q_st_project);
+      if ($a_st_project['prj_desc'] != $c_project && $a_st_class['cls_project'] == 1) {
         $output .= "<tr>";
         $output .= "<td class=\"delete ui-widget-content\">*</td>";
-        $output .= "<td class=\"ui-widget-content\" colspan=2><b>" . $a_project['prj_desc'] . "</b></td>";
+        $output .= "<td class=\"ui-widget-content\" colspan=2><b>" . $a_st_project['prj_desc'] . "</b></td>";
         $output .= "</tr>";
-        $c_project = $a_project['prj_desc'];
+        $c_project = $a_st_project['prj_desc'];
       }
-      mysqli_free_result($q_project);
+      mysqli_free_result($q_st_project);
 
       if ($a_todo['todo_completed'] > 0) {
         $tdclass = "ui-state-highlight";

@@ -142,13 +142,13 @@ function delete_line( p_script_url ) {
 
   $project = 0;
   $q_string  = "select prj_id,prj_task ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
   $q_string .= "where prj_group = " . $usergroup['usr_group'] . " ";
   $q_string .= "order by prj_name";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_project = mysqli_fetch_array($q_project) ) {
-    $projval[$project][0] = $a_project['prj_id'];
-    $projval[$project++][1] = $a_project['prj_task'];
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
+    $projval[$project][0] = $a_st_project['prj_id'];
+    $projval[$project++][1] = $a_st_project['prj_task'];
   }
   $projtot = count($projval);
 

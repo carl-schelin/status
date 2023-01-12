@@ -48,36 +48,36 @@
       $new_projects = '';
       $matches[0] = '';
       $q_string  = "select prj_id ";
-      $q_string .= "from project ";
+      $q_string .= "from st_project ";
       $q_string .= "where prj_group = " . $_SESSION['group'] . " ";
       $q_string .= "order by prj_id";
-      $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      while ($a_project = mysqli_fetch_array($q_project)) {
+      $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ($a_st_project = mysqli_fetch_array($q_st_project)) {
 
 # regex check
-        $projectid = "/:" . $a_project['prj_id'] . ":/i";
+        $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
         preg_match($projectid, $a_users['usr_projects'], $matches);
 
-# if the retrieved $a_project['prj_id'] exists in $a_users['usr_projects']
+# if the retrieved $a_st_project['prj_id'] exists in $a_users['usr_projects']
 #  check the $formVars['project'] and save it in $new_projects if it's true
 
-        if ($matches[0] == ":" . $a_project['prj_id'] . ":") {
-          if ($formVars['id'] == $a_project['prj_id']) {
+        if ($matches[0] == ":" . $a_st_project['prj_id'] . ":") {
+          if ($formVars['id'] == $a_st_project['prj_id']) {
             logaccess($db, $_SESSION['username'], "edit.project.mysql.php", "record " . $formVars['personal']);
             if ($formVars['personal'] == "true") {
-              $new_projects .= ":" . $a_project['prj_id'] . ":";
+              $new_projects .= ":" . $a_st_project['prj_id'] . ":";
             }
           } else {
-            $new_projects .= ":" . $a_project['prj_id'] . ":";
+            $new_projects .= ":" . $a_st_project['prj_id'] . ":";
           }
         } else {
 
-# if $a_project['prj_id'] is not in $a_users['usr_projects']
+# if $a_st_project['prj_id'] is not in $a_users['usr_projects']
 # if we've reached the same project id that was passed
 # if the variable is set to true, then add it to the listing
-          if ($formVars['id'] == $a_project['prj_id']) {
+          if ($formVars['id'] == $a_st_project['prj_id']) {
             if ($formVars['personal'] == "true") {
-              $new_projects .= ":" . $a_project['prj_id'] . ":";
+              $new_projects .= ":" . $a_st_project['prj_id'] . ":";
             }
           }
         }
@@ -90,7 +90,7 @@
 
       logaccess($db, $_SESSION['username'], "edit.project.mysql.php", "Editing record " . $formVars['id'] . " in project");
 
-      $query = "update project set " . 
+      $query = "update st_project set " . 
         "prj_name      = \"" . $formVars['name']  . "\", " . 
         "prj_code      =   " . $formVars['code']  . ", " . 
         "prj_snow      = \"" . $formVars['snow']  . "\", " . 

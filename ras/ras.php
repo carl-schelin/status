@@ -54,15 +54,15 @@
   $projnum = 0;
 # Load the project codes into an array
   $q_string  = "select prj_id,prj_code,prj_name,prj_desc ";
-  $q_string .= "from project ";
+  $q_string .= "from st_project ";
 #  $q_string .= "where prj_code != 7884 and prj_code != 2839 ";
   $q_string .= "order by prj_name";
-  $q_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_project = mysqli_fetch_array($q_project)) {
-    $projid[$projnum]     = $a_project['prj_id'];
-    $projdesc[$projnum]   = $a_project['prj_desc'];
-    $projcode[$projnum]   = $a_project['prj_code'];
-    $projname[$projnum++] = $a_project['prj_name'];
+  $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_project = mysqli_fetch_array($q_st_project)) {
+    $projid[$projnum]     = $a_st_project['prj_id'];
+    $projdesc[$projnum]   = $a_st_project['prj_desc'];
+    $projcode[$projnum]   = $a_st_project['prj_code'];
+    $projname[$projnum++] = $a_st_project['prj_name'];
   }
 
 ?>
