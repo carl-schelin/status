@@ -74,7 +74,7 @@
     $q_string  = "select wk_date ";
     $q_string .= "from st_weeks ";
     $q_string .= "where wk_id = " . $a_todo['todo_due'] . " ";
-    $q_st_weeks = mysqli_query($db, ,$q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
     print "<tr>\n";
