@@ -20,12 +20,12 @@
   logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
   $q_string  = "select usr_id,usr_name ";
-  $q_string .= "from users";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_string .= "from st_users";
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_users = mysqli_fetch_row($q_users) ) {
-    if ($_SESSION['username'] == $a_users[1]) {
-      $formVars['id'] = $a_users[0];
+  while ( $a_st_users = mysqli_fetch_row($q_st_users) ) {
+    if ($_SESSION['username'] == $a_st_users[1]) {
+      $formVars['id'] = $a_st_users[0];
     }
   }
 
@@ -84,12 +84,12 @@ if (strlen($formVars['task']) > 0) {
     print "<tr>\n";
 
     $q_string  = "select usr_name ";
-    $q_string .= "from users ";
+    $q_string .= "from st_users ";
     $q_string .= "where usr_id = " . $a_st_status['strp_name'];
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_users = mysqli_fetch_array($q_users);
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_st_users = mysqli_fetch_array($q_st_users);
 
-    print "  <td class=\"ui-widget-content\">" . $a_users['usr_name'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_users['usr_name'] . "</td>\n";
 
     $q_string  = "select wk_date ";
     $q_string .= "from st_weeks ";

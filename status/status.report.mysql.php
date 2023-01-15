@@ -121,15 +121,15 @@
   $c_project = "";
 
   $q_string  = "select usr_template ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
 // Retrieve the class headers. Start with 5 as 1-4 are obsolete (but still used)
   $q_string  = "select cls_id,cls_name,cls_project,cls_help ";
   $q_string .= "from st_class ";
-  $q_string .= "where cls_template = " . $a_users['usr_template'];
+  $q_string .= "where cls_template = " . $a_st_users['usr_template'];
   $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_class = mysqli_fetch_array($q_st_class)) {
     if ($a_st_class['cls_id'] == $formVars['class']) {

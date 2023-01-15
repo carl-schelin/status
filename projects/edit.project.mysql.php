@@ -40,10 +40,10 @@
 # compare the output to the project variable. If true, put it in the string. Otherwise don't
 
       $q_string  = "select usr_projects ";
-      $q_string .= "from users ";
+      $q_string .= "from st_users ";
       $q_string .= "where usr_id = " . $_SESSION['uid'];
-      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_users = mysqli_fetch_array($q_users);
+      $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_users = mysqli_fetch_array($q_st_users);
 
       $new_projects = '';
       $matches[0] = '';
@@ -56,9 +56,9 @@
 
 # regex check
         $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
-        preg_match($projectid, $a_users['usr_projects'], $matches);
+        preg_match($projectid, $a_st_users['usr_projects'], $matches);
 
-# if the retrieved $a_st_project['prj_id'] exists in $a_users['usr_projects']
+# if the retrieved $a_st_project['prj_id'] exists in $a_st_users['usr_projects']
 #  check the $formVars['project'] and save it in $new_projects if it's true
 
         if ($matches[0] == ":" . $a_st_project['prj_id'] . ":") {
@@ -72,7 +72,7 @@
           }
         } else {
 
-# if $a_st_project['prj_id'] is not in $a_users['usr_projects']
+# if $a_st_project['prj_id'] is not in $a_st_users['usr_projects']
 # if we've reached the same project id that was passed
 # if the variable is set to true, then add it to the listing
           if ($formVars['id'] == $a_st_project['prj_id']) {
@@ -83,7 +83,7 @@
         }
       }
 
-      $q_string  = "update users set ";
+      $q_string  = "update st_users set ";
       $q_string .= "usr_projects = \"" . $new_projects . "\" ";
       $q_string .= "where usr_id = " . $_SESSION['uid'];
       $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));

@@ -31,14 +31,14 @@
 ######
 
   $q_string  = "select usr_id,usr_first,usr_last,usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_name = \"" . $_SESSION['username'] . "\" ";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
-  $formVars['id'] = $a_users['usr_id'];
-  $formVars['username'] = $a_users['usr_first'] . ' ' . $a_users['usr_last'];
-  $formVars['group'] = $a_users['usr_group'];
+  $formVars['id'] = $a_st_users['usr_id'];
+  $formVars['username'] = $a_st_users['usr_first'] . ' ' . $a_st_users['usr_last'];
+  $formVars['group'] = $a_st_users['usr_group'];
 
 #######
 # Retrieve all the weeks into the weekval array

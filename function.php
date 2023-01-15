@@ -18,7 +18,7 @@ function logaccess($p_db, $p_user, $p_source, $p_detail) {
   include('settings.php');
   $package = 'function.php';
 
-  $query = "insert into log set " .
+  $query = "insert into st_log set " .
     "log_id        = NULL, " .
     "log_user      = \"" . $p_user   . "\", " .
     "log_source    = \"" . $p_source . "\", " .
@@ -35,7 +35,7 @@ function check_userlevel( $p_db, $p_level = 2 ) {
   if (isset($_SESSION['username'])) {
     include('settings.php');
     $q_string  = "select usr_level ";
-    $q_string .= "from users ";
+    $q_string .= "from st_users ";
     $q_string .= "where usr_name = \"" . $_SESSION['username'] . "\"";
     $q_user_level = mysqli_query($p_db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($p_db)));
     $a_user_level = mysqli_fetch_array($q_user_level);
@@ -182,7 +182,7 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
   $q_string .= "ras_jan,ras_feb,ras_mar,ras_apr,ras_may,ras_jun,ras_jul,ras_aug,ras_sep,";
   $q_string .= "ras_oct,ras_nov,ras_dec,ras_closed ";
   $q_string .= "from st_ras ";
-  $q_string .= "left join users on ras_resource = users.usr_id ";
+  $q_string .= "left join st_users on ras_resource = st_users.usr_id ";
   $q_string .= "where ras_name not like \"%PTO%\" and ras_group = " . $ras_group . " and ras_resource = " . $ras_resource . " and ras_code = " . $ras_code . " ";
   $q_string .= "order by ras_id desc";
   $q_showras = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));

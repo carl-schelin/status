@@ -91,16 +91,16 @@
 
   if ($formVars['group'] != 0) {
     if (check_userlevel($db, $AL_Supervisor)) {
-      $q_string = "select usr_id from users where usr_supervisor = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_supervisor = " . $formVars['user'];
     }
     if (check_userlevel($db, $AL_Manager)) {
-      $q_string = "select usr_id from users where usr_manager = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_manager = " . $formVars['user'];
     }
     if (check_userlevel($db, $AL_Director)) {
-      $q_string = "select usr_id from users where usr_director = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_director = " . $formVars['user'];
     }
     if (check_userlevel($db, $AL_VicePresident)) {
-      $q_string = "select usr_id from users where usr_vicepresident = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_vicepresident = " . $formVars['user'];
     }
   
 # restrict to group if looking at something other than the Management group.
@@ -112,9 +112,9 @@
     $prtor = "";
     $u_string = "";
   
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ($a_users = mysqli_fetch_array($q_users)) {
-      $u_string .= $prtor . "strp_name = " . $a_users['usr_id'];
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+      $u_string .= $prtor . "strp_name = " . $a_st_users['usr_id'];
       if ($prtor == "") {
         $prtor = " or ";
       }

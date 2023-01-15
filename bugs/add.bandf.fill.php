@@ -34,12 +34,12 @@
       $count = 1;
       $developer = 0;
       $q_string  = "select usr_id ";
-      $q_string .= "from users ";
+      $q_string .= "from st_users ";
       $q_string .= "where usr_level = 1 ";
       $q_string .= "order by usr_last";
-      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      while ($a_users = mysqli_fetch_array($q_users)) {
-        if ($a_users['usr_id'] == $a_st_bandf['bf_dev']) {
+      $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+        if ($a_st_users['usr_id'] == $a_st_bandf['bf_dev']) {
           $developer = $count;
         }
         $count++;

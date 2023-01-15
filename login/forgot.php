@@ -82,22 +82,22 @@ if (isset($_POST['mail_user'])) {
   $search_q = $_POST['username'];
 
   $q_string  = "select usr_id,usr_name,usr_email ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id != 1 and usr_disabled = 0 and (usr_name = '" . $search_q . "' or usr_email = '" . $search_q . "')";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  if (mysqli_num_rows($q_users) == '1') {
-    $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  if (mysqli_num_rows($q_st_users) == '1') {
+    $a_st_users = mysqli_fetch_array($q_st_users);
 
-    $user_email = $a_users['usr_email'];
+    $user_email = $a_st_users['usr_email'];
 
     if (isEmail($user_email)) {
 
       $newpassword = generatePassword(8);
 
       $q_string  = "update ";
-      $q_string .= "users ";
+      $q_string .= "st_users ";
       $q_string .= "set usr_reset=1,usr_passwd = MD5('$newpassword') ";
-      $q_string .= "where usr_id = " . $a_users['usr_id'];
+      $q_string .= "where usr_id = " . $a_st_users['usr_id'];
       $q_newpw = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
       $headers  = "From: Status Password Reset <root@" . $Sitehttp . ">\r\n";
@@ -109,7 +109,7 @@ if (isset($_POST['mail_user'])) {
       $body .= "<p>A password reset request has been received. A new password has been created and is contained within this e-mail. ";
       $body .= "Please log in to the <a href=\"" . $Siteroot . "/index.php\">Status</a> site and reset your password.</p>\n\n";
 
-      $body .= "<p>Account: " . $a_users['usr_name'] . "\n";
+      $body .= "<p>Account: " . $a_st_users['usr_name'] . "\n";
       $body .= "<br>Password: \"" . $newpassword . "\"\n\n";
 
       $body .= "<p>If you did not request this, after logging in and changing your password, please contact one of the site admins.</p>";

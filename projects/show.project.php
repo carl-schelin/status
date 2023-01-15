@@ -24,10 +24,10 @@
   $formVars['endweek']   = clean($_GET['endweek'], 10);
 
   $q_string  = "select usr_id,usr_name ";
-  $q_string .= "from users";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_users = mysqli_fetch_array($q_users)) {
-    $userval[$a_users['usr_id']] = $a_users['usr_name'];
+  $q_string .= "from st_users";
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+    $userval[$a_st_users['usr_id']] = $a_st_users['usr_name'];
   }
 
   $q_string  = "select wk_id,wk_date ";

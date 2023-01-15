@@ -76,18 +76,18 @@
           $new_passwd  = md5($formVars['new_passwd']); 
 
           $q_string  = "select usr_id ";
-          $q_string .= "from users ";
+          $q_string .= "from st_users ";
           $q_string .= "where usr_name = '" . $usr_name . "' and usr_passwd = '" . $usr_passwd . "' ";
-          $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 # Check that at least one row was returned 
-          if (mysqli_num_rows($q_users) > 0) { 
+          if (mysqli_num_rows($q_st_users) > 0) { 
 
             $q_string  = "update ";
-            $q_string .= "users ";
+            $q_string .= "st_users ";
             $q_string .= "set usr_passwd = '" . $new_passwd . "',usr_reset = 0 ";
             $q_string .= "where usr_name = '" . $usr_name . "' and usr_passwd = '" . $usr_passwd . "'";
-            $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+            $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
             logaccess($db, $_SESSION['username'], "pwreset.inc.php", $_SESSION['username'] . " has reset their password.");
 

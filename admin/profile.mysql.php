@@ -60,7 +60,7 @@
           }
 
           if ($formVars['update'] == 1) {
-            $query = "update users set " . $q_string . " where usr_id = " . $formVars['id'];
+            $query = "update st_users set " . $q_string . " where usr_id = " . $formVars['id'];
             $message = "Account settings updated.";
           }
 

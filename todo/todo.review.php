@@ -30,12 +30,12 @@
   logaccess($db, $_SESSION['username'], "todo.review.php", "Viewing the todo review page: user=" . $user . " group=" . $formVars['group']);
 
   $q_string  = "select usr_id,usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_name = '" . $_SESSION['username'] . "'";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
-  $formVars['id'] = $a_users['usr_id'];
+  $formVars['id'] = $a_st_users['usr_id'];
 
   if ($formVars['user'] != $formVars['id']) {
     logaccess($db, $_SESSION['username'], "todo.review.php", "Escalated privileged access to " . $formVars['id']);

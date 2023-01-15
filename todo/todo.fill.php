@@ -26,14 +26,14 @@
 
 // Now get the correct number of classes.
       $q_string = "select usr_template,usr_projects ";
-      $q_string .= "from users ";
+      $q_string .= "from st_users ";
       $q_string .= "where usr_id = " . $formVars['user'];
-      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_users = mysqli_fetch_array($q_users);
+      $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_users = mysqli_fetch_array($q_st_users);
 
       $q_string  = "select cls_id ";
       $q_string .= "from st_class ";
-      $q_string .= "where cls_template = " . $a_users['usr_template'];
+      $q_string .= "where cls_template = " . $a_st_users['usr_template'];
       $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));;
       $a_st_class = mysqli_fetch_array($q_st_class);
 
@@ -57,7 +57,7 @@
       $q_string .= "order by prj_desc";
       $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
-        if (strlen($a_users['usr_projects']) == 0) {
+        if (strlen($a_st_users['usr_projects']) == 0) {
           if ($a_st_project['prj_id'] == $a_todo['todo_project']) {
             $project = $count;
           } else {
@@ -65,7 +65,7 @@
           }
         } else {
           $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
-          if (preg_match($projectid, $a_users['usr_projects'])) {
+          if (preg_match($projectid, $a_st_users['usr_projects'])) {
             if ($a_st_project['prj_id'] == $a_todo['todo_project']) {
               $project = $count;
             } else {

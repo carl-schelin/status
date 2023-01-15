@@ -33,11 +33,11 @@
   logaccess($db, $_SESSION['username'], "edit.status.php", "Editing status detail records: week=" . $formVars['startweek'] . " user=" . $formVars['user']);
 
   $q_string  = "select usr_id,usr_name ";
-  $q_string .= "from users";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_users = mysqli_fetch_array($q_users) ) {
-    if ($_SESSION['username'] == $a_users['usr_name']) {
-      $formVars['id'] = $a_users['usr_id'];
+  $q_string .= "from st_users";
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_users = mysqli_fetch_array($q_st_users) ) {
+    if ($_SESSION['username'] == $a_st_users['usr_name']) {
+      $formVars['id'] = $a_st_users['usr_id'];
     }
   }
 
@@ -92,10 +92,10 @@ function delete_line( p_script_url ) {
 #######
 
   $q_string  = "select usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = " . $formVars['user'] . " ";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $usergroup = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $usergroup = mysqli_fetch_array($q_st_users);
 
 #######
 # Retrieve all the type into the typeval array

@@ -47,11 +47,11 @@
   logaccess($db, $_SESSION['username'], "todo.php", "Adding todo data: week=" . $formVars['week'] . " user=" . $formVars['user']);
 
   $q_string = "select usr_id,usr_name ";
-  $q_string .= "from users";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_users = mysqli_fetch_array($q_users) ) {
-    if ($_SESSION['username'] == $a_users['usr_name']) {
-      $formVars['id'] = $a_users['usr_id'];
+  $q_string .= "from st_users";
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_users = mysqli_fetch_array($q_st_users) ) {
+    if ($_SESSION['username'] == $a_st_users['usr_name']) {
+      $formVars['id'] = $a_st_users['usr_id'];
     }
   }
 
@@ -61,14 +61,14 @@
   }
 
   $q_string  = "select usr_template,usr_projects ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = \"" . $formVars['user'] . "\"";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
   $q_string  = "select COUNT(cls_id) ";
   $q_string .= "from st_class ";
-  $q_string .= "where cls_template = " . $a_users['usr_template'];
+  $q_string .= "where cls_template = " . $a_st_users['usr_template'];
   $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));;
   $a_st_class = mysqli_fetch_array($q_st_class);
 
@@ -76,7 +76,7 @@
 
   $q_string  = "select cls_id ";
   $q_string .= "from st_class ";
-  $q_string .= "where cls_template = " . $a_users['usr_template'];
+  $q_string .= "where cls_template = " . $a_st_users['usr_template'];
   $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));;
   $a_st_class = mysqli_fetch_array($q_st_class);
 
@@ -87,7 +87,7 @@
 # Retrieve all the user info into the userval array
 ######
 
-  $q_string = "select usr_id,usr_first,usr_last,usr_group from users where (usr_id = " . $formVars['id'];
+  $q_string = "select usr_id,usr_first,usr_last,usr_group from st_users where (usr_id = " . $formVars['id'];
   if (check_userlevel($db, $AL_VicePresident)) {
     $q_string .= " or usr_vicepresident = " . $formVars['id'];
   } else {
@@ -104,13 +104,13 @@
     }
   }
   $q_string .= ") and usr_id != 1 or usr_group = " . $_SESSION['group'] . " and usr_disabled = 0 order by usr_last";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $count = 0;
-  while ( $a_users3 = mysqli_fetch_array($q_users) ) {
-    $userid[$count] = $a_users3['usr_id'];
-    $usergrp[$count] = $a_users3['usr_group'];
-    $userval[$count++] = $a_users3['usr_last'] . ", " . $a_users3['usr_first'];
+  while ( $a_st_users3 = mysqli_fetch_array($q_st_users) ) {
+    $userid[$count] = $a_st_users3['usr_id'];
+    $usergrp[$count] = $a_st_users3['usr_group'];
+    $userval[$count++] = $a_st_users3['usr_last'] . ", " . $a_st_users3['usr_first'];
   }
   $usertot = $count;
 
@@ -251,10 +251,10 @@ function textCounter(field,cntfield,maxlimit) {
 
 // Show the user
   $q_string  = "select usr_first,usr_last,usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = " . $formVars['user'] . " ";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $username = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $username = mysqli_fetch_array($q_st_users);
 
   print "<tr>\n";
   print "  <th class=\"ui-state-default\" title=\"The week tasks will be recorded for. Click the &lt; and &gt; to move to different weeks. Click the date to go to your status report.\" colspan=2><b><a href=\"" . $Todoroot . "/todo.php?week=" . ($formVars['week'] - 1) . "&user=" . $formVars['user'] . "\">&lt;</a> ";
@@ -288,11 +288,11 @@ function textCounter(field,cntfield,maxlimit) {
 
   while ($a_st_project = mysqli_fetch_array($q_st_project)) {
 
-    if (strlen($a_users['usr_projects']) == 0) {
+    if (strlen($a_st_users['usr_projects']) == 0) {
       print "  <option value=\"" . $a_st_project['prj_id'] . "\">" . $a_st_project['prj_desc'] . "</option>\n";
     } else {
       $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
-      if (preg_match($projectid, $a_users['usr_projects'])) {
+      if (preg_match($projectid, $a_st_users['usr_projects'])) {
         print "  <option value=\"" . $a_st_project['prj_id'] . "\">" . $a_st_project['prj_desc'] . "</option>\n";
       }
     }

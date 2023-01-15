@@ -35,12 +35,12 @@
   logaccess($db, $_SESSION['username'], "todo.email.php", "Sending e-mail todo message: week=" . $formVars['startweek'] . " user=" . $formVars['user']);
 
   $q_string  = "select usr_id,usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_name = \"" . $_SESSION['username'] . "\"";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
-  $formVars['id'] = $a_users['usr_id'];
+  $formVars['id'] = $a_st_users['usr_id'];
 
   if ($formVars['user'] != $formVars['id']) {
     logaccess($db, $_SESSION['username'], "email.php", "Escalated privileged access to " . $formVars['id']);
@@ -54,14 +54,14 @@
 #######
 
   $q_string  = "select usr_first,usr_last,usr_email,usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
-  $userval = $a_users['usr_first'] . " " . $a_users['usr_last'];
-  $usermail = $a_users['usr_email'];
-  $usergroup = $a_users['usr_group'];
+  $userval = $a_st_users['usr_first'] . " " . $a_st_users['usr_last'];
+  $usermail = $a_st_users['usr_email'];
+  $usergroup = $a_st_users['usr_group'];
 
 #######
 # Retrieve information for the group
@@ -132,11 +132,11 @@
       $u_string = "";
 
       $q_string  = "select usr_id ";
-      $q_string .= "from users ";
+      $q_string .= "from st_users ";
       $q_string .= "where usr_manager = " . $formVars['id'];
-      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      while ($a_users = mysqli_fetch_array($q_users)) {
-        $u_string .= $prtor . "strp_name = " . $a_users['usr_id'];
+      $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+        $u_string .= $prtor . "strp_name = " . $a_st_users['usr_id'];
         if ($prtor == "") {
             $prtor = " or ";
         }
@@ -149,11 +149,11 @@
       $u_string = "";
 
       $q_string  = "select usr_id ";
-      $q_string .= "from users ";
+      $q_string .= "from st_users ";
       $q_string .= "where usr_group = " . $formVars['group'];
-      $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      while ($a_users = mysqli_fetch_array($q_users)) {
-        $u_string .= $prtor . "todo_user = " . $a_users['usr_id'];
+      $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+        $u_string .= $prtor . "todo_user = " . $a_st_users['usr_id'];
         if ($prtor == "") {
           $prtor = " or ";
         }

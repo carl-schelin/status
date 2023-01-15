@@ -49,7 +49,7 @@
             $a_groups = mysqli_fetch_array($q_groups);
 # got it, now update everyone in the same group with the same old manager assuming the group already exists.
             $q_string  = "update ";
-            $q_string .= "users ";
+            $q_string .= "st_users ";
             $q_string .= "set usr_manager = " . $formVars['grp_manager'] . " ";
             $q_string .= "where usr_group = " . $formVars['id'] . " and usr_manager = " . $a_groups['grp_manager'] . " ";
             $result = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
@@ -124,7 +124,7 @@
 
       $q_string  = "select grp_id,grp_name,grp_email,usr_last,usr_first,grp_disabled,grp_report ";
       $q_string .= "from groups ";
-      $q_string .= "left join users on users.usr_id = groups.grp_manager ";
+      $q_string .= "left join st_users on st_users.usr_id = groups.grp_manager ";
       $q_string .= "order by grp_name";
       $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       if (mysqli_num_rows($q_groups) > 0) {

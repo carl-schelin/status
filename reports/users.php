@@ -54,11 +54,11 @@
 <?php
 
   $q_string  = "select usr_id,usr_first,usr_last ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id != 1 and usr_disabled = 0 ";
   $q_string .= "order by usr_last";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_users = mysqli_fetch_array($q_users) ) {
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_users = mysqli_fetch_array($q_st_users) ) {
 
     $statusweek = "--";
     $statuscount = 0;
@@ -73,7 +73,7 @@
 # retrieve status information
     $q_string  = "select strp_save,strp_quarter,strp_week ";
     $q_string .= "from st_status ";
-    $q_string .= "where strp_name = " . $a_users['usr_id'] . " ";
+    $q_string .= "where strp_name = " . $a_st_users['usr_id'] . " ";
     $q_string .= "order by strp_week";
     $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     while ( $a_st_status = mysqli_fetch_array($q_st_status) ) {
@@ -99,7 +99,7 @@
 #retrieve todo information
     $q_string  = "select todo_completed,todo_entered ";
     $q_string .= "from todo ";
-    $q_string .= "where todo_user = " . $a_users['usr_id'] . " ";
+    $q_string .= "where todo_user = " . $a_st_users['usr_id'] . " ";
     $q_string .= "order by todo_entered";
     $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
@@ -113,7 +113,7 @@
 
     $q_string  = "select rep_timestamp ";
     $q_string .= "from st_report ";
-    $q_string .= "where rep_user = " . $a_users['usr_id'] . " ";
+    $q_string .= "where rep_user = " . $a_st_users['usr_id'] . " ";
     $q_string .= "order by rep_timestamp";
     $q_st_report = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     while ($a_st_report = mysqli_fetch_array($q_st_report)) {
@@ -123,7 +123,7 @@
 
     print "<tr>\n";
 
-    print "  <td class=\"ui-widget-content\">" . $a_users['usr_last'] . ", " . $a_users['usr_first'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_users['usr_last'] . ", " . $a_st_users['usr_first'] . "</td>\n";
     print "  <td class=\"ui-widget-content\" title=\"Number of Entries (Notable Entries/Annual Report)\" align=right>" . $statuscount . " (" . $statussave . "/" . $statusannual . ")</td>\n";
     print "  <td class=\"ui-widget-content\" title=\"Date of Last Entry\" align=center>" . $statusweek . "</td>\n";
     print "  <td class=\"ui-widget-content\" title=\"Number of Tasks (Number Completed)\" align=right>" . $todocount . " (" . $todocompleted . ")</td>\n";

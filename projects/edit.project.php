@@ -33,10 +33,10 @@
   }
 
   $q_string  = "select usr_projects ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = " . $_SESSION['uid'];
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
 ?>
 <!DOCTYPE HTML>
@@ -114,7 +114,7 @@ while ($a_st_project = mysqli_fetch_array($q_st_project)) {
   print "  <td class=\"ui-widget-content\" id=\"snow_" . $prj_id . "\"><input type=\"text\" name=\"snow_"   .$prj_id."\" size=\"5\"  value=\"".$a_st_project['prj_snow']."\"></td>\n";
   print "  <td class=\"ui-widget-content\" id=\"task_" . $prj_id . "\"><input type=\"text\" name=\"task_"   .$prj_id."\" size=\"30\" value=\"".$a_st_project['prj_task']."\"></td>\n";
   print "  <td class=\"ui-widget-content\" id=\"desc_" . $prj_id . "\"><input type=\"text\" name=\"desc_"   .$prj_id."\" size=\"25\" value=\"".$a_st_project['prj_desc']."\"></td>\n";
-  if (preg_match("/:" . $prj_id . ":/i", $a_users['usr_projects'])) {
+  if (preg_match("/:" . $prj_id . ":/i", $a_st_users['usr_projects'])) {
     $checked = "checked ";
   } else {
     $checked = "";

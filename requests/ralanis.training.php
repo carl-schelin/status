@@ -86,7 +86,7 @@
 
   $q_string  = "select strp_task,usr_first,usr_last ";
   $q_string .= "from st_status ";
-  $q_string .= "left join users on users.usr_id = st_status.strp_name ";
+  $q_string .= "left join st_users on st_users.usr_id = st_status.strp_name ";
   $q_string .= "where strp_week >= " . $formVars['startweek'] . " and strp_week <= " . $formVars['endweek'] . " and strp_project = " . $a_st_project['prj_id'] . " and usr_group = " . $formVars['group'];
   $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_status = mysqli_fetch_array($q_st_status)) {

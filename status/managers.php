@@ -40,14 +40,14 @@
 ######
 
   $q_string  = "select usr_id,usr_first,usr_last,usr_group,usr_supervisor,usr_manager,usr_director ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_name = \"" . $_SESSION['username'] . "\"";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
-  $formVars['id'] = $a_users['usr_id'];
-  $formVars['username'] = $a_users['usr_first'] . ' ' . $a_users['usr_last'];
-  $formVars['group'] = $a_users['usr_group'];
+  $formVars['id'] = $a_st_users['usr_id'];
+  $formVars['username'] = $a_st_users['usr_first'] . ' ' . $a_st_users['usr_last'];
+  $formVars['group'] = $a_st_users['usr_group'];
 
   logaccess($db, $_SESSION['username'], "managers.php", "Viewing the manager app: user=" . $formVars['username'] . " group=" . $formVars['group']);
 # select users who's supervisor == your uid, manager == your uid, and/or director == your uid.
@@ -56,7 +56,9 @@
 # Retrieve all the user info into the userval array
 ######
 
-  $q_string = "select usr_id,usr_first,usr_last,usr_group from users where usr_id = " . $formVars['id'] . " or ";
+  $q_string  = "select usr_id,usr_first,usr_last,usr_group ";
+  $q_string .= "from st_users ";
+  $q_string .= "where usr_id = " . $formVars['id'] . " or ";
   if (check_userlevel($db, $AL_VicePresident)) {
     $q_string .= "usr_vicepresident = " . $formVars['id'] . " and ";
   } else {
@@ -73,13 +75,13 @@
     }
   }
   $q_string .= "usr_id != 1 and usr_disabled = 0 order by usr_last";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $count = 0;
-  while ( $a_users = mysqli_fetch_array($q_users) ) {
-    $userid[$count] = $a_users['usr_id'];
-    $usergrp[$count] = $a_users['usr_group'];
-    $userval[$count++] = $a_users['usr_last'] . ", " . $a_users['usr_first'];
+  while ( $a_st_users = mysqli_fetch_array($q_st_users) ) {
+    $userid[$count] = $a_st_users['usr_id'];
+    $usergrp[$count] = $a_st_users['usr_group'];
+    $userval[$count++] = $a_st_users['usr_last'] . ", " . $a_st_users['usr_first'];
   }
   $usertot = $count;
 

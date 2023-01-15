@@ -50,11 +50,11 @@
   $dow = date('w');
 
   $q_string  = "select usr_id,usr_name ";
-  $q_string .= "from users";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_users = mysqli_fetch_array($q_users)) {
-    if ($_SESSION['username'] == $a_users['usr_name']) {
-      $formVars['id'] = $a_users['usr_id'];
+  $q_string .= "from st_users";
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+    if ($_SESSION['username'] == $a_st_users['usr_name']) {
+      $formVars['id'] = $a_st_users['usr_id'];
     }
   }
 
@@ -64,14 +64,14 @@
   }
 
   $q_string  = "select usr_template,usr_projects ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = \"" . $formVars['user'] . "\"";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
   $q_string  = "select COUNT(cls_id) ";
   $q_string .= "from st_class ";
-  $q_string .= "where cls_template = " . $a_users['usr_template'];
+  $q_string .= "where cls_template = " . $a_st_users['usr_template'];
   $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   $a_st_class = mysqli_fetch_array($q_st_class);
 
@@ -79,7 +79,7 @@
 
   $q_string  = "select cls_id ";
   $q_string .= "from st_class ";
-  $q_string .= "where cls_template = " . $a_users['usr_template'];
+  $q_string .= "where cls_template = " . $a_st_users['usr_template'];
   $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   $a_st_class = mysqli_fetch_array($q_st_class);
 
@@ -333,10 +333,10 @@ function textCounter(field,cntfield,maxlimit) {
 
 // Show the user
   $q_string  = "select usr_first,usr_last,usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id = " . $formVars['user'];
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $username = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $username = mysqli_fetch_array($q_st_users);
 
   print "<tr>\n";
   echo "  <th class=\"ui-state-default\" title=\"The week tasks will be recorded for. Click the &lt; and &gt; to move to different weeks. Click the date to go to your timecard.\" colspan=2><b><a href=\"" . $Statusroot . "/status.report.php?startweek=" . ($formVars['startweek'] - 1) . "&user=" . $formVars['user'] . "\">Prior Week &lt;</a> ";
@@ -369,11 +369,11 @@ function textCounter(field,cntfield,maxlimit) {
   $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_project = mysqli_fetch_array($q_st_project)) {
 
-    if (strlen($a_users['usr_projects']) == 0) {
+    if (strlen($a_st_users['usr_projects']) == 0) {
       print "  <option value=\"" . $a_st_project['prj_id'] . "\">" . $a_st_project['prj_desc'] . "</option>\n";
     } else {
       $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
-      if (preg_match($projectid, $a_users['usr_projects'])) {
+      if (preg_match($projectid, $a_st_users['usr_projects'])) {
         print "  <option value=\"" . $a_st_project['prj_id'] . "\">" . $a_st_project['prj_desc'] . "</option>\n";
       }
     }

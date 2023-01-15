@@ -83,14 +83,14 @@ if (isset($_POST['new_user'])) {
     $error = '<div class="error_message">Attention! Your password must be at least 5 characters.</div>';
   }
 
-  $count = mysqli_num_rows(mysqli_query($db, "select * from users where usr_name='".$username."'"));
+  $count = mysqli_num_rows(mysqli_query($db, "select * from st_users where usr_name='".$username."'"));
 
   if ($count > 0) {
     $error = '<div class="error_message">Sorry, username already taken.</div>';
   }
 
   if ($error == '') {
-    $q_string = "insert into users set " . 
+    $q_string = "insert into st_users set " . 
       "usr_level    =  " . '7'              . "," . 
       "usr_first    = '" . $fname           . "'," . 
       "usr_last     = '" . $lname           . "'," . 
@@ -99,7 +99,7 @@ if (isset($_POST['new_user'])) {
       "usr_passwd   = '" . MD5($password)   . "'," . 
       "usr_report   =  " . '1';
       
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
     echo "<h2>Success!</h2>";	
     echo "<div class='success_message'>Thank you for registering! Go to the <a href='" . $Siteroot . "'><?php print $Sitename; ?></a> application and log in.</div>";
@@ -124,11 +124,11 @@ if (isset($_POST['new_user'])) {
     $a_groups = mysqli_fetch_array($q_groups);
 
     $q_string  = "select usr_email ";
-    $q_string .= "from users ";
+    $q_string .= "from st_users ";
     $q_string .= "where usr_level < 2";
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ($a_users = mysqli_fetch_array($q_users)) {
-      $usermail = $a_users['usr_email'];
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+      $usermail = $a_st_users['usr_email'];
       $subject = "New member in <?php print $Sitename; ?>";
       $body = "$fname $lname has created an account and requested access to the " . $a_groups['grp_name'] . " group and is currently waiting for confirmation.";
       mail($usermail, $subject, $body);

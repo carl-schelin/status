@@ -49,20 +49,20 @@
   $date = date('Y-m');
 
   $q_string  = "select log_id,log_user,log_date,log_source,log_detail ";
-  $q_string .= "from log ";
+  $q_string .= "from st_log ";
   $q_string .= "where log_date like '$date%' ";
   $q_string .= "order by log_id";
-  $q_log = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_log = mysqli_fetch_array($q_log)) {
+  $q_st_log = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_log = mysqli_fetch_array($q_st_log)) {
 
-    $time = explode(" ", $a_log['log_date']);
+    $time = explode(" ", $a_st_log['log_date']);
 
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_log['log_id'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_log['log_user'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_log['log_id'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_log['log_user'] . "</td>\n";
     print "  <td class=\"ui-widget-content\">" . $time[0] . "&nbsp;" . $time[1] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_log['log_source'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_log['log_detail'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_log['log_source'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_log['log_detail'] . "</td>\n";
     print "</tr>\n";
   }
 

@@ -23,12 +23,12 @@
 
 // Get the user information
   $q_string  = "select usr_id ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_name = '" . $_SESSION['username'] . "'";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
-  $formVars['id'] = $a_users['usr_id'];
+  $formVars['id'] = $a_st_users['usr_id'];
 
 // Get all the weeks into an array
   $q_string  = "select wk_id,wk_date ";
@@ -151,12 +151,12 @@ function clear_fields() {
 # if developer, show the developer pages
   print "  <td class=\"ui-widget-content\">Assign task to: <select name=\"developer\"><option value=0>Unassigned</option>\n";
   $q_string  = "select usr_id,usr_last,usr_first ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_level = 1 ";
   $q_string .= "order by usr_last";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_users = mysqli_fetch_array($q_users)) {
-    print "<option value=" . $a_users['usr_id'] . ">" . $a_users['usr_last'] . ", " . $a_users['usr_first'] . "</option>\n";
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+    print "<option value=" . $a_st_users['usr_id'] . ">" . $a_st_users['usr_last'] . ", " . $a_st_users['usr_first'] . "</option>\n";
   }
   print "</select></td>\n";
   print "  <td class=\"ui-widget-content\"><input type=\"checkbox\" name=\"completed\"> Task Completed?</td>\n";

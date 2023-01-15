@@ -68,25 +68,25 @@ if (isset($_POST['change_user'])) {
   $search_q = $_POST['username'];
 
   $q_string  = "select usr_id,usr_name,usr_email ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_id != 1 and usr_disabled = 0 and (usr_name = '" . $search_q . "' or usr_email = '" . $search_q . "')";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  if (mysqli_num_rows($q_users) == '1') {
-    $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  if (mysqli_num_rows($q_st_users) == '1') {
+    $a_st_users = mysqli_fetch_array($q_st_users);
 
     $q_string  = "select usr_id,usr_level,usr_disabled,usr_name,usr_first,usr_last,";
     $q_string .= "usr_group,usr_reset,theme_name ";
-    $q_string .= "from users ";
-    $q_string .= "left join st_themes on st_themes.theme_id = users.usr_theme ";
-    $q_string .= "where usr_name = '" . $a_users['usr_name'] . "' ";
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_users = mysqli_fetch_array($q_users);
+    $q_string .= "from st_users ";
+    $q_string .= "left join st_themes on st_themes.theme_id = st_users.usr_theme ";
+    $q_string .= "where usr_name = '" . $a_st_users['usr_name'] . "' ";
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_st_users = mysqli_fetch_array($q_st_users);
 
-    $_SESSION['uid']         = $a_users['usr_id'];
-    $_SESSION['username']    = $a_users['usr_name'];
-    $_SESSION['name']        = $a_users['usr_first'] . " " . $a_users['usr_last'];
-    $_SESSION['group']       = $a_users['usr_group'];
-    $_SESSION['theme']       = $a_users['theme_name'];
+    $_SESSION['uid']         = $a_st_users['usr_id'];
+    $_SESSION['username']    = $a_st_users['usr_name'];
+    $_SESSION['name']        = $a_st_users['usr_first'] . " " . $a_st_users['usr_last'];
+    $_SESSION['group']       = $a_st_users['usr_group'];
+    $_SESSION['theme']       = $a_st_users['theme_name'];
 
     print "<p>You have assumed the identity of " . $_SESSION['username'] . ".</p>";
 

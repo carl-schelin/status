@@ -47,19 +47,19 @@
         $body .= "<p><i>" . $formVars['bf_text'] . "</i></p>";
 
         $q_string  = "select usr_email ";
-        $q_string .= "from users ";
+        $q_string .= "from st_users ";
         $q_string .= "where usr_id = " . $formVars['bf_name'];
-        $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-        $a_users = mysqli_fetch_array($q_users);
+        $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+        $a_st_users = mysqli_fetch_array($q_st_users);
 
-        mail($a_users['usr_email'], "Status Management: Request Completed", $body, $headers);
+        mail($a_st_users['usr_email'], "Status Management: Request Completed", $body, $headers);
 
         $q_string  = "select usr_email ";
-        $q_string .= "from users ";
+        $q_string .= "from st_users ";
         $q_string .= "where usr_level = 1 and usr_id != 1";
-        $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-        while ($a_users = mysqli_fetch_array($q_users)) {
-          mail($a_users['usr_email'], "Status Management: Request Completed", $body, $headers);
+        $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+        while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+          mail($a_st_users['usr_email'], "Status Management: Request Completed", $body, $headers);
         }
       } else {
         $formVars['bf_status'] = 0;
@@ -67,21 +67,21 @@
 # so if the task is completed, build the e-mail to notify the requestor
         if ($formVars['update'] == 0 || $formVars['update'] == 1) {
           $q_string  = "select usr_first,usr_last ";
-          $q_string .= "from users ";
+          $q_string .= "from st_users ";
           $q_string .= "where usr_id = " . $formVars['bf_name'];
-          $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-          $a_users = mysqli_fetch_array($q_users);
+          $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          $a_st_users = mysqli_fetch_array($q_st_users);
 
-          $body  = "<p>New request from " . $a_users['usr_first'] . " " . $a_users['usr_last'] . ".</p>";
+          $body  = "<p>New request from " . $a_st_users['usr_first'] . " " . $a_st_users['usr_last'] . ".</p>";
 
           $body .= "<p><i>" . $formVars['bf_text'] . "</i></p>";
 
           $q_string = "select usr_email ";
-          $q_string .= "from users ";
+          $q_string .= "from st_users ";
           $q_string .= "where usr_level = 1 and usr_id != 1";
-          $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-          while ($a_users = mysqli_fetch_array($q_users)) {
-            mail($a_users['usr_email'], "Status Management: New Request", $body, $headers);
+          $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+            mail($a_st_users['usr_email'], "Status Management: New Request", $body, $headers);
           }
         }
       }
@@ -132,16 +132,16 @@
   while ($a_st_bandf = mysqli_fetch_array($q_st_bandf)) {
 
     $q_string  = "select usr_name ";
-    $q_string .= "from users ";
+    $q_string .= "from st_users ";
     $q_string .= "where usr_id = " . $a_st_bandf['bf_name'];
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_name = mysqli_fetch_array($q_users);
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_name = mysqli_fetch_array($q_st_users);
 
     $q_string  = "select usr_name ";
-    $q_string .= "from users ";
+    $q_string .= "from st_users ";
     $q_string .= "where usr_id = " . $a_st_bandf['bf_dev'];
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_dev = mysqli_fetch_array($q_users);
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_dev = mysqli_fetch_array($q_st_users);
 
     $dev = $a_dev['usr_name'];
     if ($a_st_bandf['bf_dev'] == 0) {
@@ -198,16 +198,16 @@
   while ($a_st_bandf = mysqli_fetch_array($q_st_bandf)) {
 
     $q_string  = "select usr_name ";
-    $q_string .= "from users ";
+    $q_string .= "from st_users ";
     $q_string .= "where usr_id = " . $a_st_bandf['bf_name'];
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_name = mysqli_fetch_array($q_users);
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_name = mysqli_fetch_array($q_st_users);
 
     $q_string  = "select usr_name ";
-    $q_string .= "from users ";
+    $q_string .= "from st_users ";
     $q_string .= "where usr_id = " . $a_st_bandf['bf_dev'];
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    $a_dev = mysqli_fetch_array($q_users);
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $a_dev = mysqli_fetch_array($q_st_users);
 
     $dev = $a_dev['usr_name'];
     if ($a_st_bandf['bf_dev'] == 0) {

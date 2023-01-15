@@ -38,13 +38,13 @@
   logaccess($db, $_SESSION['username'], "ras.php", "Viewing the ras");
 
   $q_string  = "select usr_id,usr_group ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_name = '" . $_SESSION['username'] . "'";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_users = mysqli_fetch_array($q_users);
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_users = mysqli_fetch_array($q_st_users);
 
-  $formVars['id'] = $a_users['usr_id'];
-  $formVars['group'] = $a_users['usr_group'];
+  $formVars['id'] = $a_st_users['usr_id'];
+  $formVars['group'] = $a_st_users['usr_group'];
 
   if ($formVars['user'] != $formVars['id']) {
     logaccess($db, $_SESSION['username'], "ras.php", "Escalated privileged access to " . $formVars['id']);
@@ -108,11 +108,11 @@ while ($a_groups = mysqli_fetch_array($q_groups)) {
   $query = "(";
   $orstr = "";
   $q_string  = "select usr_id ";
-  $q_string .= "from users ";
+  $q_string .= "from st_users ";
   $q_string .= "where usr_group = " . $a_groups['grp_id'];
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_users = mysqli_fetch_array($q_users)) {
-    $query .= $orstr . "strp_name = " . $a_users['usr_id'];
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+    $query .= $orstr . "strp_name = " . $a_st_users['usr_id'];
     $orstr = " or ";
   }
   $query .= ") and ";

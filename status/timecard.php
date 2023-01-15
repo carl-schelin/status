@@ -32,12 +32,12 @@
   logaccess($db, $_SESSION['username'], "timecard.php", "Viewing timecard: startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " user=" . $formVars['user'] . " group=" . $formVars['group']);
 
   $q_string  = "select usr_id,usr_name ";
-  $q_string .= "from users";
-  $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_string .= "from st_users";
+  $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_users = mysqli_fetch_array($q_users) ) {
-    if ($_SESSION['username'] == $a_users['usr_name']) {
-      $formVars['id'] = $a_users['usr_id'];
+  while ( $a_st_users = mysqli_fetch_array($q_st_users) ) {
+    if ($_SESSION['username'] == $a_st_users['usr_name']) {
+      $formVars['id'] = $a_st_users['usr_id'];
     }
   }
 
@@ -145,16 +145,16 @@
 
   if ($formVars['group'] != 0) {
     if (check_userlevel($db, $AL_Supervisor)) {
-      $q_string = "select usr_id from users where usr_supervisor = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_supervisor = " . $formVars['user'];
     }
     if (check_userlevel($db, $AL_Manager)) {
-      $q_string = "select usr_id from users where usr_manager = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_manager = " . $formVars['user'];
     }
     if (check_userlevel($db, $AL_Director)) {
-      $q_string = "select usr_id from users where usr_director = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_director = " . $formVars['user'];
     }
     if (check_userlevel($db, $AL_VicePresident)) {
-      $q_string = "select usr_id from users where usr_vicepresident = " . $formVars['user'];
+      $q_string = "select usr_id from st_users where usr_vicepresident = " . $formVars['user'];
     }
   
 # restrict to group if looking at something other than the Management group.
@@ -166,9 +166,9 @@
     $prtor = "";
     $u_string = "";
   
-    $q_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ($a_users = mysqli_fetch_array($q_users)) {
-      $u_string .= $prtor . "strp_name = " . $a_users['usr_id'];
+    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+      $u_string .= $prtor . "strp_name = " . $a_st_users['usr_id'];
       if ($prtor == "") {
         $prtor = " or ";
       }
