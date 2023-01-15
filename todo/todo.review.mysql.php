@@ -36,7 +36,7 @@
 
         logaccess($db, $_SESSION['username'], "todo.review.mysql.php", "Updating todo record " . $formVars['id'] . ": save=" . $formVars['save']);
 
-        $q_string  = "update todo set ";
+        $q_string  = "update st_todo set ";
         $q_string .= "todo_save = " . $formVars['save'] . " ";
         $q_string .= "where todo_id = " . $formVars['id'];
         $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
@@ -161,25 +161,25 @@
       $output = "<table class=\"ui-widget-content\">";
 
       $q_string  = "select todo_id,todo_name,todo_class,todo_project,todo_save,todo_due,todo_completed,todo_user,todo_priority,todo_status ";
-      $q_string .= "from todo ";
+      $q_string .= "from st_todo ";
       $q_string .= "where (($u_string)$managerview) ";
 #      $q_string .= "and todo_due <= " . ($formVars['week'] + 1) . " ";
       $q_string .= "and todo_completed = 0 ";
       $q_string .= "order by todo_class,todo_project,todo_due,todo_status,todo_priority,todo_name ";
-      $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $q_st_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-      while ( $a_todo = mysqli_fetch_array($q_todo) ) {
+      while ( $a_st_todo = mysqli_fetch_array($q_st_todo) ) {
 
         $q_string  = "select usr_last ";
         $q_string .= "from st_users ";
-        $q_string .= "where usr_id = " . $a_todo['todo_user'];
+        $q_string .= "where usr_id = " . $a_st_todo['todo_user'];
         $q_username = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
         $a_username = mysqli_fetch_array($q_username);
 
-        if ($class != $a_todo['todo_class']) {
-          $class = $a_todo['todo_class'];
+        if ($class != $a_st_todo['todo_class']) {
+          $class = $a_st_todo['todo_class'];
           if ($class > 0) {
-            $output .= "<tr><td class=\"ui-widget-content\"><b>" . $classval[$a_todo['todo_class']] . "</b></td></tr>";
+            $output .= "<tr><td class=\"ui-widget-content\"><b>" . $classval[$a_st_todo['todo_class']] . "</b></td></tr>";
           }
         }
 
@@ -187,10 +187,10 @@
         if ($class > 0) {
           if ($classprj[$class] == 1) {
             $pre = "&nbsp;&nbsp;&nbsp;&nbsp;- ";
-            if ($project != $a_todo['todo_project']) {
-              $project = $a_todo['todo_project'];
+            if ($project != $a_st_todo['todo_project']) {
+              $project = $a_st_todo['todo_project'];
               if ($project > 0) {
-                $output .= "<tr><td class=\"ui-widget-content\"><b>&nbsp;&nbsp;* " . $projval[$a_todo['todo_project']] . "</b></td></tr>";
+                $output .= "<tr><td class=\"ui-widget-content\"><b>&nbsp;&nbsp;* " . $projval[$a_st_todo['todo_project']] . "</b></td></tr>";
               }
             }
           } else {
@@ -198,7 +198,7 @@
           }
         }
 
-        if ($a_todo['todo_save']) {
+        if ($a_st_todo['todo_save']) {
           $ready = " class=\"ui-state-highlight\"";
           $title = " title=\"Click to remove from Todo e-mail\"";
           $save = 0;
@@ -209,16 +209,16 @@
         }
 
         $output .= "<tr><td" . $ready . $title . ">" . $pre;
-        $output .= "<a href=\"#\" onclick=\"show_file('todo.review.mysql.php?id=" . $a_todo['todo_id'];
+        $output .= "<a href=\"#\" onclick=\"show_file('todo.review.mysql.php?id=" . $a_st_todo['todo_id'];
         $output .= "&startweek=" . $formVars['week'] . "&user=" . $formVars['user'] . "&group=" . $formVars['group'];
         $output .= "&save=" . $save . "');\">";
-        if ($a_todo['todo_status']) {
+        if ($a_st_todo['todo_status']) {
           $output .= "Desired - ";
         } else {
           $output .= "Required - ";
         }
-        $output .= $a_todo['todo_priority'] . " - ";
-        $output .= $a_todo['todo_name'] . "</a>";
+        $output .= $a_st_todo['todo_priority'] . " - ";
+        $output .= $a_st_todo['todo_name'] . "</a>";
         if ($formVars['group'] != 0) {
           $output .= " (" . $a_username['usr_last'] . ")";
         }

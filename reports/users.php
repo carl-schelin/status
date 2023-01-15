@@ -98,17 +98,17 @@
 
 #retrieve todo information
     $q_string  = "select todo_completed,todo_entered ";
-    $q_string .= "from todo ";
+    $q_string .= "from todo_todo ";
     $q_string .= "where todo_user = " . $a_st_users['usr_id'] . " ";
     $q_string .= "order by todo_entered";
-    $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $q_todo_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-    while ( $a_todo = mysqli_fetch_array($q_todo) ) {
+    while ( $a_todo_todo = mysqli_fetch_array($q_todo_todo) ) {
       $todocount++;
-      if ($a_todo['todo_completed'] > 0) {
+      if ($a_todo_todo['todo_completed'] > 0) {
         $todocompleted++;
       }
-      $todoweek = explode(" ", $a_todo['todo_entered']);
+      $todoweek = explode(" ", $a_todo_todo['todo_entered']);
     }
 
     $q_string  = "select rep_timestamp ";

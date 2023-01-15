@@ -146,16 +146,16 @@
   $header .= "</tr>\n";
 
   $q_string  = "select todo_name,todo_due,todo_time,todo_user ";
-  $q_string .= "from todo ";
+  $q_string .= "from st_todo ";
   $q_string .= "where todo_completed = 0 and todo_project = " . $formVars['project'] . " ";
   $q_string .= "order by todo_due";
-  $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ($a_todo = mysqli_fetch_array($q_todo)) {
+  while ($a_st_todo = mysqli_fetch_array($q_st_todo)) {
     print $header;
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_todo['todo_name'] . " (" . $userval[$a_todo['todo_user']] . ")</td>\n";
-    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_todo['todo_due']] . "&nbsp;" . number_format((($a_todo['todo_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_todo['todo_name'] . " (" . $userval[$a_st_todo['todo_user']] . ")</td>\n";
+    print "  <td class=\"ui-widget-content\" align=center>" . $weekval[$a_st_todo['todo_due']] . "&nbsp;" . number_format((($a_st_todo['todo_time'] * 15) / 60), 2, '.', ',') . "</td>\n";
     print "</tr>\n";
     $header = "";
   }

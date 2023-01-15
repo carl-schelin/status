@@ -1,5 +1,5 @@
 <?php
-# Script: todo.mysql.php
+# Script: quarterly.mysql.php
 # Owner: Carl Schelin
 # Coding Standard 3.0 Applied
 # See: https://incowk01/makers/index.php/Coding_Standards
@@ -13,7 +13,7 @@
   include($Sitepath . '/function.php');
 
   if (isset($_SESSION['username'])) {
-    $package = "todo.mysql.php";
+    $package = "quarterly.mysql.php";
     $formVars['update']         = clean($_GET['update'],        10);
 
     if ($formVars['update'] == '') {

@@ -159,17 +159,17 @@ function delete_line( p_script_url ) {
   print "</tr>\n";
 
   $q_string  = "select todo_id,todo_name,todo_class ";
-  $q_string .= "from todo ";
+  $q_string .= "from st_todo ";
   $q_string .= "where todo_completed = 0 and todo_user = " . $formVars['user'] . " ";
   $q_string .= "order by todo_due,todo_project";
-  $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_todo = mysqli_fetch_array($q_todo) ) {
+  $q_st_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_todo = mysqli_fetch_array($q_st_todo) ) {
 
     print "<tr>\n";
 
-    print "  <td class=\"ui-widget-content\" id=\"task_" . $a_todo['todo_id'] . "\"><input type=\"text\" name=\"task_" . $a_todo['todo_id'] . "\" size=\"107\" value=\"" . $a_todo['todo_name'] . "\"></td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"task_" . $a_st_todo['todo_id'] . "\"><input type=\"text\" name=\"task_" . $a_st_todo['todo_id'] . "\" size=\"107\" value=\"" . $a_st_todo['todo_name'] . "\"></td>\n";
 
-    print "  <td class=\"ui-widget-content\" id=\"clas_" . $a_todo['todo_id'] . "\"><select name=\"clas_" . $a_todo['todo_id'] . "\">\n";
+    print "  <td class=\"ui-widget-content\" id=\"clas_" . $a_st_todo['todo_id'] . "\"><select name=\"clas_" . $a_st_todo['todo_id'] . "\">\n";
     for ($i = 0; $i < $clastot; $i++) {
       if ($a_todo['todo_class'] == $classid[$i]) {
         $selected = " selected";
@@ -180,8 +180,8 @@ function delete_line( p_script_url ) {
     }
     print "</select></td>\n";
 
-    print "  <td class=\"ui-widget-content delete\" id=\"save_" . $a_todo['todo_id'] . "\"><input type=\"button\" value=\"Save\" onClick=\"javascript:attach_file('edit.todo.mysql.php?id=" . $a_todo['todo_id'] . "&task=' + task_" . $a_todo['todo_id'] . ".value + '&class=' + clas_" . $a_todo['todo_id'] . ".value);\"></td>\n";
-    print "  <td class=\"ui-widget-content delete\" id=\"del_" . $a_todo['todo_id'] . "\"><input type=\"button\" value=\"Del\" onClick=\"javascript:delete_line('del.todo.mysql.php?id=" . $a_todo['todo_id'] . "');\"></td>\n";
+    print "  <td class=\"ui-widget-content delete\" id=\"save_" . $a_st_todo['todo_id'] . "\"><input type=\"button\" value=\"Save\" onClick=\"javascript:attach_file('edit.todo.mysql.php?id=" . $a_st_todo['todo_id'] . "&task=' + task_" . $a_st_todo['todo_id'] . ".value + '&class=' + clas_" . $a_st_todo['todo_id'] . ".value);\"></td>\n";
+    print "  <td class=\"ui-widget-content delete\" id=\"del_" . $a_st_todo['todo_id'] . "\"><input type=\"button\" value=\"Del\" onClick=\"javascript:delete_line('del.todo.mysql.php?id=" . $a_st_todo['todo_id'] . "');\"></td>\n";
 
   }
 ?>

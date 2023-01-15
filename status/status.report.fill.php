@@ -20,7 +20,7 @@
     }
 
     if (check_userlevel($db, $AL_User)) {
-      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from todo");
+      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from st_users");
 
 // id of the record being pulled from the database.
       $formVars['user'] = clean($_GET['user'], 10);

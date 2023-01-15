@@ -20,7 +20,7 @@
     }
 
     if (check_userlevel($db, $AL_User)) {
-      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from todo");
+      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from st_todo");
 
       $formVars['user'] = clean($_GET['user'], 10);
 
@@ -41,10 +41,10 @@
 
 // Retrieve the task array
       $q_string  = "select * ";
-      $q_string .= "from todo ";
+      $q_string .= "from st_todo ";
       $q_string .= "where todo_id = " . $formVars['id'];
-      $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      $a_todo = mysqli_fetch_array($q_todo);
+      $q_st_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_todo = mysqli_fetch_array($q_st_todo);
 
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
@@ -58,7 +58,7 @@
       $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
         if (strlen($a_st_users['usr_projects']) == 0) {
-          if ($a_st_project['prj_id'] == $a_todo['todo_project']) {
+          if ($a_st_project['prj_id'] == $a_st_todo['todo_project']) {
             $project = $count;
           } else {
             $count++;
@@ -66,7 +66,7 @@
         } else {
           $projectid = "/:" . $a_st_project['prj_id'] . ":/i";
           if (preg_match($projectid, $a_st_users['usr_projects'])) {
-            if ($a_st_project['prj_id'] == $a_todo['todo_project']) {
+            if ($a_st_project['prj_id'] == $a_st_todo['todo_project']) {
               $project = $count;
             } else {
               $count++;
@@ -88,7 +88,7 @@
 #      $q_string .= "order by prj_desc";
 #      $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 #      while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
-#        if ($a_st_project['prj_id'] == $a_todo['todo_project']) {
+#        if ($a_st_project['prj_id'] == $a_st_todo['todo_project']) {
 #          $project = $count;
 #        } else {
 #          $count++;
@@ -98,18 +98,18 @@
 
 ?>
 
-document.taskmgr.project['<?php print $project; ?>'].selected = true;
-document.taskmgr.todo_status['<?php print $a_todo['todo_status']; ?>'].selected = true;
-document.taskmgr.todo_priority.value = <?php print $a_todo['todo_priority']; ?>;
-document.taskmgr.report['<?php print $a_todo['todo_class'] - $class; ?>'].checked = true;
-document.taskmgr.duedate['<?php print $a_todo['todo_due']; ?>'].selected = true;
-document.taskmgr.task.value = "<?php print $a_todo['todo_name']; ?>";
-document.taskmgr.save.checked = <?php if ($a_todo['todo_save']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.completed.checked = <?php if ($a_todo['todo_completed']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.day['<?php print $a_todo['todo_day']; ?>'].checked = true;
-document.taskmgr.time.value = <?php print $a_todo['todo_time']; ?>;
+document.taskmgr.project['<?php                    print $project; ?>'].selected = true;
+document.taskmgr.todo_status['<?php                print $a_st_todo['todo_status']; ?>'].selected = true;
+document.taskmgr.todo_priority.value = <?php       print $a_st_todo['todo_priority']; ?>;
+document.taskmgr.report['<?php                     print $a_st_todo['todo_class'] - $class; ?>'].checked = true;
+document.taskmgr.duedate['<?php                    print $a_st_todo['todo_due']; ?>'].selected = true;
+document.taskmgr.task.value = "<?php               print $a_st_todo['todo_name']; ?>";
+document.taskmgr.save.checked = <?php              if ($a_st_todo['todo_save']) { print "true"; } else { print "false"; }; ?>;
+document.taskmgr.completed.checked = <?php         if ($a_st_todo['todo_completed']) { print "true"; } else { print "false"; }; ?>;
+document.taskmgr.day['<?php                        print $a_st_todo['todo_day']; ?>'].checked = true;
+document.taskmgr.time.value = <?php                print $a_st_todo['todo_time']; ?>;
 
-document.taskmgr.id.value = <?php print $a_todo['todo_id']; ?>;
+document.taskmgr.id.value = <?php                  print $a_st_todo['todo_id']; ?>;
 
 document.taskmgr.status.disabled = false;
 document.taskmgr.update.disabled = false;

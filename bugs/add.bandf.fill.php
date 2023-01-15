@@ -20,7 +20,7 @@
     }
 
     if (check_userlevel($db, $AL_Admin)) {
-      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from todo");
+      logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from st_bandf");
 
 // Retrieve the data
       $q_string  = "select bf_id,bf_week,bf_name,bf_borf,bf_text,bf_dev,bf_status ";

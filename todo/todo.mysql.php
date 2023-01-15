@@ -181,13 +181,13 @@
           "todo_status    = "   . $formVars['todo_status'];
 
       if ($formVars['update'] == 0) {
-        $q_string = "insert into todo set todo_id = NULL," . $query_todo;
+        $q_string = "insert into st_todo set todo_id = NULL," . $query_todo;
 
         $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
         logaccess($db, $_SESSION['username'], "todo.mysql.php", "Adding todo record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
       }
       if ($formVars['update'] == 1) {
-        $q_string = "update todo set " . $query_todo . " where todo_id = " . $formVars['id'];
+        $q_string = "update st_todo set " . $query_todo . " where todo_id = " . $formVars['id'];
 
         logaccess($db, $_SESSION['username'], "todo.mysql.php", "Updating todo record " . $formVars['id'] . ": week=" . $formVars['week'] . " user=" . $formVars['user'] . " assign=" . $formVars['assign']);
         $insert = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
@@ -252,18 +252,18 @@
 // Retrieve the todo array
     $q_string  = "select todo_id,todo_name,todo_project,todo_save,todo_entered,todo_due,todo_day,";
     $q_string .= "todo_time,todo_completed,todo_user,todo_priority,todo_status ";
-    $q_string .= "from todo ";
+    $q_string .= "from st_todo ";
     $q_string .= "where " . $showall . "(todo_user = " . $formVars['user'] . $showyour . ") ";
     $q_string .= "and todo_group = " . $_SESSION['group'] . " ";
     $q_string .= "and todo_class = " . $a_st_class['cls_id'] . " ";
     $q_string .= "order by todo_project,todo_due,todo_day,todo_status,todo_priority,todo_name ";
-    $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-    while ($a_todo = mysqli_fetch_assoc($q_todo)) {
+    $q_st_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    while ($a_st_todo = mysqli_fetch_assoc($q_st_todo)) {
 
 // Retreive the project information for this entry
       $q_string  = "select prj_desc ";
       $q_string .= "from st_project ";
-      $q_string .= "where prj_id = " . $a_todo['todo_project'];
+      $q_string .= "where prj_id = " . $a_st_todo['todo_project'];
       $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       $a_st_project = mysqli_fetch_assoc($q_st_project);
       if ($a_st_project['prj_desc'] != $c_project && $a_st_class['cls_project'] == 1) {
@@ -275,21 +275,21 @@
       }
       mysqli_free_result($q_st_project);
 
-      if ($a_todo['todo_completed'] > 0) {
+      if ($a_st_todo['todo_completed'] > 0) {
         $tdclass = "ui-state-highlight";
       } else {
-        if ($a_todo['todo_due'] <= $formVars['week']) {
+        if ($a_st_todo['todo_due'] <= $formVars['week']) {
           $tdclass = "ui-state-error";
         } else {
           $tdclass = "ui-widget-content";
         }
       }
-      if ($a_todo['todo_user'] == 0) {
+      if ($a_st_todo['todo_user'] == 0) {
         $tdclass = "ui-state-highlight";
         $title = "\"This task is Unassigned and available for work. Modify the todo with your name to claim ownership of the task.\"";
       }
 
-      if ($a_todo['todo_user'] == 0) {
+      if ($a_st_todo['todo_user'] == 0) {
         $grptitle = "group ";
       } else {
         $grptitle = "";
@@ -302,40 +302,40 @@
 # delete column
       $daily_output .= "<td class=\"" . $tdclass . " delete\" title=\"Delete this task\">";
       $daily_output .= "<a href=\"#\" onClick=\"javascript:delete_line('del.todo.mysql.php?id=";
-      $daily_output .= $a_todo['todo_id'] . "');\">x</a></td>";
+      $daily_output .= $a_st_todo['todo_id'] . "');\">x</a></td>";
 
 # data column
       $daily_output .= "<td class=\"" . $tdclass . "\" title=" . $title . ">";
       $daily_output .= "<a href=\"#\" onclick=\"show_file('todo.fill.php?id=";
-      $daily_output .= $a_todo['todo_id'] . "&user=" . $formVars['user'] . "');" . "\">";
-      if ($a_todo['todo_status']) {
+      $daily_output .= $a_st_todo['todo_id'] . "&user=" . $formVars['user'] . "');" . "\">";
+      if ($a_st_todo['todo_status']) {
         $daily_output .= "Desired - ";
       } else {
         $daily_output .= "Required - ";
       }
-      $daily_output .= $a_todo['todo_priority'] . " - " . mysqli_real_escape_string($db, $a_todo['todo_name']) . "</a>" . "</td>";
+      $daily_output .= $a_st_todo['todo_priority'] . " - " . mysqli_real_escape_string($db, $a_st_todo['todo_name']) . "</a>" . "</td>";
 
       $q_string  = "select wk_date ";
       $q_string .= "from st_weeks ";
-      $q_string .= "where wk_id = " . $a_todo['todo_due'];
+      $q_string .= "where wk_id = " . $a_st_todo['todo_due'];
       $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       $a_st_weeks = mysqli_fetch_assoc($q_st_weeks);
 
-      if ($a_todo['todo_save'] == 1) {
+      if ($a_st_todo['todo_save'] == 1) {
         $tdclass = "ui-widget-content";
       } else {
         $tdclass= "ui-state-highlight";
       }
 
       $daily_output .= "<td title=\"Week and Day due plus Estimated hours to complete\" class=\"" . $tdclass . "\">";
-      $daily_output .= $a_st_weeks['wk_date'] . "&nbsp;" . $weekday[$a_todo['todo_day']] . "&nbsp;";
-      $daily_output .= number_format((($a_todo['todo_time'] * 15) / 60), 2, '.', ',') . "</td>";
+      $daily_output .= $a_st_weeks['wk_date'] . "&nbsp;" . $weekday[$a_st_todo['todo_day']] . "&nbsp;";
+      $daily_output .= number_format((($a_st_todo['todo_time'] * 15) / 60), 2, '.', ',') . "</td>";
 
       $daily_output .= "</tr>";
 
       $output .= $daily_output;
     }
-    mysqli_free_result($q_todo);
+    mysqli_free_result($q_st_todo);
   }
 }
 

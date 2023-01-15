@@ -171,22 +171,22 @@
   $first = 0;
 
   $q_string  =  "select todo_id,todo_due,todo_user,todo_class,todo_project,todo_name,todo_priority,todo_status ";
-  $q_string .= "from todo ";
+  $q_string .= "from st_todo ";
   $q_string .= "where ($u_string) ";
 #  $q_string .= "and todo_due <= " . ($formVars['startweek'] + 1) . " ";
   $q_string .= "and todo_completed = 0 and todo_save = 1 ";
   $q_string .= "order by todo_class,todo_project,todo_due,todo_status,todo_priority,todo_name ";
-  $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ( $a_todo = mysqli_fetch_array($q_todo) ) {
+  $q_st_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ( $a_st_todo = mysqli_fetch_array($q_st_todo) ) {
 
     if ($first++ == 0) {
       $body .= "Tasks due as of : " . $weekval[$formVars['startweek'] + 1] . "\n";
     }
 
-    if ($class != $a_todo['todo_class']) {
-      $class = $a_todo['todo_class'];
+    if ($class != $a_st_todo['todo_class']) {
+      $class = $a_st_todo['todo_class'];
       if ($class > 0) {
-        $body .= "\n" . $classval[$a_todo['todo_class']] . "\n";
+        $body .= "\n" . $classval[$a_st_todo['todo_class']] . "\n";
       }
     }
 
@@ -194,10 +194,10 @@
     if ($class > 0) {
       if ($classprj[$class] == 1) {
         $pre = "    - ";
-        if ($project != $a_todo['todo_project']) {
-            $project = $a_todo['todo_project'];
+        if ($project != $a_st_todo['todo_project']) {
+            $project = $a_st_todo['todo_project'];
             if ($project > 0) {
-                $body .= $linefeed . "* " . $projval[$a_todo['todo_project']] . "\n";
+                $body .= $linefeed . "* " . $projval[$a_st_todo['todo_project']] . "\n";
             }
             $linefeed = "\n";
         }
@@ -207,12 +207,12 @@
     }
 
     $body .= $pre;
-    if ($a_todo['todo_status']) {
+    if ($a_st_todo['todo_status']) {
       $body .= "Desired - ";
     } else {
       $body .= "Required - ";
     }
-    $body .= $a_todo['todo_priority'] . " - " . $a_todo['todo_name'] . "\n";
+    $body .= $a_st_todo['todo_priority'] . " - " . $a_st_todo['todo_name'] . "\n";
   }
 
   echo "<meta http-equiv=\"REFRESH\" content=\"5; url=" . $Siteroot . "/\">\n";

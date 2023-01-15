@@ -63,27 +63,27 @@
 <?php
 
   $q_string  = "select todo_id,todo_name,prj_desc,todo_entered,todo_due,wk_date,todo_priority ";
-  $q_string .= "from todo ";
-  $q_string .= "left join st_weeks   on st_weeks.wk_id    = todo.todo_completed ";
-  $q_string .= "left join st_project on st_project.prj_id = todo.todo_project ";
+  $q_string .= "from st_todo ";
+  $q_string .= "left join st_weeks   on st_weeks.wk_id    = st_todo.todo_completed ";
+  $q_string .= "left join st_project on st_project.prj_id = st_todo.todo_project ";
   $q_string .= "where todo_user = " . $user . " ";
   $q_string .= $orderby;
-  $q_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_todo = mysqli_fetch_array($q_todo) ) {
+  $q_st_todo = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_todo = mysqli_fetch_array($q_st_todo) ) {
 
     $q_string  = "select wk_date ";
     $q_string .= "from st_weeks ";
-    $q_string .= "where wk_id = " . $a_todo['todo_due'] . " ";
+    $q_string .= "where wk_id = " . $a_st_todo['todo_due'] . " ";
     $q_st_weeks = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     $a_st_weeks = mysqli_fetch_array($q_st_weeks);
 
     print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_todo['prj_desc'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_todo['todo_name'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_todo['todo_priority'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_todo['todo_entered'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_todo['prj_desc'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_todo['todo_name'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_todo['todo_priority'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_todo['todo_entered'] . "</td>\n";
     print "  <td class=\"ui-widget-content\">" . $a_st_weeks['wk_date'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_todo['wk_date'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_todo['wk_date'] . "</td>\n";
     print "</tr>\n";
 
   }

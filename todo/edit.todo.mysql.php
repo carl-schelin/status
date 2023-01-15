@@ -20,9 +20,9 @@
       $formVars['task']      = clean($_GET['task'],    255);
       $formVars['class']     = clean($_GET['class'],    10);
 
-      logaccess($db, $_SESSION['username'], "edit.todo.mysql.php", "Editing record " . $formVars['id'] . " in todo");
+      logaccess($db, $_SESSION['username'], "edit.todo.mysql.php", "Editing record " . $formVars['id'] . " in st_todo");
 
-      $q_string = "update todo set " . 
+      $q_string = "update st_todo set " . 
         "todo_name      = \"" . $formVars['task']      . "\"," . 
         "todo_class     =   " . $formVars['class']     . " " . 
         "where todo_id  =   " . $formVars['id'];
