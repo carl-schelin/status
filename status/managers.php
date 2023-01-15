@@ -89,17 +89,19 @@
 # Retrieve all the groups into the groupval array
 #######
 
-  $q_string = "select grp_id,grp_name from groups where grp_id = " . $formVars['group'];
+  $q_string  = "select grp_id,grp_name ";
+  $q_string .= "from st_groups ";
+  $q_string .= "where grp_id = " . $formVars['group'];
 
   for ($i = 0; $i < $usertot; $i++) {
     $q_string .= " or grp_id = " . $usergrp[$i];
   }
-  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
   $count = 0;
-  while ( $a_groups = mysqli_fetch_array($q_groups) ) {
-    $groupid[$count] = $a_groups['grp_id'];
-    $groupval[$count++] = $a_groups['grp_name'];
+  while ( $a_st_groups = mysqli_fetch_array($q_st_groups) ) {
+    $groupid[$count] = $a_st_groups['grp_id'];
+    $groupval[$count++] = $a_st_groups['grp_name'];
   }
   $grouptot = $count;
 

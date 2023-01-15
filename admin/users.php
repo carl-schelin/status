@@ -341,12 +341,12 @@ $(document).ready( function() {
 <option value="0">Unassigned</option>
 <?php
   $q_string  = "select grp_id,grp_name ";
-  $q_string .= "from groups ";
+  $q_string .= "from st_groups ";
   $q_string .= "where grp_disabled = 0 ";
   $q_string .= "order by grp_name";
-  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_groups = mysqli_fetch_array($q_groups)) {
-    print "<option value=\"" . $a_groups['grp_id'] . "\">" . $a_groups['grp_name'] . "</option>\n";
+  $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_groups = mysqli_fetch_array($q_st_groups)) {
+    print "<option value=\"" . $a_st_groups['grp_id'] . "\">" . $a_st_groups['grp_name'] . "</option>\n";
   }
 ?>
 </select></td>

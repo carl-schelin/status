@@ -38,13 +38,13 @@
   logaccess($db, $_SESSION['username'], "ralanis.training.php", "Viewing Training: startweek=" . $formVars['startweek'] . " endweek=" . $formVars['endweek'] . " group=" . $formVars['group']);
 
   $q_string  = "select grp_name ";
-  $q_string .= "from groups ";
+  $q_string .= "from st_groups ";
   $q_string .= "where grp_id = " . $formVars['group'];
-  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_groups = mysqli_fetch_array($q_groups);
+  $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_groups = mysqli_fetch_array($q_st_groups);
 
-  if ($a_groups['grp_name'] == '') {
-    $a_groups['grp_name'] = "Unknown Group";
+  if ($a_st_groups['grp_name'] == '') {
+    $a_st_groups['grp_name'] = "Unknown Group";
   }
 
   $q_string  = "select prj_id ";
@@ -76,7 +76,7 @@
 
 <table class="ui-widget-content">
 <tr>
-  <th class="ui-state-default" colspan=2><?php print $a_groups['grp_name']; ?></th>
+  <th class="ui-state-default" colspan=2><?php print $a_st_groups['grp_name']; ?></th>
 </tr>
 <tr>
   <th class="ui-state-default">User</th>

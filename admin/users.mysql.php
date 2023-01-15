@@ -176,7 +176,7 @@
       $q_string  = "select usr_id,lvl_name,usr_disabled,usr_name,usr_first,usr_last,usr_email,usr_reset,grp_name,usr_timestamp,theme_title ";
       $q_string .= "from st_users ";
       $q_string .= "left join st_levels on st_levels.lvl_id   = st_users.usr_level ";
-      $q_string .= "left join groups    on groups.grp_id      = st_users.usr_group ";
+      $q_string .= "left join st_groups on st_groups.grp_id   = st_users.usr_group ";
       $q_string .= "left join st_themes on st_themes.theme_id = st_users.usr_theme ";
       $q_string .= "where usr_disabled = 0 and usr_group = 0 and usr_level > 1 ";
       $q_string .= "order by usr_last,usr_first";
@@ -294,15 +294,15 @@ function display_user( $p_title, $p_toggle, $p_query ) {
   $output .= "</div>\n";
 
   $q_string  = "select grp_id,grp_name ";
-  $q_string .= "from groups ";
+  $q_string .= "from st_groups ";
   $q_string .= "where grp_disabled = 0 ";
   $q_string .= "order by grp_name";
-  $q_groups = mysqli_query($db, $q_string);
-  while ($a_groups = mysqli_fetch_array($q_groups)) {
+  $q_st_groups = mysqli_query($db, $q_string);
+  while ($a_st_groups = mysqli_fetch_array($q_st_groups)) {
 
     $group  = "<table class=\"ui-styled-table\">\n";
     $group .= "<tr>\n";
-    $group .=   "<th class=\"ui-state-default\" colspan=\"13\">" . $a_groups['grp_name'] . "</th>\n";
+    $group .=   "<th class=\"ui-state-default\" colspan=\"13\">" . $a_st_groups['grp_name'] . "</th>\n";
     $group .= "</tr>\n";
     $group .= "<tr>\n";
     $group .=   "<th class=\"ui-state-default\">Del</th>\n";
@@ -322,7 +322,7 @@ function display_user( $p_title, $p_toggle, $p_query ) {
     $q_string .= "from st_users ";
     $q_string .= "left join st_levels on st_levels.lvl_id   = st_users.usr_level ";
     $q_string .= "left join st_themes on st_themes.theme_id = st_users.usr_theme ";
-    $q_string .= "where usr_group = " . $a_groups['grp_id'] . " " . $p_query;
+    $q_string .= "where usr_group = " . $a_st_groups['grp_id'] . " " . $p_query;
     $q_string .= "order by usr_last,usr_first";
     $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     if (mysqli_num_rows($q_st_users) > 0) {

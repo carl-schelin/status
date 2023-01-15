@@ -92,16 +92,16 @@
 # 4. Parse through the status lines based on user and project id and for January
 
 $q_string  = "select grp_id,grp_name ";
-$q_string .= "from groups ";
+$q_string .= "from st_groups ";
 $q_string .= "order by grp_name";
-$q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+$q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-while ($a_groups = mysqli_fetch_array($q_groups)) {
+while ($a_st_groups = mysqli_fetch_array($q_st_groups)) {
 
   $total = 0;
   $projects = 0;
   print "<tr>\n";
-  print "  <th class=\"ui-state-default\" colspan=2>" . $a_groups['grp_name'] . "</th>\n";
+  print "  <th class=\"ui-state-default\" colspan=2>" . $a_st_groups['grp_name'] . "</th>\n";
   print "</tr>\n";
 
 # build the user portion of the query
@@ -109,7 +109,7 @@ while ($a_groups = mysqli_fetch_array($q_groups)) {
   $orstr = "";
   $q_string  = "select usr_id ";
   $q_string .= "from st_users ";
-  $q_string .= "where usr_group = " . $a_groups['grp_id'];
+  $q_string .= "where usr_group = " . $a_st_groups['grp_id'];
   $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_users = mysqli_fetch_array($q_st_users)) {
     $query .= $orstr . "strp_name = " . $a_st_users['usr_id'];

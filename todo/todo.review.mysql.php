@@ -62,12 +62,12 @@
 #######
 
 #      $q_string = "select grp_week ";
-#      $q_string .= "from groups ";
+#      $q_string .= "from st_groups ";
 #      $q_string .= "where grp_id = $usergroup";
-#      $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-#      $a_groups = mysqli_fetch_array($q_groups);
+#      $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+#      $a_st_groups = mysqli_fetch_array($q_st_groups);
 #
-#      $groupstatus = $a_groups['grp_week'];
+#      $groupstatus = $a_st_groups['grp_week'];
 
 #######
 # Retrieve all the weeks into the weekval array

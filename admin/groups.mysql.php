@@ -42,16 +42,16 @@
 
 # get old group manager.
           $q_string  = "select grp_manager ";
-          $q_string .= "from groups ";
+          $q_string .= "from st_groups ";
           $q_string .= "where grp_id = " . $formVars['id'] . " ";
-          $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-          if (mysqli_num_rows($q_groups) > 0) {
-            $a_groups = mysqli_fetch_array($q_groups);
+          $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          if (mysqli_num_rows($q_st_groups) > 0) {
+            $a_st_groups = mysqli_fetch_array($q_st_groups);
 # got it, now update everyone in the same group with the same old manager assuming the group already exists.
             $q_string  = "update ";
             $q_string .= "st_users ";
             $q_string .= "set usr_manager = " . $formVars['grp_manager'] . " ";
-            $q_string .= "where usr_group = " . $formVars['id'] . " and usr_manager = " . $a_groups['grp_manager'] . " ";
+            $q_string .= "where usr_group = " . $formVars['id'] . " and usr_manager = " . $a_st_groups['grp_manager'] . " ";
             $result = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
           }
 
@@ -65,11 +65,11 @@
             "grp_report        =   " . $formVars['grp_report'];
 
           if ($formVars['update'] == 0) {
-            $query = "insert into groups set grp_id = NULL," . $q_string;
+            $query = "insert into st_groups set grp_id = NULL," . $q_string;
             $message = "Group added.";
           }
           if ($formVars['update'] == 1) {
-            $query = "update groups set " . $q_string . " where grp_id = " . $formVars['id'];
+            $query = "update st_groups set " . $q_string . " where grp_id = " . $formVars['id'];
             $message = "Group updated.";
           }
 
@@ -123,19 +123,19 @@
       $group     .= $header . $title;
 
       $q_string  = "select grp_id,grp_name,grp_email,usr_last,usr_first,grp_disabled,grp_report ";
-      $q_string .= "from groups ";
-      $q_string .= "left join st_users on st_users.usr_id = groups.grp_manager ";
+      $q_string .= "from st_groups ";
+      $q_string .= "left join st_users on st_users.usr_id = st_groups.grp_manager ";
       $q_string .= "order by grp_name";
-      $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-      if (mysqli_num_rows($q_groups) > 0) {
-        while ($a_groups = mysqli_fetch_array($q_groups)) {
+      $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_st_groups) > 0) {
+        while ($a_st_groups = mysqli_fetch_array($q_st_groups)) {
 
-          $linkstart = "<a href=\"#\" onclick=\"show_file('groups.fill.php?id="  . $a_groups['grp_id'] . "');jQuery('#dialogGroup').dialog('open');\">";
-          $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_line('groups.del.php?id=" . $a_groups['grp_id'] . "');\">";
+          $linkstart = "<a href=\"#\" onclick=\"show_file('groups.fill.php?id="  . $a_st_groups['grp_id'] . "');jQuery('#dialogGroup').dialog('open');\">";
+          $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_line('groups.del.php?id=" . $a_st_groups['grp_id'] . "');\">";
           $linkend = "</a>";
 
           $class = "ui-widget-content";
-          if ($a_groups['grp_disabled']) {
+          if ($a_st_groups['grp_disabled']) {
             $class = "ui-state-error";
           }
 
@@ -143,11 +143,11 @@
           if (check_userlevel($db, $AL_Admin)) {
             $group .= "  <td class=\"" . $class . " delete\">" . $linkdel   . "</td>";
           }
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_groups['grp_id']           . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_groups['grp_name']         . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_groups['grp_email']        . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_groups['usr_first'] . " " . $a_groups['usr_last'] . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_groups['grp_report']       . $linkend . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_id']           . $linkend . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_name']         . $linkend . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_email']        . $linkend . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['usr_first'] . " " . $a_st_groups['usr_last'] . $linkend . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_report']       . $linkend . "</td>";
           $group .= "</tr>";
 
         }
@@ -157,7 +157,7 @@
         $group .= "</tr>";
       }
 
-      mysqli_free_result($q_groups);
+      mysqli_free_result($q_st_groups);
 
       $group .= "</table>";
 

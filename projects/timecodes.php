@@ -24,17 +24,17 @@
 #######
 
   $q_string  = "select grp_id,grp_name ";
-  $q_string .= "from groups ";
+  $q_string .= "from st_groups ";
   $q_string .= "where grp_id=" . $_SESSION['group'];
-  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  $a_groups = mysqli_fetch_array($q_groups);
-  $user_group = $a_groups['grp_name'];
-  $user_groupid = $a_groups['grp_id'];
+  $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $a_st_groups = mysqli_fetch_array($q_st_groups);
+  $user_group = $a_st_groups['grp_name'];
+  $user_groupid = $a_st_groups['grp_id'];
 
   $q_string  = "select grp_id,grp_name ";
-  $q_string .= "from groups ";
+  $q_string .= "from st_groups ";
   $q_string .= "where grp_id not like " . $_SESSION['group'];
-  $q_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  $q_st_groups = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
 ?>
 <!DOCTYPE HTML>
@@ -87,10 +87,10 @@
   }
   print "</table>\n";
 
-  while ( $a_groups = mysqli_fetch_array($q_groups) ) {
+  while ( $a_st_groups = mysqli_fetch_array($q_st_groups) ) {
     print "<table>\n";
     print "<tr>\n";
-    print "  <th class=\"ui-state-default\" colspan=5 align=center>" . $a_groups['grp_name'] . "</th>\n";
+    print "  <th class=\"ui-state-default\" colspan=5 align=center>" . $a_st_groups['grp_name'] . "</th>\n";
     print "</tr>\n";
     print "<tr>\n";
     print "  <th class=\"ui-state-default\" width=5%>Code</th>\n";
@@ -102,7 +102,7 @@
 
     $q_string  = "select prj_id,prj_name,prj_code,prj_snow,prj_task,prj_desc,prj_close ";
     $q_string .= "from st_project ";
-    $q_string .= "where prj_group = " . $a_groups['grp_id'] . " ";
+    $q_string .= "where prj_group = " . $a_st_groups['grp_id'] . " ";
     $q_string .= "order by prj_name,prj_task";
     $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     while ( $a_st_project = mysqli_fetch_array($q_st_project) ) {
