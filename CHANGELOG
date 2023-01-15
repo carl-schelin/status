@@ -263,35 +263,55 @@ Update the logaccess function to include the passed $db. Update the function as 
 Update the check_userlevel() function to add $db. Update the function as well.
 
 
-| bandf            |
-| cande            |
-| class            |
-| epics            |
-| events           |
-| grouplist        |
-| groups           |
-| levels           |
-| log              |
-| polls            |
-| progress         |
-| project          |
-| ras              |
-| report           |
-| status           |
-| themes           |
-| titles           |
-| todo             |
-| type             |
-| users            |
-| userstories      |
-| weeks            |
+x bandf
+x cande - not used?
+x class
+x epics
+x events - not used?
+x grouplist
+x groups
+x levels
+x log
+x polls - not used?
+x progress
+x project
+x ras
+x report - Morning report stuff, not used.
+x status
+x themes
+x titles
+x todo
+x type
+x users
+x userstories
+x weeks
 
 
 Time to rename the tables in the status management app. Groups was a problem with newer mysql.
 
 
 rename table bandf to st_bandf;
-
+rename table cande to st_cande;
+rename table class to st_class;
+rename table epics to st_epics;
+rename table events to st_events;
+rename table grouplist to st_grouplist;
+rename table groups to st_groups;
+rename table levels to st_levels;
+rename table log to st_log;
+rename table polls to st_polls;
+rename table progress to st_progress;
+rename table project to st_project;
+rename table ras to st_ras;
+rename table report to st_report;
+rename table status to st_status;
+rename table themes to st_themes;
+rename table titles to st_titles;
+rename table type to st_type;
+rename table users to st_users;
+rename table userstories to st_userstories;
+rename table weeks to st_weeks;
+rename table todo to st_todo;
 
 
 
