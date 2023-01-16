@@ -25,16 +25,17 @@
       $q_string .= "usr_phone,usr_email,usr_group,usr_theme,usr_reset,usr_manager,usr_title ";
       $q_string .= "from st_users ";
       $q_string .= "where usr_id = " . $formVars['id'];
-      $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $q_st_users = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+#      $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       $a_st_users = mysqli_fetch_array($q_st_users);
       mysqli_free_result($q_st_users);
 
-      $groups   = return_Index($a_st_users['usr_group'],    "select grp_id from st_groups where grp_disabled = 0 order by grp_name");
+      $groups   = return_Index($db, $a_st_users['usr_group'],    "select grp_id from st_groups where grp_disabled = 0 order by grp_name");
       $disabled = $a_st_users['usr_disabled'];
-      $levels   = return_Index($a_st_users['usr_level'],    "select lvl_id from st_levels where lvl_disabled = 0 order by lvl_id");
-      $theme    = return_Index($a_st_users['usr_theme'],    "select theme_id from st_themes order by theme_title") - 1;
-      $manager  = return_Index($a_st_users['usr_manager'],  "select usr_id from st_users where usr_disabled = 0 order by usr_last,usr_first");
-      $title    = return_Index($a_st_users['usr_title'],    "select tit_id from st_titles order by tit_name");
+      $levels   = return_Index($db, $a_st_users['usr_level'],    "select lvl_id from st_levels where lvl_disabled = 0 order by lvl_id");
+      $theme    = return_Index($db, $a_st_users['usr_theme'],    "select theme_id from st_themes order by theme_title") - 1;
+      $manager  = return_Index($db, $a_st_users['usr_manager'],  "select usr_id from st_users where usr_disabled = 0 order by usr_last,usr_first");
+      $title    = return_Index($db, $a_st_users['usr_title'],    "select tit_id from st_titles order by tit_name");
 
       print "document.user.usr_name.value = '"       . mysqli_real_escape_string($db, $a_st_users['usr_name'])     . "';\n";
       print "document.user.usr_first.value = '"      . mysqli_real_escape_string($db, $a_st_users['usr_first'])    . "';\n";

@@ -28,9 +28,9 @@
       $a_st_users = mysqli_fetch_array($q_st_users);
       mysqli_free_result($q_st_users);
 
-      $theme    = return_Index($a_st_users['usr_theme'],    "select theme_id from st_themes order by theme_title") - 1;
-      $manager  = return_Index($a_st_users['usr_manager'],  "select usr_id from st_users where usr_disabled = 0 order by usr_last,usr_first");
-      $title    = return_Index($a_st_users['usr_title'],    "select tit_id from st_titles order by tit_name");
+      $theme    = return_Index($db, $a_st_users['usr_theme'],    "select theme_id from st_themes order by theme_title") - 1;
+      $manager  = return_Index($db, $a_st_users['usr_manager'],  "select usr_id from st_users where usr_disabled = 0 order by usr_last,usr_first");
+      $title    = return_Index($db, $a_st_users['usr_title'],    "select tit_id from st_titles order by tit_name");
 
       print "document.user.usr_first.value = '"      . mysqli_real_escape_string($db, $a_st_users['usr_first'])    . "';\n";
       print "document.user.usr_last.value = '"       . mysqli_real_escape_string($db, $a_st_users['usr_last'])     . "';\n";

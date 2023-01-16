@@ -28,7 +28,7 @@
       $a_st_groups = mysqli_fetch_array($q_st_groups);
       mysqli_free_result($q_st_groups);
 
-      $manager      = return_Index($a_st_groups['grp_manager'],      "select usr_id from st_users where usr_disabled = 0 order by usr_last,usr_first");
+      $manager      = return_Index($db, $a_st_groups['grp_manager'],      "select usr_id from st_users where usr_disabled = 0 order by usr_last,usr_first");
 
       print "document.groups.grp_name.value = '"      . mysqli_real_escape_string($db, $a_st_groups['grp_name'])      . "';\n";
       print "document.groups.grp_email.value = '"     . mysqli_real_escape_string($db, $a_st_groups['grp_email'])     . "';\n";
