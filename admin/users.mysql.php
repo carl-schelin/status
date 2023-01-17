@@ -211,16 +211,16 @@
 
           $output .= "<tr>\n";
           $output .=   "<td" . $defaultdel . ">" . $linkdel   . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_id']                 . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['lvl_name']               . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_name']               . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_first']              . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_last']               . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_email']              . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $pwreset                           . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['grp_name']               . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $reg_date                          . $linkend . "</td>\n";
-          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['theme_title']            . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_id']      . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['lvl_name']    . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_name']    . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_first']   . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_last']    . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_email']   . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $pwreset                   . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['grp_name']    . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $reg_date                  . $linkend . "</td>\n";
+          $output .= "  <td" . $default    . ">" . $linkstart . $a_st_users['theme_title'] . $linkend . "</td>\n";
           $output .= "</tr>\n";
         }
       } else {
@@ -234,16 +234,16 @@
       print "document.getElementById('new_users_table').innerHTML = '" . mysqli_real_escape_string($db, $output) . "';\n\n";
 
 
-      display_User("Registered",      "all",        " and usr_disabled = 0 ");
-      display_User("Developers",      "develop",    " and usr_disabled = 0 and usr_level = 1 ");
-      display_User("Admin",           "admin",      " and usr_disabled = 0 and usr_level = 2 ");
-      display_User("Vice President",  "vice",       " and usr_disabled = 0 and usr_level = 3 ");
-      display_User("Director",        "director",   " and usr_disabled = 0 and usr_level = 4 ");
-      display_User("Manager",         "manager",    " and usr_disabled = 0 and usr_level = 5 ");
-      display_User("Supervisor",      "supervisor", " and usr_disabled = 0 and usr_level = 6 ");
-      display_User("Direct Reports",  "report",     " and usr_disabled = 0 and usr_level = 7 ");
-      display_User("Guest",           "guest",      " and usr_disabled = 0 and usr_level = 8 ");
-      display_User("Disabled",        "disabled",   " and usr_disabled = 1 ");
+      display_User($db, "Registered",      "all",        " and usr_disabled = 0 ");
+      display_User($db, "Developers",      "develop",    " and usr_disabled = 0 and usr_level = 1 ");
+      display_User($db, "Admin",           "admin",      " and usr_disabled = 0 and usr_level = 2 ");
+      display_User($db, "Vice President",  "vice",       " and usr_disabled = 0 and usr_level = 3 ");
+      display_User($db, "Director",        "director",   " and usr_disabled = 0 and usr_level = 4 ");
+      display_User($db, "Manager",         "manager",    " and usr_disabled = 0 and usr_level = 5 ");
+      display_User($db, "Supervisor",      "supervisor", " and usr_disabled = 0 and usr_level = 6 ");
+      display_User($db, "Direct Reports",  "report",     " and usr_disabled = 0 and usr_level = 7 ");
+      display_User($db, "Guest",           "guest",      " and usr_disabled = 0 and usr_level = 8 ");
+      display_User($db, "Disabled",        "disabled",   " and usr_disabled = 1 ");
 
       print "document.user.usr_level[0].selected = true;\n";
       print "document.user.usr_name.value = '';\n";
@@ -258,7 +258,7 @@
     }
   }
 
-function display_user( $p_title, $p_toggle, $p_query ) {
+function display_user( $p_db, $p_title, $p_toggle, $p_query ) {
 
   $output  = "<p></p>\n";
   $output .= "<table class=\"ui-styled-table\">\n";
@@ -296,7 +296,7 @@ function display_user( $p_title, $p_toggle, $p_query ) {
   $q_string .= "from st_groups ";
   $q_string .= "where grp_disabled = 0 ";
   $q_string .= "order by grp_name";
-  $q_st_groups = mysqli_query($db, $q_string);
+  $q_st_groups = mysqli_query($p_db, $q_string);
   while ($a_st_groups = mysqli_fetch_array($q_st_groups)) {
 
     $group  = "<table class=\"ui-styled-table\">\n";
@@ -323,7 +323,7 @@ function display_user( $p_title, $p_toggle, $p_query ) {
     $q_string .= "left join st_themes on st_themes.theme_id = st_users.usr_theme ";
     $q_string .= "where usr_group = " . $a_st_groups['grp_id'] . " " . $p_query;
     $q_string .= "order by usr_last,usr_first";
-    $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+    $q_st_users = mysqli_query($p_db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($p_db)));
     if (mysqli_num_rows($q_st_users) > 0) {
       while ($a_st_users = mysqli_fetch_array($q_st_users)) {
 
@@ -355,15 +355,15 @@ function display_user( $p_title, $p_toggle, $p_query ) {
 
         $group .= "<tr>\n";
         $group .=   "<td" . $defaultdel . ">" . $linkdel   . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_id']                 . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['lvl_name']               . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_name']               . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_first']              . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_last']               . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_email']              . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $pwreset                           . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $reg_date                          . $linkend . "</td>\n";
-        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['theme_title']            . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_id']      . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['lvl_name']    . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_name']    . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_first']   . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_last']    . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['usr_email']   . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $pwreset                   . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $reg_date                  . $linkend . "</td>\n";
+        $group .= "  <td" . $default    . ">" . $linkstart . $a_st_users['theme_title'] . $linkend . "</td>\n";
         $group .= "</tr>\n";
         $count++;
       }
@@ -377,7 +377,7 @@ function display_user( $p_title, $p_toggle, $p_query ) {
 
   }
 
-  print "document.getElementById('" . $p_toggle . "_users_table').innerHTML = '" . mysqli_real_escape_string($db, $output) . "';\n\n";
+  print "document.getElementById('" . $p_toggle . "_users_table').innerHTML = '" . mysqli_real_escape_string($p_db, $output) . "';\n\n";
 
 }
 
