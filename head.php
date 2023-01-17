@@ -5,7 +5,7 @@
 <script type="text/javascript" src="<?php print $Siteroot; ?>/functions/konami.js"></script>
 
 <script type="text/javascript" language="javascript" src="<?php print $Siteroot; ?>/css/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="<?php print $Siteroot; ?>/css/themes/<?php print $_SESSION['theme']; ?>/jquery-ui.js"></script>
-<link   rel="stylesheet" type="text/css"            href="<?php print $Siteroot; ?>/css/themes/<?php print $_SESSION['theme']; ?>/jquery-ui.css">
+<script type="text/javascript" language="javascript" src="<?php print $Siteroot; ?>/css/jquery-ui/jquery-ui.js"></script>
+<link   rel="stylesheet" type="text/css"            href="<?php print $Siteroot; ?>/css/jquery-ui-themes/themes/<?php print $_SESSION['theme']; ?>/jquery-ui.css">
 <script type="text/javascript" language="javascript" src="<?php print $Siteroot; ?>/functions/jquery.status.js"></script>
 
