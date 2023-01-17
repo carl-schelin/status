@@ -1,7 +1,24 @@
 ### Installation
 
-This is the set of mysql tables for the status management app.
+You'll need to create the statususer account for access to the status management database.
 
+create user 'statususer'@'localhost' identified by 'password';
+
+Then give the user access:
+
+grant privilege on status.* to 'statususer'@'localhost';
+
+Then finish:
+
+flush privileges;
+
+### Create database
+
+create database status;
+
+### Add tables
+
+This is the set of mysql tables for the status management app.
 
 CREATE TABLE `st_bandf` (
   `bf_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -279,10 +296,24 @@ Need to create the administrator account.
 insert into st_users set usr_id = null,usr_level = 2, usr_name = 'admin', usr_first = 'Administrator', usr_last = 'Status';
 
 
+### Weeks Update
+
+Also need to update the st_weeks table with the dates for the last friday of each week.
+
+See the additional file, weeks.update for 2023.
+
+Yes, I know. Pain in the ass. That's how it goes for now. I've been working on a different app so this'll have to do for now.
+
 
 ### Settings File
 
-The settings.php file needs to be updated to reflect your credentials for accessing mysql.
+The settings.php file needs to be updated to reflect your hostname and to add the credentials for accessing mysql you created at the first step.
+
+
+### CSS files
+
+I'm using jQuery so you'll need to install the following files for this to work correctly.
+
 
 
 
