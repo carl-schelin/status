@@ -241,7 +241,7 @@ CREATE TABLE `st_users` (
   PRIMARY KEY (`usr_id`)
 ); 
 
-create table userstories (
+create table st_userstories (
   user_id int(10) not null auto_increment,
   user_epic int(10) not null default 0,
   user_jira char(60) not null default '',
@@ -256,6 +256,28 @@ CREATE TABLE `st_weeks` (
   `wk_date` date NOT NULL,
   PRIMARY KEY (`wk_id`)
 ); 
+
+
+### Need to set up the initial levels.
+
+As the variables are used within the code, all entries need to be added
+
+insert into st_levels set lvl_id = null,lvl_name = 'Developer', lvl_level = 1;
+insert into st_levels set lvl_id = null,lvl_name = 'Admin', lvl_level = 2;
+insert into st_levels set lvl_id = null,lvl_name = 'Vice President', lvl_level = 3;
+insert into st_levels set lvl_id = null,lvl_name = 'Director', lvl_level = 4;
+insert into st_levels set lvl_id = null,lvl_name = 'Manager', lvl_level = 5;
+insert into st_levels set lvl_id = null,lvl_name = 'Supervisor', lvl_level = 6;
+insert into st_levels set lvl_id = null,lvl_name = 'Report', lvl_level = 7;
+insert into st_levels set lvl_id = null,lvl_name = 'Guest', lvl_level = 8;
+
+
+### Initial User
+
+Need to create the administrator account.
+
+insert into st_users set usr_id = null,usr_level = 2, usr_name = 'admin', usr_first = 'Administrator', usr_last = 'Status';
+
 
 
 ### Settings File
