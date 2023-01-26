@@ -131,7 +131,7 @@ $(document).ready( function() {
   $q_string .= "from st_themes ";
   $q_string .= "order by theme_title";
   $q_st_themes = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-  while ($a_tst_hemes = mysqli_fetch_array($q_st_themes)) {
+  while ($a_st_themes = mysqli_fetch_array($q_st_themes)) {
     print "<option value=\"" . $a_st_themes['theme_id'] . "\">" . $a_st_themes['theme_title'] . "</option>\n";
   }
 ?>

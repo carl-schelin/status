@@ -46,7 +46,7 @@
   $q_string .= "order by bf_week";
   $q_st_bandf = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
 
-  while ( $a_st_bandf = mysqli_fetch_array($q_bst_andf) ) {
+  while ( $a_st_bandf = mysqli_fetch_array($q_st_bandf) ) {
     $week = $a_st_bandf['bf_week'];
   }
 
