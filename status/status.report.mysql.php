@@ -58,6 +58,9 @@
       if (!isset($_GET['user'])) {
         $formVars['user'] = 1;
       }
+      if (!isset($_GET['user_jira'])) {
+        $formVars['user_jira'] = 0;
+      }
       if (!isset($_GET['day'])) {
         $formVars['day'] = 0;
       }
