@@ -133,7 +133,7 @@
 
       $output .= "</table>";
 
-      mysqli_free_result($q_epics);
+      mysqli_free_result($q_st_epics);
 
       print "document.epics.epic_jira.value = '';\n";
       print "document.epics.epic_title.value = '';\n";

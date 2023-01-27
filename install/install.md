@@ -6,6 +6,12 @@ create user 'statususer'@'localhost' identified by 'password';
 
 Then give the user access:
 
+For the 5.1 mysql server:
+
+grant all on status.* to 'statususer'@'localhost';
+
+For the 5.5 mysql servers:
+
 grant privilege on status.* to 'statususer'@'localhost';
 
 Then finish:

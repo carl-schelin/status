@@ -1,6 +1,5 @@
 <?php
   include('settings.php');
-  $called = 'no';
   include($Sitepath . '/function.php');
 
 # if the person hasn't logged in and is using the email login link then set the variable here.

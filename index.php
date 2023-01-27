@@ -5,6 +5,7 @@
 # Description: 
 
   include('settings.php');
+  $called = 'no';
   include($Sitepath . "/guest.php");
 
   $package = "index.php";
