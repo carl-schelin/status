@@ -105,14 +105,14 @@ if (isset($_POST['project'])) {
 
 <table class="ui-widget-content">
 <tr>
-  <th class="ui-state-default" colspan=6>Description For Status Reports</th>
+  <th class="ui-state-default" colspan="8">Description For Status Reports</th>
 </tr>
 <tr>
-  <td class="ui-widget-content" title="The description as shown in the drop down menus in the Status Management app" colspan=2>Project Description</td>
-  <td class="ui-widget-content" title="The description as shown in the drop down menus in the Status Management app" colspan=4><input type="text" value="Brief Description" name="desc" size=30 length=30 onfocus="clear_input(this);"></td>
+  <td class="ui-widget-content" title="The description as shown in the drop down menus in the Status Management app" colspan="2">Project Description</td>
+  <td class="ui-widget-content" title="The description as shown in the drop down menus in the Status Management app" colspan="6"><input type="text" value="Brief Description" name="desc" size=30 length=30 onfocus="clear_input(this);"></td>
 </tr>
 <tr>
-  <th class="ui-state-default" colspan=6>Description From Timecard</th>
+  <th class="ui-state-default" colspan="8">Description From Timecard</th>
 </tr>
 <tr>
   <td class="ui-widget-content" title="The project code as seen in iConnect">Project Code</td>

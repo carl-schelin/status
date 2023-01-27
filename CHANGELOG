@@ -314,5 +314,7 @@ rename table weeks to st_weeks;
 rename table todo to st_todo;
 
 
+alter table st_project add column prj_snow char(30) not null default '' after prj_name;
+
 
 
