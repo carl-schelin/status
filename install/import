@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo "Importing the status mysql files"
+
+read PASSWORD
+
+echo "Importing the SQL files"
+cd /var/www/html/status/install/sql
+for i in `ls *.sql`
+do
+  echo $i
+  mysql --user=root --password=${PASSWORD} status < $i
+done
+
+#echo "Importing the data"
+#for i in `ls *.txt`
+#do
+#  mysqlimport --local --user=root --password=${PASSWORD} status `pwd`/$i
+#done
+
+cd /var/www/html/status/install
+
+echo "Done"
+

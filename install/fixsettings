@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Fix the settings.php symbolic links.
+
+# back off settings.php first just to be sure
+if [[ -f settings.php ]]
+then
+  echo "Backing up settings.php"
+  cp settings.php settings.backup.php
+else
+  echo "settings.php file not found!"
+  exit 1
+fi
+
+echo "Updating status settings.php"
+### Don't forget to delete "./settings.php" from the listing or bad things will happen
+SETTINGS=""
+SETTINGS="${SETTINGS} ./admin/settings.php"
+SETTINGS="${SETTINGS} ./bugs/settings.php"
+SETTINGS="${SETTINGS} ./css/settings.php"
+SETTINGS="${SETTINGS} ./faq/settings.php"
+SETTINGS="${SETTINGS} ./functions/settings.php"
+SETTINGS="${SETTINGS} ./help/settings.php"
+SETTINGS="${SETTINGS} ./jira/settings.php"
+SETTINGS="${SETTINGS} ./login/functions/settings.php"
+SETTINGS="${SETTINGS} ./login/settings.php"
+SETTINGS="${SETTINGS} ./morning/settings.php"
+SETTINGS="${SETTINGS} ./projects/settings.php"
+SETTINGS="${SETTINGS} ./ras/settings.php"
+SETTINGS="${SETTINGS} ./reports/settings.php"
+SETTINGS="${SETTINGS} ./requests/settings.php"
+SETTINGS="${SETTINGS} ./research/settings.php"
+SETTINGS="${SETTINGS} ./status/settings.php"
+SETTINGS="${SETTINGS} ./todo/settings.php"
+
+
+### Don't forget to delete "./settings.php" from the listing or bad things will happen
+
+# now remove the existing standalone settings file and create symbolic links
+for i in $SETTINGS
+do
+  if [[ -f $i ]]
+  then
+    rm $i
+  fi
+  ln settings.php $i
+done
+
+echo "Done..."
