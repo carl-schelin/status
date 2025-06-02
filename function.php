@@ -6,15 +6,15 @@ date_default_timezone_set('UTC');
 
 # clean and escape the input data
 
-function clean($input, $maxlength) {
-  $input = trim($input);
-  $input = substr($input, 0, $maxlength);
-  return ($input);
+function clean( $p_input, $p_maxlength ) {
+  $input = trim($p_input);
+  $r_input = substr($input, 0, $p_maxlength);
+  return ($r_input);
 }
 
 # log who did what
 
-function logaccess($p_db, $p_user, $p_source, $p_detail) {
+function logaccess( $p_db, $p_user, $p_source, $p_detail ) {
   include('settings.php');
   $package = 'function.php';
 
@@ -50,7 +50,7 @@ function check_userlevel( $p_db, $p_level = 2 ) {
   }
 }
 
-function return_Index($p_db, $p_check, $p_string) {
+function return_Index( $p_db, $p_check, $p_string ) {
   $package = 'function.php';
   $r_index = 0;
   $count = 1;
@@ -64,7 +64,7 @@ function return_Index($p_db, $p_check, $p_string) {
   return $r_index;
 }
 
-function wait_Process($p_string) {
+function wait_Process( $p_string ) {
 # includeing in order to use path information
   include('settings.php');
 
@@ -96,37 +96,37 @@ function wait_Process($p_string) {
   return $output;
 }
 
-function convert_datetime($date_string) {
+function convert_datetime( $p_date_string ) {
 
-  list($week_mon, $week_day, $week_year) = explode("/", $date_string);
+  list($week_mon, $week_day, $week_year) = explode("/", $p_date_string);
 
-  $timestamp = mktime("12", "00", "00", $week_mon + 1, $week_day, $week_year);
+  $r_timestamp = mktime("12", "00", "00", $week_mon + 1, $week_day, $week_year);
 
-  return $timestamp;
+  return $r_timestamp;
 
 }
 
-function myUrlEncode($string) {
+function myUrlEncode( $p_string ) {
 
-    $entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
-    $replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",   ":",   "@",   "&",   "=",   "+",   "$",   ",",   "/",   "?",   "%",   "#",   "[",   "]");
-    return str_replace($entities, $replacements, urlencode($string));
+    $r_entities     = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
+    $r_replacements = array(  '!',   '*',   "'",   "(",   ")",   ";",   ":",   "@",   "&",   "=",   "+",   "$",   ",",   "/",   "?",   "%",   "#",   "[",   "]");
+    return str_replace($r_entities, $r_replacements, urlencode($p_string));
 }
 
-function myUrlDecode($string) {
+function myUrlDecode( $p_string ) {
 
-    $entities     = array(  '!',   '*',   "'",   "(",   ")",   ";",   ":",   "@",   "&",   "=",   "+",   "$",   ",",   "/",   "?",   "%",   "#",   "[",   "]");
-    $replacements = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
-    return str_replace($entities, $replacements, urldecode($string));
+    $r_entities     = array(  '!',   '*',   "'",   "(",   ")",   ";",   ":",   "@",   "&",   "=",   "+",   "$",   ",",   "/",   "?",   "%",   "#",   "[",   "]");
+    $r_replacements = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
+    return str_replace($r_entities, $r_replacements, urldecode($p_string));
 }
 
-function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
+function displayHistory( $p_ras_id, $p_ras_code, $p_ras_resource, $p_ras_group ) {
   $package = 'function.php';
-  $divout .= "<div id=\"down_" . $ras_id . "\" style=\"display:none\">\n";
+  $divout .= "<div id=\"down_" . $p_ras_id . "\" style=\"display:none\">\n";
   $divout .= "<table>\n";
 
   $divout .= "<tr>\n";
-  $divout .= "  <th colspan=13>Historical View: " . $ras_code . "</th>\n";
+  $divout .= "  <th colspan=13>Historical View: " . $p_ras_code . "</th>\n";
   $divout .= "</tr>\n";
   $divout .= "<tr>\n";
   $divout .= "  <th>Project Name</th>\n";
@@ -158,7 +158,7 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
     $q_string  = "select strp_time ";
     $q_string .= "from st_status ";
     $q_string .= "left join st_project on st_project.prj_id = st_status.strp_project ";
-    $q_string .= "where prj_code = " . $ras_code . " and strp_yearmon = " . $divyearmon . " and strp_name = " . $ras_resource;
+    $q_string .= "where prj_code = " . $p_ras_code . " and strp_yearmon = " . $divyearmon . " and strp_name = " . $p_ras_resource;
     $q_divstatus = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
     while ($a_divstatus = mysqli_fetch_array($q_divstatus)) {
       $divouttotal += $a_divstatus['strp_time'];
@@ -183,7 +183,7 @@ function displayHistory($ras_id, $ras_code, $ras_resource, $ras_group) {
   $q_string .= "ras_oct,ras_nov,ras_dec,ras_closed ";
   $q_string .= "from st_ras ";
   $q_string .= "left join st_users on ras_resource = st_users.usr_id ";
-  $q_string .= "where ras_name not like \"%PTO%\" and ras_group = " . $ras_group . " and ras_resource = " . $ras_resource . " and ras_code = " . $ras_code . " ";
+  $q_string .= "where ras_name not like \"%PTO%\" and ras_group = " . $p_ras_group . " and ras_resource = " . $p_ras_resource . " and ras_code = " . $p_ras_code . " ";
   $q_string .= "order by ras_id desc";
   $q_showras = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_showras = mysqli_fetch_array($q_showras)) {
