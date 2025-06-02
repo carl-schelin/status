@@ -101,21 +101,19 @@ $q_string  = "select cls_id,cls_name,cls_template,cls_project,cls_title,cls_help
 $q_string .= "from st_class ";
 $q_string .= "order by cls_id";
 $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_st_class = mysqli_fetch_array($q_st_class)) {
+if (mysqli_num_rows($q_st_class) > 0) {
+  while ($a_st_class = mysqli_fetch_array($q_st_class)) {
 
-  print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_st_class['cls_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_template']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_project']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_title']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_help']) . "</td>\n";
-  print "</tr>\n";
-  $count++;
-
-}
-
-if ($count == 0) {
+    print "<tr>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_class['cls_id'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_name']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_template']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_project']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_title']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_help']) . "</td>\n";
+    print "</tr>\n";
+  }
+} else {
   print "<tr>\n";
   print "  <td class=\"ui-widget-content\" colspan=6>No records found.</td>\n";
   print "</tr>\n";
