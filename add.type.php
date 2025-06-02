@@ -87,18 +87,16 @@ $q_string  = "select typ_id,typ_name,typ_desc ";
 $q_string .= "from st_type ";
 $q_string .= "order by typ_id";
 $q_st_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_st_type = mysqli_fetch_array($q_st_type)) {
+if (mysqli_num_rows($q_st_type) > 0) {
+  while ($a_st_type = mysqli_fetch_array($q_st_type)) {
 
-  print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_st_type['typ_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_desc']) . "</td>\n";
-  print "</tr>\n";
-  $count++;
-
-}
-
-if ($count == 0) {
+    print "<tr>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_type['typ_id'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_name']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_desc']) . "</td>\n";
+    print "</tr>\n";
+  }
+} else {
   print "<tr>\n";
   print "  <td class=\"ui-widget-content\" colspan=3>No records found.</td>\n";
   print "</tr>\n";
