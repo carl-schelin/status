@@ -21,6 +21,7 @@
     $formVars['usr_manager']    = clean($_GET['usr_manager'],    10);
     $formVars['usr_title']      = clean($_GET['usr_title'],      10);
     $formVars['usr_theme']      = clean($_GET['usr_theme'],      10);
+    $formVars['usr_template']   = clean($_GET['usr_template'],   10);
     $formVars['usr_passwd']     = clean($_GET['usr_passwd'],     32);
     $formVars['usr_reenter']    = clean($_GET['usr_reenter'],    32);
     $formVars['usr_reset']      = clean($_GET['usr_reset'],      10);
@@ -50,6 +51,7 @@
             "usr_manager     =   " . $formVars['usr_manager']   . "," .
             "usr_title       =   " . $formVars['usr_title']     . "," .
             "usr_theme       =   " . $formVars['usr_theme']     . "," .
+            "usr_template    =   " . $formVars['usr_template']  . "," .
             "usr_reset       =   " . $formVars['usr_reset']     . "," . 
             "usr_phone       = \"" . $formVars['usr_phone']     . "\"";
 
