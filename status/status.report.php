@@ -184,9 +184,9 @@ function show_daily() {
   }
 
   if (document.taskmgr.daily.checked) {
-    show_file('status.report.mysql.php?startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>&daily=' + day);
+    show_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>&daily=' + day);
   } else {
-    show_file('status.report.mysql.php?startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>');
+    show_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>');
   }
 
 }
@@ -413,7 +413,7 @@ function textCounter(field,cntfield,maxlimit) {
 <?php
   $q_string  = "select epic_id,epic_jira,epic_title ";
   $q_string .= "from st_epics ";
-  $q_string .= "where epic_user = 5 and epic_closed = 0 ";
+  $q_string .= "where epic_user = " . $_SESSION['uid'] . " and epic_closed = 0 ";
   $q_string .= "order by epic_jira ";
   $q_st_epics = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_epics = mysqli_fetch_array($q_st_epics)) {
@@ -425,7 +425,7 @@ function textCounter(field,cntfield,maxlimit) {
 <?php
   $q_string  = "select user_id,user_jira,user_task ";
   $q_string .= "from st_userstories ";
-  $q_string .= "where user_user = 5 and user_epic = 0 and user_closed = 0 ";
+  $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = 0 and user_closed = 0 ";
   $q_string .= "order by user_jira ";
   $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
