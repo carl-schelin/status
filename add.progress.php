@@ -89,18 +89,16 @@ $q_string  = "select pro_id,pro_name,pro_desc ";
 $q_string .= "from st_progress ";
 $q_string .= "order by pro_id";
 $q_st_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_st_progress = mysqli_fetch_array($q_st_progress)) {
+if (mysqli_num_rows($q_st_progress) > 0) {
+  while ($a_st_progress = mysqli_fetch_array($q_st_progress)) {
 
-  print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_st_progress['pro_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_name']) . "</td>\n";
-  print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_desc']) . "</td>\n";
-  print "</tr>\n";
-  $count++;
-
-}
-
-if ($count == 0) {
+    print "<tr>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_progress['pro_id'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_name']) . "</td>\n";
+    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_desc']) . "</td>\n";
+    print "</tr>\n";
+  }
+} else {
   print "<tr>\n";
   print "  <td class=\"ui-widget-content\">No records found.</td>\n";
   print "</tr>\n";
