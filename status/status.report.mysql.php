@@ -20,22 +20,26 @@
     }
 
     if (check_userlevel($db, $AL_User)) {
-      $formVars['id']       = clean($_GET['id'], 10);
-      $formVars['week']     = clean($_GET['startweek'], 10);
-      $formVars['user']     = clean($_GET['user'], 10);
+      $formVars['week']       = clean($_GET['startweek'], 10);
+      $formVars['user']       = clean($_GET['user'], 10);
+      $formVars['id']         = clean($_GET['id'], 10);
       $formVars['user_jira']  = clean($_GET['user_jira'], 10);
-      $formVars['class']    = clean($_GET['class'], 10);
-      $formVars['type']     = clean($_GET['type'], 10);
-      $formVars['progress'] = clean($_GET['progress'], 10);
-      $formVars['project']  = clean($_GET['project'], 10);
-      $formVars['day']      = clean($_GET['day'], 10);
-      $formVars['time']     = clean($_GET['time'], 10);
-      $formVars['task']     = clean($_GET['task'], 255);
-      $formVars['save']     = clean($_GET['save'], 10);
-      $formVars['quarter']  = clean($_GET['quarter'], 10);
-      $formVars['update']   = clean($_GET['update'], 10);
-      $formVars['daily']    = clean($_GET['daily'], 10);
-      $formVars['docopy']   = clean($_GET['docopy'], 10);
+      $formVars['class']      = clean($_GET['class'], 10);
+      $formVars['type']       = clean($_GET['type'], 10);
+      $formVars['progress']   = clean($_GET['progress'], 10);
+      $formVars['project']    = clean($_GET['project'], 10);
+      $formVars['day']        = clean($_GET['day'], 10);
+      $formVars['time']       = clean($_GET['time'], 10);
+      $formVars['task']       = clean($_GET['task'], 255);
+      $formVars['save']       = clean($_GET['save'], 10);
+      $formVars['quarter']    = clean($_GET['quarter'], 10);
+      $formVars['update']     = clean($_GET['update'], 10);
+      $formVars['daily']      = clean($_GET['daily'], 10);
+      $formVars['docopy']     = clean($_GET['docopy'], 10);
+
+      if ($formVars['user_jira'] == '') {
+        $formVars['user_jira'] = 0;
+      }
 
       $weekday[0] = "U";
       $weekday[1] = "M";
@@ -57,9 +61,6 @@
       }
       if (!isset($_GET['user'])) {
         $formVars['user'] = 1;
-      }
-      if ($formVars['user_jira'] == '') {
-        $formVars['user_jira'] = 0;
       }
       if (!isset($_GET['day'])) {
         $formVars['day'] = 0;
