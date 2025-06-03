@@ -1,0 +1,3 @@
+insert into st_progress set pro_id = null,pro_name = 'Complete',pro_desc = 'The task has been completed.';
+insert into st_progress set pro_id = null,pro_name = 'Ongoing',pro_desc = 'The task has no end or is a long term task.';
+insert into st_progress set pro_id = null,pro_name = 'In Progress',pro_desc = "The task will be completed but you're working on it.";
