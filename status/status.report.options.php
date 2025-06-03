@@ -34,7 +34,7 @@
           print "selbox.options[selbox.options.length] = new Option(\"" . htmlspecialchars($a_st_userstories['user_jira']) . " - " . htmlspecialchars($a_st_userstories['user_task']) . "\"," . $a_st_userstories['user_id'] . ");\n";
         }
       } else {
-        print "selbox.options[selbox.options.length] = new Option(\"No User Stories have been created for this Epic\",0);\n";
+        print "selbox.options[selbox.options.length] = new Option(\"No User Stories have been created for this Epic.\",0);\n";
       }
     } else {
       logaccess($db, $_SESSION['uid'], $package, "Access denied");

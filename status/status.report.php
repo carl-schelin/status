@@ -422,6 +422,7 @@ function textCounter(field,cntfield,maxlimit) {
 ?>
 </select></td>
   <td class="ui-widget-content" colspan="2">Jira User Story: <select name="user_jira">
+<option value="0">No User Stories have been created for this Epic.</option>
 <?php
   $q_string  = "select user_id,user_jira,user_task ";
   $q_string .= "from st_userstories ";
