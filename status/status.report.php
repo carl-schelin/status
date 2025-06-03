@@ -520,7 +520,7 @@ if ($_SESSION['group'] < 5) {
   <td class="ui-widget-content">Involuntary, non-incident work such as calls for assistance or responding to system alerts</td>
 </tr>
 <tr>
-  <td class="ui-widget-content"><b>1.3 Maintenance</b></td>
+  <td class="ui-widget-content"><b>1.2 Maintenance</b></td>
   <td class="ui-widget-content"><b>2.3 Training</b></td>
   <td class="ui-widget-content">&nbsp;</td>
 </tr>
