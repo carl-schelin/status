@@ -50,6 +50,28 @@ function check_userlevel( $p_db, $p_level = 2 ) {
   }
 }
 
+# if the passed script name for this user isn't here yet, then the user hasn't viewed the help screen yet.
+function show_Help( $p_db, $p_script ) {
+
+  $q_string  = "select help_id ";
+  $q_string .= "from st_help ";
+  $q_string .= "where help_user = " . $_SESSION['uid'] . " and help_screen = '" . $p_script . "' ";
+  $q_st_help = mysqli_query($p_db, $q_string) or die($q_string . ": " . mysqli_error($p_db));
+  if (mysqli_num_rows($q_st_help) == 0) {
+    $q_string  = "insert ";
+    $q_string .= "into st_help ";
+    $q_string .= "set ";
+    $q_string .= "help_user = " . $_SESSION['uid'] . ",";
+    $q_string .= "help_screen = '" . $p_script . "' ";
+
+    $result = mysqli_query($p_db, $q_string) or die($q_string . ": " . mysqli_error($p_db));
+
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 function return_Index( $p_db, $p_check, $p_string ) {
   $package = 'function.php';
   $r_index = 0;
