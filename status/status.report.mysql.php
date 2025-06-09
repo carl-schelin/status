@@ -213,7 +213,7 @@
 
       $daily_output .= "<a href=\"#\" onclick=\"show_file('status.report.fill.php?id=";
       $daily_output .= $a_task['strp_id'] . "&user=" . $formVars['user'] . "');" . "\">";
-      $daily_output .= mysqli_real_escape_string($db, $a_task['strp_task']) . "</a></td>";
+      $daily_output .= $a_task['strp_task'] . "</a></td>";
 
       $daily_output .= "<td " . $ready . " title=\"Day:Hours Worked. Green = Status email active.";
       $daily_output .= " * = Quarterly Accomplishment\">" . $weekday[$a_task['strp_day']] . ":";
