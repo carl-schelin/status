@@ -28,7 +28,7 @@
       $a_st_userstories = mysqli_fetch_array($q_st_userstories);
       mysqli_free_result($q_st_userstories);
 
-      $epic = return_Index($db, $a_st_userstories['user_epic'], "select epic_id from epics where epic_user = " . $_SESSION['uid'] . " order by epic_jira");
+      $epic = return_Index($db, $a_st_userstories['user_epic'], "select epic_id from st_epics where epic_user = " . $_SESSION['uid'] . " order by epic_jira");
 
       print "document.userstories.user_jira.value = '"      . mysqli_real_escape_string($db, $a_st_userstories['user_jira'])      . "';\n";
       print "document.userstories.user_task.value = '"      . mysqli_real_escape_string($db, $a_st_userstories['user_task'])      . "';\n";
