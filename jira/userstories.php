@@ -74,8 +74,8 @@ $(document).ready( function() {
   $( "#dialogStory" ).dialog({
     autoOpen: false,
     modal: true,
-    height: 200,
-    width: 1100,
+    height: 250,
+    width: 600,
     show: 'slide',
     hide: 'slide',
     closeOnEscape: true,
@@ -201,7 +201,11 @@ $(document).ready( function() {
 </tr>
 <tr>
   <td class="ui-widget-content">Jira: <input type="text" name="user_jira" size="10"></td>
-  <td class="ui-widget-content">User Story: <input type="text" name="user_task" size="90"></td>
+</tr>
+<tr>
+  <td class="ui-widget-content">User Story: <input type="text" name="user_task" size="50"></td>
+</tr>
+<tr>
   <td class="ui-widget-content">Close: <input type="checkbox" name="user_closed"></td>
 </tr>
 </table>
