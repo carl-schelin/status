@@ -80,16 +80,16 @@
 
 ?>
 
-document.taskmgr.project['<?php          print $project; ?>'].selected = true;
-document.taskmgr.report['<?php           print $a_st_status['strp_class'] - $class; ?>'].checked = true;
-document.taskmgr.progress['<?php         print $a_st_status['strp_progress']; ?>'].selected = true;
-document.taskmgr.tcktype['<?php          print $a_st_status['strp_type']; ?>'].selected = true;
-document.taskmgr.day['<?php              print $a_st_status['strp_day']; ?>'].checked = true;
-document.taskmgr.task.value = "<?php     print mysqli_real_escape_string($db, $a_st_status['strp_task']); ?>";
-document.taskmgr.save.checked = <?php    if ($a_st_status['strp_save']) { print "true"; } else { print "false"; }; ?>;
+document.taskmgr.project['<?php          print $project;                                                              ?>'].selected = true;
+document.taskmgr.report['<?php           print $a_st_status['strp_class'] - $class;                                   ?>'].checked = true;
+document.taskmgr.progress['<?php         print $a_st_status['strp_progress'];                                         ?>'].selected = true;
+document.taskmgr.tcktype['<?php          print $a_st_status['strp_type'];                                             ?>'].selected = true;
+document.taskmgr.day['<?php              print $a_st_status['strp_day'];                                              ?>'].checked = true;
+document.taskmgr.task.value = "<?php     print mysqli_real_escape_string($db, $a_st_status['strp_task']);             ?>";
+document.taskmgr.save.checked = <?php    if ($a_st_status['strp_save']) { print "true"; } else { print "false"; };    ?>;
 document.taskmgr.quarter.checked = <?php if ($a_st_status['strp_quarter']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.time.value = <?php      print $a_st_status['strp_time']; ?>;
-document.taskmgr.id.value = <?php        print $a_st_status['strp_id']; ?>;
+document.taskmgr.time.value = <?php      print $a_st_status['strp_time'];                                             ?>;
+document.taskmgr.id.value = <?php        print $a_st_status['strp_id'];                                               ?>;
 document.taskmgr.update.disabled = false;
 document.taskmgr.copy.disabled = false;
 
