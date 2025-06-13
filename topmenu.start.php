@@ -37,8 +37,8 @@
   </li>
   <li id="tm_manage"><a href="<?php print $Siteroot; ?>/index.manage.php">Database</a>
     <ul>
-      <li><a href="<?php print $Adminroot; ?>/add.class.php">Classifications Table</a></li>
-      <li><a href="<?php print $Adminroot; ?>/add.progress.php">Progress Table</a></li>
-      <li><a href="<?php print $Adminroot; ?>/add.type.php">Task Types Table</a></li>
+      <li><a href="<?php print $Adminroot; ?>/class.php">Classifications Table</a></li>
+      <li><a href="<?php print $Adminroot; ?>/progress.php">Progress Table</a></li>
+      <li><a href="<?php print $Adminroot; ?>/type.php">Task Types Table</a></li>
     </ul>
   </li>
