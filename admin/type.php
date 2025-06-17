@@ -1,5 +1,5 @@
 <?php
-# Script: add.type.php
+# Script: type.php
 # Owner: Carl Schelin
 # Coding Standard 3.0 Applied
 # Description:
@@ -14,9 +14,16 @@
 
   check_login($db, $AL_User);
 
-  $package = "add.type.php";
+  $package = "type.php";
 
   logaccess($db, $_SESSION['username'], $package, "Accessing script");
+
+# if help has not been seen yet,
+  if (show_Help($db, $Sitepath . "/" . $package)) {
+    $display = "display: block";
+  } else {
+    $display = "display: none";
+  }
 
 ?>
 <!DOCTYPE HTML>
@@ -27,6 +34,131 @@
 
 <?php include($Sitepath . "/head.php"); ?>
 
+<script type="text/javascript">
+<?php
+  if (check_userlevel($db, $AL_Admin)) {
+?>
+function delete_line( p_script_url ) {
+  var answer = confirm("Delete this Type?")
+
+  if (answer) {
+    script = document.createElement('script');
+    script.src = p_script_url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+}
+<?php
+  }
+?>
+
+function attach_file( p_script_url, update ) {
+  var af_form = document.formCreate;
+  var af_url;
+
+  af_url  = '?update='   + update;
+
+  af_url += "&typ_name="        + encode_URI(af_form.typ_name.value);
+  af_url += "&typ_desc="        + encode_URI(af_form.typ_desc.value);
+
+  script = document.createElement('script');
+  script.src = p_script_url + af_url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function update_file( p_script_url, update ) {
+  var uf_form = document.formUpdate;
+  var uf_url;
+
+  uf_url  = '?update='   + update;
+  uf_url += '&id='       + uf_form.id.value;
+
+  uf_url += "&typ_name="        + encode_URI(uf_form.typ_name.value);
+  uf_url += "&typ_desc="        + encode_URI(uf_form.typ_desc.value);
+
+  script = document.createElement('script');
+  script.src = p_script_url + uf_url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function clear_fields() {
+  show_file('type.mysql.php?update=-1');
+}
+
+$(document).ready( function() {
+  $( '#clickCreate' ).click(function() {
+    $( "#dialogCreate" ).dialog('open');
+  });
+
+  $( "#dialogCreate" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 200,
+    width: 600,
+    show: 'slide',
+    hide: 'slide',
+    closeOnEscape: true,
+    dialogClass: 'dialogWithDropShadow',
+    close: function(event, ui) {
+      $( "#dialogCreate" ).hide();
+    },
+    buttons: [
+      {
+        text: "Cancel",
+        click: function() {
+          show_file('type.mysql.php?update=-1');
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Add Type",
+        click: function() {
+          attach_file('type.mysql.php', 0);
+          $( this ).dialog( "close" );
+        }
+      }
+    ]
+  });
+
+  $( "#dialogUpdate" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 200,
+    width: 600,
+    show: 'slide',
+    hide: 'slide',
+    closeOnEscape: true,
+    dialogClass: 'dialogWithDropShadow',
+    close: function(event, ui) {
+      $( "#dialogUpdate" ).hide();
+    },
+    buttons: [
+      {
+        text: "Cancel",
+        click: function() {
+          show_file('type.mysql.php?update=-1');
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Update Type",
+        click: function() {
+          update_file('type.mysql.php', 1);
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Add Type",
+        click: function() {
+          update_file('type.mysql.php', 0);
+          $( this ).dialog( "close" );
+        }
+      }
+    ]
+  });
+});
+
+</script>
+
 </head>
 <body onLoad="clear_fields();" class="ui-widget-content">
 
@@ -35,80 +167,72 @@
 
 <div id="main">
 
-<?php
-
-if (isset($_POST['type'])) {
-
-  $formVars['typ_name'] = clean($_POST['type'], 70);
-  $formVars['typ_desc'] = clean($_POST['desc'], 70);
-
-  logaccess($db, $_SESSION['username'], "add.type.php", "Adding type: " . $formVars['typ_name']);
-
-  $q_string  = "insert into st_type set ";
-  $q_string .= "typ_id = NULL, typ_name = \"" . $formVars['typ_name'] . "\", typ_desc = \"" . $formVars['typ_desc'] . "\"";
-  mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-
-}
-
-?>
-
-<form action="" method="POST">
-
-<table class="ui-widget-content">
+<table class="ui-styled-table">
 <tr>
-  <td class="ui-widget-content button"><input type="submit" value="Add Type"></td>
+  <th class="ui-state-default">Type Editor</th>
+  <th class="ui-state-default" width="20"><a href="javascript:;" onmousedown="toggleDiv('type-help');">Help</a></th>
 </tr>
 </table>
 
-<table>
+<div id="type-help" style="<?php print $display; ?>">
+
+<div class="main-help ui-widget-content">
+
+
+</div>
+
+</div>
+
+<table class="ui-styled-table">
 <tr>
-  <th class="ui-state-default">Task Type Form</th>
-</tr>
-<tr>
-  <td class="ui-widget-content">New Type: <input type="text" name="type" size=70 length=70></td>
-</tr>
-<tr>
-  <td class="ui-widget-content">Description: <input type="text" name="desc" size=70 length=70></td>
+  <td class="ui-widget-content button"><input type="button" id="clickCreate" value="Add Type"></td>
 </tr>
 </table>
 
-<table class="ui-widget-content">
+<p></p>
+
+<table class="ui-styled-table">
 <tr>
-  <th class="ui-state-default" colspan=3>Task Type Listing</th>
+  <th class="ui-state-default">Type Listing</th>
+  <th class="ui-state-default" width="20"><a href="javascript:;" onmousedown="toggleDiv('type-listing-help');">Help</a></th>
 </tr>
-<tr>
-  <th class="ui-state-default">ID</th>
-  <th class="ui-state-default">Name</th>
-  <th class="ui-state-default">Description</th>
-</tr>
-<?php
-
-$q_string  = "select typ_id,typ_name,typ_desc ";
-$q_string .= "from st_type ";
-$q_string .= "order by typ_id";
-$q_st_type = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-if (mysqli_num_rows($q_st_type) > 0) {
-  while ($a_st_type = mysqli_fetch_array($q_st_type)) {
-
-    print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_st_type['typ_id'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_name']) . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_type['typ_desc']) . "</td>\n";
-    print "</tr>\n";
-  }
-} else {
-  print "<tr>\n";
-  print "  <td class=\"ui-widget-content\" colspan=3>No records found.</td>\n";
-  print "</tr>\n";
-}
-
-mysqli_free_result($q_st_type);
-
-?>
 </table>
+
+<div id="type-listing-help" style="<?php print $display; ?>">
+
+<div class="main-help ui-widget-content">
+
+
+</div>
+
+</div>
+
+
+<span id="table_mysql"><?php print wait_Process('Waiting...')?></span>
+
+</div>
+
+
+<div id="dialogCreate" title="Add Types">
+
+<form name="formCreate">
+
+<?php include('type.dialog.php'); ?>
 
 </form>
-</center>
+
+</div>
+
+
+<div id="dialogUpdate" title="Edit Types">
+
+<form name="formUpdate">
+
+<input type="hidden" name="id" value="0">
+
+<?php include('type.dialog.php'); ?>
+
+</form>
 
 </div>
 
