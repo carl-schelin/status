@@ -97,10 +97,10 @@ function wait_Process( $p_string ) {
   $output  = "<center>";
   switch ($randgif) {
     case 0: $output .= "<img src=\"" . $Siteroot . "/imgs/3MA_processingbar.gif\">";
-            $output .= "<br class=\"iu-widget-content\">" . $p_string;
+            $output .= "<br class=\"ui-widget-content\">" . $p_string;
             break;
     case 1: $output .= "<img src=\"" . $Siteroot . "/imgs/progress_bar.gif\">";
-            $output .= "<br class=\"iu-widget-content\">" . $p_string;
+            $output .= "<br class=\"ui-widget-content\">" . $p_string;
             break;
     case 2: $output .= "<img src=\"" . $Siteroot . "/imgs/chasingspheres.gif\">";
             $output .= $p_string;
