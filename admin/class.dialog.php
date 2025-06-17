@@ -1,5 +1,8 @@
 <table class="ui-widget-content">
 <tr>
+  <th class="ui-state-default">Classification Form</th>
+</tr>
+<tr>
   <td class="ui-widget-content">Classification: <input type="text" name="cls_name" size=50></td>
 </tr>
 <tr>
