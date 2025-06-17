@@ -32,17 +32,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Manage Titles</title>
 
-<style type="text/css" title="currentStyle" media="screen">
-<?php include($Sitepath . "/mobile.php"); ?>
-</style>
-
-<script type="text/javascript" language="javascript" src="<?php print $Siteroot; ?>/css/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="<?php print $Siteroot; ?>/css/jquery-ui/jquery-ui.js"></script>
-<link   rel="stylesheet" type="text/css"            href="<?php print $Siteroot; ?>/css/jquery-ui-themes/themes/<?php print $_SESSION['theme']; ?>/jquery-ui.css">
-<script type="text/javascript" language="javascript" src="<?php print $Siteroot; ?>/functions/jquery.inventory.js"></script>
+<?php include($Sitepath . "/head.php"); ?>
 
 <script type="text/javascript">
-
 <?php
   if (check_userlevel($db, $AL_Admin)) {
 ?>
