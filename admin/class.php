@@ -1,5 +1,5 @@
 <?php
-# Script: add.class.php
+# Script: class.php
 # Owner: Carl Schelin
 # Coding Standard 3.0 Applied
 # Description:
@@ -14,119 +14,234 @@
 
   check_login($db, $AL_User);
 
-  $package = "add.class.php";
+  $package = "class.php";
 
   logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
-  $DEBUG = 0;
+# if help has not been seen yet,
+  if (show_Help($db, $Sitepath . "/" . $package)) {
+    $display = "display: block";
+  } else {
+    $display = "display: none";
+  }
 
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Add Classification</title>
+<title>Manage Classifications</title>
 
 <?php include($Sitepath . "/head.php"); ?>
 
+<script type="text/javascript">
+<?php
+  if (check_userlevel($db, $AL_Admin)) {
+?>
+function delete_line( p_script_url ) {
+  var answer = confirm("Delete this Classification?")
+
+  if (answer) {
+    script = document.createElement('script');
+    script.src = p_script_url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+}
+<?php
+  }
+?>
+
+function attach_file( p_script_url, update ) {
+  var af_form = document.formCreate;
+  var af_url;
+
+  af_url  = '?update='   + update;
+
+  af_url += "&cls_name="        + encode_URI(af_form.cls_name.value);
+  af_url += "&cls_template="    + encode_URI(af_form.cls_template.value);
+  af_url += "&cls_project="     + encode_URI(af_form.cls_project.value);
+  af_url += "&cls_title="       + encode_URI(af_form.cls_title.value);
+  af_url += "&cls_help="        + encode_URI(af_form.cls_help.value);
+
+  script = document.createElement('script');
+  script.src = p_script_url + af_url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function update_file( p_script_url, update ) {
+  var uf_form = document.formUpdate;
+  var uf_url;
+
+  uf_url  = '?update='   + update;
+  uf_url += '&id='       + uf_form.id.value;
+
+  uf_url += "&cls_name="        + encode_URI(uf_form.cls_name.value);
+  uf_url += "&cls_template="    + encode_URI(uf_form.cls_template.value);
+  uf_url += "&cls_project="     + encode_URI(uf_form.cls_project.value);
+  uf_url += "&cls_title="       + encode_URI(uf_form.cls_title.value);
+  uf_url += "&cls_help="        + encode_URI(uf_form.cls_help.value);
+
+  script = document.createElement('script');
+  script.src = p_script_url + uf_url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function clear_fields() {
+  show_file('class.mysql.php?update=-1');
+}
+
+$(document).ready( function() {
+  $( '#clickCreate' ).click(function() {
+    $( "#dialogCreate" ).dialog('open');
+  });
+
+  $( "#dialogCreate" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 250,
+    width: 600,
+    show: 'slide',
+    hide: 'slide',
+    closeOnEscape: true,
+    dialogClass: 'dialogWithDropShadow',
+    close: function(event, ui) {
+      $( "#dialogCreate" ).hide();
+    },
+    buttons: [
+      {
+        text: "Cancel",
+        click: function() {
+          show_file('class.mysql.php?update=-1');
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Add Classification",
+        click: function() {
+          attach_file('class.mysql.php', 0);
+          $( this ).dialog( "close" );
+        }
+      }
+    ]
+  });
+
+  $( "#dialogUpdate" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 250,
+    width: 600,
+    show: 'slide',
+    hide: 'slide',
+    closeOnEscape: true,
+    dialogClass: 'dialogWithDropShadow',
+    close: function(event, ui) {
+      $( "#dialogUpdate" ).hide();
+    },
+    buttons: [
+      {
+        text: "Cancel",
+        click: function() {
+          show_file('class.mysql.php?update=-1');
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Update Classification",
+        click: function() {
+          update_file('class.mysql.php', 1);
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Add Classification",
+        click: function() {
+          update_file('class.mysql.php', 0);
+          $( this ).dialog( "close" );
+        }
+      }
+    ]
+  });
+});
+
+</script>
+
 </head>
-<body class="ui-widget-content">
+<body onload="clear_fields();" class="ui-widget-content">
 
 <?php include($Sitepath . '/topmenu.start.php'); ?>
 <?php include($Sitepath . '/topmenu.end.php'); ?>
 
 <div id="main">
 
-<?php
-
-if (isset($_POST['class'])) {
-  $formVars['cls_name']        = clean($_POST['class'],       70);
-  $formVars['cls_template']    = clean($_POST['template'],    10);
-  $formVars['cls_project']     = clean($_POST['project'],     10);
-  $formVars['cls_title']       = clean($_POST['title'],      100);
-  $formVars['cls_help']        = clean($_POST['help'],       100);
-
-  logaccess($db, $_SESSION['username'], "add.class.php", "Adding class: " . $formVars['cls_name']);
-
-  $q_string = "insert into st_class set " . 
-    "cls_id       = NULL, " . 
-    "cls_name     = \"" . $formVars['cls_name']     . "\"," . 
-    "cls_template =   " . $formVars['cls_template'] . "," . 
-    "cls_project  =   " . $formVars['cls_project']  . "," . 
-    "cls_title    = \"" . $formVars['cls_title']    . "\"," . 
-    "cls_help     = \"" . $formVars['cls_help']     . "\" ";
-
-  mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-
-}
-
-?>
-
-<form action="" method="POST">
-
-<table class="ui-widget-content">
+<table class="ui-styled-table">
 <tr>
-  <td class="ui-widget-content button"><input type="submit" value="Add Classification"></td>
+  <th class="ui-state-default">Classification Editor</th>
+  <th class="ui-state-default" width="20"><a href="javascript:;" onmousedown="toggleDiv('class-help');">Help</a></th>
 </tr>
 </table>
 
-<table class="ui-widget-content">
+<div id="class-help" style="<?php print $display; ?>">
+
+<div class="main-help ui-widget-content">
+
+
+</div>
+
+</div>
+
+<table class="ui-styled-table">
 <tr>
-  <th class="ui-state-default" colspan=5>Classification Form</th>
-</tr>
-<tr>
-  <td class="ui-widget-content">Classification: <input type="text" name="class" size=30></td>
-  <td class="ui-widget-content">Template: <input type="text" name="template" size=5></td>
-  <td class="ui-widget-content">Project: <input type="text" name="project" size=5></td>
-  <td class="ui-widget-content">Title: <input type="text" name="title" size=20></td>
-  <td class="ui-widget-content">Help: <input type="text" name="help" size=30></td>
+  <td class="ui-widget-content button"><input type="button" id="clickCreate" value="Add Classification"></td>
 </tr>
 </table>
 
-<table class="ui-widget-content">
+<p></p>
+
+<table class="ui-styled-table">
 <tr>
-  <th class="ui-state-default" colspan=6>Classification Listing</th>
+  <th class="ui-state-default">Classification Listing</th>
+  <th class="ui-state-default" width="20"><a href="javascript:;" onmousedown="toggleDiv('class-listing-help');">Help</a></th>
 </tr>
-<tr>
-  <th class="ui-state-default">ID</th>
-  <th class="ui-state-default">Classification</th>
-  <th class="ui-state-default">Template #</th>
-  <th class="ui-state-default">Project</th>
-  <th class="ui-state-default">Title</th>
-  <th class="ui-state-default">Help</th>
-</tr>
-<?php
-
-$q_string  = "select cls_id,cls_name,cls_template,cls_project,cls_title,cls_help ";
-$q_string .= "from st_class ";
-$q_string .= "order by cls_id";
-$q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-if (mysqli_num_rows($q_st_class) > 0) {
-  while ($a_st_class = mysqli_fetch_array($q_st_class)) {
-
-    print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_st_class['cls_id'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_name']) . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_template']) . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_project']) . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_title']) . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_class['cls_help']) . "</td>\n";
-    print "</tr>\n";
-  }
-} else {
-  print "<tr>\n";
-  print "  <td class=\"ui-widget-content\" colspan=6>No records found.</td>\n";
-  print "</tr>\n";
-}
-
-mysqli_free_result($q_st_class);
-
-?>
 </table>
+
+<div id="class-listing-help" style="<?php print $display; ?>">
+
+<div class="main-help ui-widget-content">
+
+
+</div>
+
+</div>
+
+
+<span id="table_mysql"><?php print wait_Process('Waiting...')?></span>
+
+</div>
+
+
+<div id="dialogCreate" title="Add Classifications">
+
+<form name="formCreate">
+
+<?php include('class.dialog.php'); ?>
 
 </form>
 
 </div>
+
+
+<div id="dialogUpdate" title="Edit Classifications">
+
+<form name="formUpdate">
+
+<input type="hidden" name="id" value="0">
+
+<?php include('class.dialog.php'); ?>
+
+</form>
+
+</div>
+
 
 <?php include($Sitepath . '/footer.php'); ?>
 
