@@ -1,5 +1,5 @@
 <?php
-# Script: add.progress.php
+# Script: progress.php
 # Owner: Carl Schelin
 # Coding Standard 3.0 Applied
 # Description:
@@ -14,105 +14,228 @@
 
   check_login($db, $AL_User);
 
-  $package = "add.progress.php";
+  $package = "progress.php";
 
   logaccess($db, $_SESSION['username'], $package, "Accessing script");
+
+# if help has not been seen yet,
+  if (show_Help($db, $Sitepath . "/" . $package)) {
+    $display = "display: block";
+  } else {
+    $display = "display: none";
+  }
 
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Add Progress</title>
+<title>Manage Progress Items</title>
 
 <?php include($Sitepath . "/head.php"); ?>
 
+<script type="text/javascript">
+<?php
+  if (check_userlevel($db, $AL_Admin)) {
+?>
+function delete_line( p_script_url ) {
+  var answer = confirm("Delete this Title?")
+
+  if (answer) {
+    script = document.createElement('script');
+    script.src = p_script_url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+}
+<?php
+  }
+?>
+
+function attach_file( p_script_url, update ) {
+  var af_form = document.formCreate;
+  var af_url;
+
+  af_url  = '?update='   + update;
+
+  af_url += "&pro_name="    + encode_URI(af_form.pro_name.value);
+  af_url += "&pro_desc="    + encode_URI(af_form.pro_desc.value);
+
+  script = document.createElement('script');
+  script.src = p_script_url + af_url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function update_file( p_script_url, update ) {
+  var uf_form = document.formUpdate;
+  var uf_url;
+
+  uf_url  = '?update='   + update;
+  uf_url += '&id='       + uf_form.id.value;
+
+  uf_url += "&pro_name="    + encode_URI(uf_form.pro_name.value);
+  uf_url += "&pro_desc="    + encode_URI(uf_form.pro_desc.value);
+
+  script = document.createElement('script');
+  script.src = p_script_url + uf_url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function clear_fields() {
+  show_file('progress.mysql.php?update=-1');
+}
+
+$(document).ready( function() {
+  $( '#clickCreate' ).click(function() {
+    $( "#dialogCreate" ).dialog('open');
+  });
+
+  $( "#dialogCreate" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 200,
+    width: 600,
+    show: 'slide',
+    hide: 'slide',
+    closeOnEscape: true,
+    dialogClass: 'dialogWithDropShadow',
+    close: function(event, ui) {
+      $( "#dialogCreate" ).hide();
+    },
+    buttons: [
+      {
+        text: "Cancel",
+        click: function() {
+          show_file('progress.mysql.php?update=-1');
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Add Progress",
+        click: function() {
+          attach_file('progress.mysql.php', 0);
+          $( this ).dialog( "close" );
+        }
+      }
+    ]
+  });
+
+  $( "#dialogUpdate" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 200,
+    width: 600,
+    show: 'slide',
+    hide: 'slide',
+    closeOnEscape: true,
+    dialogClass: 'dialogWithDropShadow',
+    close: function(event, ui) {
+      $( "#dialogUpdate" ).hide();
+    },
+    buttons: [
+      {
+        text: "Cancel",
+        click: function() {
+          show_file('progress.mysql.php?update=-1');
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Update Progress",
+        click: function() {
+          update_file('progress.mysql.php', 1);
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Add Progress",
+        click: function() {
+          update_file('progress.mysql.php', 0);
+          $( this ).dialog( "close" );
+        }
+      }
+    ]
+  });
+});
+
+</script>
+
 </head>
-<body class="ui-widget-content">
+<body onload="clear_fields();" class="ui-widget-content">
 
 <?php include($Sitepath . '/topmenu.start.php'); ?>
 <?php include($Sitepath . '/topmenu.end.php'); ?>
 
 <div id="main">
 
-<?php
-
-if (isset($_POST['progress'])) {
-  $formVars['pro_name'] = clean($_POST['progress'], 70);
-  $formVars['pro_desc'] = clean($_POST['desc'], 70);
-
-  logaccess($db, $_SESSION['username'], "add.progress.php", "Adding progress: " . $formVars['pro_name']);
-
-  $q_string = "insert into st_progress set " . 
-    "pro_id   =   " . " NULL"               . ", " . 
-    "pro_name = \"" . $formVars['pro_name'] . "\", " . 
-    "pro_desc = \"" . $formVars['pro_desc'] . "\"";
-
-  mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-
-}
-
-?>
-
-<form action="" method="POST">
-
-<table class="ui-widget-content">
+<table class="ui-styled-table">
 <tr>
-  <td class="ui-widget-content button"><input type="submit" value="Add Progress"></td>
+  <th class="ui-state-default">Progress Editor</th>
+  <th class="ui-state-default" width="20"><a href="javascript:;" onmousedown="toggleDiv('progress-help');">Help</a></th>
 </tr>
 </table>
 
-<table class="ui-widget-content">
-<tr>
-  <th class="ui-state-default">Progress Form</th>
-</tr>
-<tr>
-  <td class="ui-widget-content">New Progress ID: <input type="text" name="progress" size=70 length=70></td>
-</tr>
-<tr>
-  <td class="ui-widget-content">Description: <input type="text" name="desc" size=70 length=70></td>
-</tr>
-</table>
+<div id="progress-help" style="<?php print $display; ?>">
 
-<table class="ui-widget-content">
-<tr>
-  <th class="ui-state-default" colspan=3>Progress Listing</th>
-</tr>
-<tr>
-  <th class="ui-state-default">ID</th>
-  <th class="ui-state-default">Description</th>
-  <th class="ui-state-default">Help</th>
-</tr>
-<?php
+<div class="main-help ui-widget-content">
 
-$q_string  = "select pro_id,pro_name,pro_desc ";
-$q_string .= "from st_progress ";
-$q_string .= "order by pro_id";
-$q_st_progress = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-if (mysqli_num_rows($q_st_progress) > 0) {
-  while ($a_st_progress = mysqli_fetch_array($q_st_progress)) {
-
-    print "<tr>\n";
-    print "  <td class=\"ui-widget-content\">" . $a_st_progress['pro_id'] . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_name']) . "</td>\n";
-    print "  <td class=\"ui-widget-content\">" . mysqli_real_escape_string($db, $a_st_progress['pro_desc']) . "</td>\n";
-    print "</tr>\n";
-  }
-} else {
-  print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">No records found.</td>\n";
-  print "</tr>\n";
-}
-
-mysqli_free_result($q_st_progress);
-
-?>
-</table>
-
-</form>
-</center>
 
 </div>
+
+</div>
+
+<table class="ui-styled-table">
+<tr>
+  <td class="ui-widget-content button"><input type="button" id="clickCreate" value="Add Progress"></td>
+</tr>
+</table>
+
+<p></p>
+
+<table class="ui-styled-table">
+<tr>
+  <th class="ui-state-default">Progress Listing</th>
+  <th class="ui-state-default" width="20"><a href="javascript:;" onmousedown="toggleDiv('progress-listing-help');">Help</a></th>
+</tr>
+</table>
+
+<div id="progress-listing-help" style="<?php print $display; ?>">
+
+<div class="main-help ui-widget-content">
+
+
+</div>
+
+</div>
+
+
+<span id="table_mysql"><?php print wait_Process('Waiting...')?></span>
+
+</div>
+
+
+<div id="dialogCreate" title="Add Progress">
+
+<form name="formCreate">
+
+<?php include('progress.dialog.php'); ?>
+
+</form>
+
+</div>
+
+
+<div id="dialogUpdate" title="Edit Progress">
+
+<form name="formUpdate">
+
+<input type="hidden" name="id" value="0">
+
+<?php include('progress.dialog.php'); ?>
+
+</form>
+
+</div>
+
 
 <?php include($Sitepath . '/footer.php'); ?>
 
