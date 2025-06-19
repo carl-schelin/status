@@ -28,12 +28,12 @@
       $a_st_levels = mysqli_fetch_array($q_st_levels);
       mysqli_free_result($q_st_levels);
 
-      print "document.levels.lvl_name.value = '"  . mysqli_real_escape_string($db, $a_st_levels['lvl_name'])  . "';\n";
-      print "document.levels.lvl_level.value = '" . mysqli_real_escape_string($db, $a_st_levels['lvl_level']) . "';\n";
+      print "document.formUpdate.lvl_name.value = \""  . $a_st_levels['lvl_name']  . "\";\n";
+      print "document.formUpdate.lvl_level.value = \"" . $a_st_levels['lvl_level'] . "\";\n";
 
-      print "document.levels.lvl_disabled['" . $a_st_levels['lvl_disabled'] . "'].selected = 'true';\n";
+      print "document.formUpdate.lvl_disabled['" . $a_st_levels['lvl_disabled'] . "'].selected = 'true';\n";
 
-      print "document.levels.id.value = " . $formVars['id'] . ";\n";
+      print "document.formUpdate.id.value = " . $formVars['id'] . ";\n";
 
     } else {
       logaccess($db, $_SESSION['username'], $package, "Unauthorized access.");
