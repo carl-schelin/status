@@ -20,14 +20,14 @@
     }
 
     if (check_userlevel($db, $AL_User)) {
-      $formVars['id']       = clean($_GET['id'], 10);
-      $formVars['name']     = clean($_GET['name'], 255);
-      $formVars['code']     = clean($_GET['code'], 10);
-      $formVars['snow']     = clean($_GET['snow'], 30);
-      $formVars['task']     = clean($_GET['task'], 30);
-      $formVars['desc']     = clean($_GET['desc'], 100);
-      $formVars['personal'] = clean($_GET['personal'], 10);
-      $formVars['close']    = clean($_GET['close'], 10);
+      $formVars['id']       = clean($_GET['id'],            10);
+      $formVars['name']     = clean($_GET['name'],         255);
+      $formVars['code']     = clean($_GET['code'],         100);
+      $formVars['snow']     = clean($_GET['snow'],          30);
+      $formVars['task']     = clean($_GET['task'],          30);
+      $formVars['desc']     = clean($_GET['desc'],         100);
+      $formVars['personal'] = clean($_GET['personal'],      10);
+      $formVars['close']    = clean($_GET['close'],         10);
 
       if ($formVars['close'] == "true") {
         $formVars['close'] = 1;
@@ -91,7 +91,7 @@
 
       $query = "update st_project set " . 
         "prj_name      = \"" . $formVars['name']  . "\", " . 
-        "prj_code      =   " . $formVars['code']  . ", " . 
+        "prj_code      = \"" . $formVars['code']  . "\", " . 
         "prj_snow      = \"" . $formVars['snow']  . "\", " . 
         "prj_task      = \"" . $formVars['task']  . "\", " . 
         "prj_desc      = \"" . $formVars['desc']  . "\", " . 

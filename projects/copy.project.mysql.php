@@ -37,7 +37,7 @@
       $q_string = "insert into st_project set " . 
         "prj_id    = NULL, " . 
         "prj_name  = \"" . $a_st_project['prj_name'] . "\", " . 
-        "prj_code  = "   . $a_st_project['prj_code'] . ", "  . 
+        "prj_code  = \"" . $a_st_project['prj_code'] . "\", "  . 
         "prj_snow  = \"" . $a_st_project['prj_snow'] . "\", " . 
         "prj_task  = \"" . $a_st_project['prj_task'] . "\", " . 
         "prj_desc  = \"" . $a_st_project['prj_desc'] . "\", " . 

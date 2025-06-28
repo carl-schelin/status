@@ -72,19 +72,19 @@ function clear_input(formfield) {
 
 if (isset($_POST['project'])) {
 
-  $formVars['prj_name']  = clean($_POST['project'], 255);
-  $formVars['prj_code']  = clean($_POST['code'], 10);
-  $formVars['prj_snow']  = clean($_POST['snow'], 30);
-  $formVars['prj_task']  = clean($_POST['task'], 30);
-  $formVars['prj_desc']  = clean($_POST['desc'], 100);
-  $formVars['prj_group'] = clean($_POST['group'], 10);
+  $formVars['prj_name']  = clean($_POST['project'],       255);
+  $formVars['prj_code']  = clean($_POST['code'],          100);
+  $formVars['prj_snow']  = clean($_POST['snow'],           30);
+  $formVars['prj_task']  = clean($_POST['task'],           30);
+  $formVars['prj_desc']  = clean($_POST['desc'],          100);
+  $formVars['prj_group'] = clean($_POST['group'],          10);
 
   logaccess($db, $_SESSION['username'], "add.project.php", "Adding project: " . $formVars['prj_name']);
 
   $q_string = "insert into st_project " . 
     "set prj_id = NULL, " . 
     "prj_name  = \"" . $formVars['prj_name']  . "\", " . 
-    "prj_code  = "   . $formVars['prj_code']  . "," . 
+    "prj_code  = \"" . $formVars['prj_code']  . "\"," . 
     "prj_snow  = \"" . $formVars['prj_snow']  . "\", " .
     "prj_task  = \"" . $formVars['prj_task']  . "\", " .
     "prj_desc  = \"" . $formVars['prj_desc']  . "\", " .

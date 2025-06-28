@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `st_project`;
 CREATE TABLE `st_project` (
   `prj_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `prj_name` char(30) NOT NULL DEFAULT '',
-  `prj_code` int(10) unsigned NOT NULL DEFAULT '0',
+  `prj_code` char(100) NOT NULL DEFAULT '',
   `prj_code` char(30) NOT NULL DEFAULT '',
   `prj_task` char(30) NOT NULL DEFAULT '',
   `prj_desc` char(100) NOT NULL DEFAULT '',
