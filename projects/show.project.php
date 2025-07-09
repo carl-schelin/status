@@ -57,16 +57,16 @@
 <?php
   $q_string  = "select prj_name,prj_code,prj_task,prj_desc ";
   $q_string .= "from st_project ";
-  $q_string .= "where prj_id = " . $formVars['project'];
+  $q_string .= "where prj_id = " . $formVars['project'] . " ";
   $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   $a_st_project = mysqli_fetch_array($q_st_project);
 
   print "<tr>\n";
-  print "  <th class=\"ui-state-default\" colspan=2>" . $a_st_project['prj_desc'] . "</th>\n";
+  print "  <th class=\"ui-state-default\" colspan=\"2\">" . $a_st_project['prj_desc'] . "</th>\n";
   print "</tr>\n";
 
   $header  = "<tr>\n";
-  $header .= "  <th class=\"ui-state-default\" align=left colspan=2><i>N/A</i></th>\n";
+  $header .= "  <th class=\"ui-state-default\" align=left colspan=\"2\"><i>N/A</i></th>\n";
   $header .= "</tr>\n";
 
   $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
@@ -84,7 +84,7 @@
   }
 
   $header  = "<tr>\n";
-  $header .= "  <th class=\"ui-state-default\" align=left colspan=2><i>Meeting</i></th>\n";
+  $header .= "  <th class=\"ui-state-default\" align=left colspan=\"2\"><i>Meeting</i></th>\n";
   $header .= "</tr>\n";
 
   $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
@@ -102,7 +102,7 @@
   }
 
   $header  = "<tr>\n";
-  $header .= "  <th class=\"ui-state-default\" align=left colspan=2><i>Reactive</i></th>\n";
+  $header .= "  <th class=\"ui-state-default\" align=left colspan=\"2\"><i>Reactive</i></th>\n";
   $header .= "</tr>\n";
 
   $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
@@ -121,7 +121,7 @@
   }
 
   $header  = "<tr>\n";
-  $header .= "  <th class=\"ui-state-default\" align=left colspan=2><i>Proactive</i></th>\n";
+  $header .= "  <th class=\"ui-state-default\" align=left colspan=\"2\"><i>Proactive</i></th>\n";
   $header .= "</tr>\n";
 
   $q_string  = "select strp_name,strp_week,strp_time,strp_task ";
