@@ -15,6 +15,8 @@
   check_login($db, $AL_User);
 
   $package = "email.php";
+  $debug = 'yes';
+  $debug = 'no';
 
   logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
@@ -27,6 +29,10 @@
     $formVars['startweek'] = 118;
   }
 
+  if ($formVars['endweek'] == '') {
+    $formVars['endweek'] = 118;
+  }
+
   if ($formVars['startweek'] == $formVars['endweek']) {
     $formVars['endweek'] = $formVars['startweek'] + 1;
   }
@@ -36,6 +42,10 @@
   }
 
   $logfile = "email.php";
+
+  if ( $debug == 'yes' ) {
+    print "<pre>User: " . $formVars['user'] . ", Startweek: " . $formVars['startweek'] . ", Endweek: " . $formVars['endweek'] . ", Group: " . $formVars['group'] . "</pre>\n";
+  }
 
   logaccess($db, $_SESSION['username'], $logfile, "Sending e-mail status message: week=" . $formVars['startweek'] . " user=" . $formVars['user']);
 
@@ -76,6 +86,10 @@
   $usermail = $a_st_users['usr_email'];
   $usergroup = $a_st_users['usr_group'];
 
+  if ($debug == 'yes') {
+    print "<pre>User: " . $userval . ", Email: " . $usermail . ", Group: " . $usergroup . "</pre>\n";
+  }
+
 #######
 # Retrieve information for the group
 #######
@@ -87,6 +101,12 @@
   $a_st_groups = mysqli_fetch_array($q_st_groups);
 
   $startday = $a_st_groups['grp_day'];
+
+  if ($debug == 'yes') {
+    print "<pre>Start Day: " . $startday . "</pre>\n";
+# start on Sunday; can select a different day for reports to start but for testing, use Sunday
+    $startday = 0;
+  }
 
 #######
 # Retrieve all the weeks into the weekval array
@@ -250,9 +270,17 @@
     }
   }
 
-  echo "<meta http-equiv=\"REFRESH\" content=\"5; url=" . $Siteroot . "\">\n";
+  if ($debug == "yes") {
+    print "<pre>From: " . $usermail . "\nSubject: " . $subject . "\n\n" . $body . "</pre>";
+  } else {
+    echo "<meta http-equiv=\"REFRESH\" content=\"5; url=" . $Siteroot . "\">\n";
+  }
 
-  if (mail($usermail, $subject, $body)) {
+  $headers  = 'MIME-Version: 1.0' ."\r\n";
+  $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+  $headers .= 'From: Status management <carl.schelin@arcfield.com>' . "\r\n";
+
+  if (mail($usermail, $subject, $body, $headers)) {
       echo("<p>Message successfully sent!</p>");
    } else {
       echo("<p>Message delivery failed...</p>");
