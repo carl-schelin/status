@@ -28,6 +28,12 @@
       <li><a href="<?php print $Jiraroot; ?>/userstories.php">Jira User Stories</a></li>
     </ul>
   </li>
+  <li id="tm_goals"><a href="<?php print $Siteroot; ?>/index.goals.php">Goals</a>
+    <ul>
+      <li><a href="<?php print $Goalroot; ?>/titles.php?group=<?php print $_SESSION['group']; ?>">Add Goal Titles</a></li>
+      <li><a href="<?php print $Goalroot; ?>/goals.php?group=<?php print $_SESSION['group']; ?>">Add Goals</a></li>
+    </ul>
+  </li>
   <li id="tm_projects"><a href="<?php print $Siteroot; ?>/index.projects.php">Projects</a>
     <ul>
       <li><a href="<?php print $Projectroot; ?>/timecodes.php">Project Code Table</a></li>
