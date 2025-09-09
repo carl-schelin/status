@@ -21,12 +21,12 @@
 
     if (check_userlevel($db, $AL_Admin)) {
       if ($formVars['update'] == 0 || $formVars['update'] == 1) {
-        $formVars['id']              = clean($_GET['id'],           10);
-        $formVars['cls_name']        = clean($_POST['class'],       70);
-        $formVars['cls_template']    = clean($_POST['template'],    10);
-        $formVars['cls_project']     = clean($_POST['project'],     10);
-        $formVars['cls_title']       = clean($_POST['title'],      100);
-        $formVars['cls_help']        = clean($_POST['help'],       100);
+        $formVars['id']              = clean($_GET['id'],              10);
+        $formVars['cls_name']        = clean($_GET['cls_name'],        70);
+        $formVars['cls_template']    = clean($_GET['cls_template'],    10);
+        $formVars['cls_project']     = clean($_GET['cls_project'],     10);
+        $formVars['cls_title']       = clean($_GET['cls_title'],      100);
+        $formVars['cls_help']        = clean($_GET['cls_help'],       100);
 
         if ($formVars['id'] == '') {
           $formVars['id'] = 0;
