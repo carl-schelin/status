@@ -357,7 +357,7 @@ function textCounter(field,cntfield,maxlimit) {
   <th class="ui-state-default" title="This data is used for day due and time estimates for Todo items or what day and how much time was spent for Status Reports." colspan=8>Status Report Data</th>
 </tr>
 <tr>
-  <td class="ui-widget-content" width=50%>Time Worked: <input type="text" name="time" size=3 value="2"> <input type="checkbox" id="showall" name="showall" onchange="show_all();"> Show all Tasks <input type="checkbox" id="showyour" name="showyour" onchange="show_all();"> Show just your Tasks</td>
+  <td class="ui-widget-content" width=50%>Estimated Effort: <input type="text" name="time" size=3 value="2"> in 15 minute increments <input type="checkbox" id="showall" name="showall" onchange="show_all();"> Show all Tasks <input type="checkbox" id="showyour" name="showyour" onchange="show_all();"> Show just your Tasks</td>
   <td class="ui-widget-content"><input type="radio" name="day" value="0"> Sun</td>
   <td class="ui-widget-content"><input type="radio" name="day" value="1"> Mon</td>
   <td class="ui-widget-content"><input type="radio" name="day" value="2"> Tue</td>
@@ -368,8 +368,7 @@ function textCounter(field,cntfield,maxlimit) {
 </tr>
 </table>
 
-<span id="from_mysql">
-</span>
+<span id="from_mysql"></span>
 
 </form>
 </center>
