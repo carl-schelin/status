@@ -201,9 +201,9 @@
   }
 
 // See if the data was copied to a new week or not.
-  if ($formVars['docopy'] == 1) {
-    $formVars['week'] = $formVars['week'] - 1;
-  }
+#  if ($formVars['docopy'] == 1) {
+#    $formVars['week'] = $formVars['week'] - 1;
+#  }
 
   $output = "<table class=\"ui-widget-content\">";
   $c_project = "";
@@ -281,6 +281,9 @@
           $tdclass = "ui-state-error";
         } else {
           $tdclass = "ui-widget-content";
+          if ($a_st_todo['todo_priority'] == 1) {
+            $tdclass = "ui-state-highlight";
+          }
         }
       }
       if ($a_st_todo['todo_user'] == 0) {
