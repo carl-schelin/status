@@ -55,6 +55,7 @@ function attach_story( p_script_url, update ) {
   as_url += "&user_epic="         + as_form.user_epic.value;
   as_url += "&user_jira="         + encode_URI(as_form.user_jira.value);
   as_url += "&user_task="         + encode_URI(as_form.user_task.value);
+  as_url += "&user_priority="     + as_form.user_priority.value;
   as_url += "&user_closed="       + as_form.user_closed.checked;
 
   script = document.createElement('script');
@@ -204,6 +205,15 @@ $(document).ready( function() {
 </tr>
 <tr>
   <td class="ui-widget-content">User Story: <input type="text" name="user_task" size="50"></td>
+</tr>
+<tr>
+  <td class="ui-widget-content">Priority: <select name="user_priority">
+<option value="0">Lowest Priority</option>
+<option value="1">Low Priority</option>
+<option value="2" Selected='True'>Medium Priority</option>
+<option value="3">High Priority</option>
+<option value="4">Highest Priority</option>
+</select></td>
 </tr>
 <tr>
   <td class="ui-widget-content">Close: <input type="checkbox" name="user_closed"></td>

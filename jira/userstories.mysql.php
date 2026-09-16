@@ -25,6 +25,7 @@
         $formVars['user_epic']        = clean($_GET['user_epic'],         10);
         $formVars['user_jira']        = clean($_GET['user_jira'],         60);
         $formVars['user_task']        = clean($_GET['user_task'],        255);
+        $formVars['user_priority']    = clean($_GET['user_priority'],     10);
         $formVars['user_user']        = $_SESSION['uid'];
         $formVars['user_closed']      = clean($_GET['user_closed'],       10);
 
@@ -44,6 +45,7 @@
             "user_epic        =   " . $formVars['user_epic']     . "," .
             "user_jira        = \"" . $formVars['user_jira']     . "\"," .
             "user_task        = \"" . $formVars['user_task']     . "\"," .
+            "user_priority    =   " . $formVars['user_priority'] . "," .
             "user_user        =   " . $formVars['user_user']     . "," .
             "user_closed      =   " . $formVars['user_closed'];
 
@@ -64,6 +66,12 @@
 
 
       logaccess($db, $_SESSION['uid'], $package, "Creating the table for viewing.");
+
+      $priority[0] = "Lowest";
+      $priority[1] = "Low";
+      $priority[2] = "Medium";
+      $priority[3] = "High";
+      $priority[4] = "Highest";
 
       $output  = "<p></p>\n";
       $output .= "<table class=\"ui-styled-table\">\n";
@@ -94,6 +102,7 @@
       }
       $output .= "  <th class=\"ui-state-default\">Jira</th>\n";
       $output .= "  <th class=\"ui-state-default\">Title</th>\n";
+      $output .= "  <th class=\"ui-state-default\">Priority</th>\n";
       $output .= "  <th class=\"ui-state-default\">Closed</th>\n";
       $output .= "</tr>\n";
 
@@ -103,7 +112,7 @@
 
       $output .= "<tr>";
       $output .= "  <td class=\"" . $class . " button\">" . "Epic: " . "</td>";
-      $output .= "  <td class=\"" . $class . "\" colspan=\"3\">" . "User Stories not assigned to an Epic" . "</td>";
+      $output .= "  <td class=\"" . $class . "\" colspan=\"4\">" . "User Stories not assigned to an Epic" . "</td>";
       $output .= "</tr>";
 
       $q_string  = "select user_id,user_jira,user_task,user_closed ";
@@ -129,9 +138,10 @@
           if (check_userlevel($db, $AL_Developer)) {
             $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
           }
-          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira'] . $linkend . "</td>";
           $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
-          $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">" . $linkstart . $priority[$a_st_userstories['user_priority']]  . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed    . $linkend . "</td>";
           $output .= "</tr>";
 
         }
@@ -149,10 +159,10 @@
 
           $output .= "<tr>";
           $output .= "  <td class=\"" . $class . " button\">" . "Epic: " . "</td>";
-          $output .= "  <td class=\"" . $class . "\" colspan=\"3\">" . $a_st_epics['epic_jira'] . " - " . $a_st_epics['epic_title'] . "</td>";
+          $output .= "  <td class=\"" . $class . "\" colspan=\"4\">" . $a_st_epics['epic_jira'] . " - " . $a_st_epics['epic_title'] . "</td>";
           $output .= "</tr>";
 
-          $q_string  = "select user_id,user_jira,user_task,user_closed ";
+          $q_string  = "select user_id,user_jira,user_task,user_priority,user_closed ";
           $q_string .= "from st_userstories ";
           $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $a_st_epics['epic_id'] . " and user_closed = 0 ";
           $q_string .= "order by user_jira ";
@@ -178,6 +188,7 @@
               }
               $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
               $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . "\">" . $linkstart . $priority[$a_st_userstories['user_priority']]  . $linkend . "</td>";
               $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed . $linkend . "</td>";
               $output .= "</tr>";
 
@@ -186,7 +197,7 @@
         }
       } else {
         $output .= "<tr>";
-        $output .= "  <td class=\"ui-widget-content\" colspan=\"4\">No records found.</td>";
+        $output .= "  <td class=\"ui-widget-content\" colspan=\"5\">No records found.</td>";
         $output .= "</tr>";
       }
 
