@@ -21,7 +21,7 @@
     if (check_userlevel($db, $AL_Admin)) {
       logaccess($db, $_SESSION['uid'], $package, "Requesting record " . $formVars['id'] . " from st_userstories");
 
-      $q_string  = "select user_epic,user_jira,user_task,user_priority,user_closed ";
+      $q_string  = "select user_epic,user_jira,user_task,user_status,user_priority,user_closed ";
       $q_string .= "from st_userstories ";
       $q_string .= "where user_id = " . $formVars['id'];
       $q_st_userstories = mysqli_query($db, $q_string) or die (mysqli_error($db));
@@ -35,6 +35,7 @@
 
       print "document.userstories.user_epic['" . $epic . "'].selected = true;\n";
       print "document.userstories.user_priority['" . $a_st_userstories['user_priority'] . "'].selected = true;\n";
+      print "document.userstories.user_status['" . $a_st_userstories['user_status'] . "'].selected = true;\n";
 
       if ($a_st_userstories['user_closed']) {
         print "document.userstories.user_closed.checked = true;\n";
