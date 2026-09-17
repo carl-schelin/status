@@ -25,6 +25,7 @@ CREATE TABLE `st_userstories` (
   `user_epic` int(10) NOT NULL DEFAULT '0',
   `user_jira` char(60) NOT NULL DEFAULT '',
   `user_task` char(255) NOT NULL DEFAULT '',
+  'user_status' int(10) NOT NULL DEFAULT 0,
   'user_priority' int(10) NOT NULL DEFAULT 0,
   `user_user` int(10) NOT NULL DEFAULT '0',
   `user_closed` int(10) NOT NULL DEFAULT '0',
