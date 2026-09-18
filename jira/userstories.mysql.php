@@ -111,7 +111,7 @@
       $output .= "  <th class=\"ui-state-default\">Title</th>\n";
       $output .= "  <th class=\"ui-state-default\">Status</th>\n";
       $output .= "  <th class=\"ui-state-default\">Priority</th>\n";
-      $output .= "  <th class=\"ui-state-default\">Closed</th>\n";
+      $output .= "  <th class=\"ui-state-default\">In Use</th>\n";
       $output .= "</tr>\n";
 
 # because some user stories have no epic "owner"
@@ -180,6 +180,7 @@
             while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
 
               $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
+              $linkmember = "<a href=\"userstories.member.php?id=" . $a_st_userstories['user_id'] . "\">";
               $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
               $linkend   = "</a>";
 
@@ -191,15 +192,25 @@
                 $closed = 'Yes';
               }
 
+              $q_string  = "select strp_id ";
+              $q_string .= "from st_status ";
+              $q_string .= "where strp_jira = " . $a_st_userstories['user_id'] . " ";
+              $q_st_status = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+              $total = mysqli_num_rows($q_st_status);
+
               $output .= "<tr>";
               if (check_userlevel($db, $AL_Developer)) {
                 $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
               }
-              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . "\">" . $linkstart . $status[$a_st_userstories['user_status']]  . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . "\">" . $linkstart . $priority[$a_st_userstories['user_priority']]  . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . "\">" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $status[$a_st_userstories['user_status']]  . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $priority[$a_st_userstories['user_priority']]  . $linkend . "</td>";
+              if ($total > 0) {
+                $output .= "  <td class=\"" . $class . " delete\">" . $linkmember . $total . $linkend . "</td>";
+              } else {
+                $output .= "  <td class=\"" . $class . " delete\">" . $total . "</td>";
+              }
               $output .= "</tr>";
 
             }
