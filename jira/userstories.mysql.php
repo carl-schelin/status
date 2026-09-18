@@ -14,6 +14,7 @@
   if (isset($_SESSION['username'])) {
     $package = "userstories.mysql.php";
     $formVars['update'] = clean($_GET['update'], 10);
+    $formVars['status'] = clean($_GET['status'], 10);
 
     if ($formVars['update'] == '') {
       $formVars['update'] = -1;
@@ -126,14 +127,18 @@
       $q_string  = "select user_id,user_jira,user_task,user_status,user_priority,user_closed ";
       $q_string .= "from st_userstories ";
       $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = 0 ";
+      if ($formVars['status'] >= 0) {
+        $q_string .= "and user_status = " . $formVars['status'] . " ";
+      }
       $q_string .= "order by user_jira ";
       $q_st_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
       if (mysqli_num_rows($q_st_userstories) > 0) {
         while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
 
-          $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
-          $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
-          $linkend   = "</a>";
+          $linkstart    = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
+          $linkdel      = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
+          $linkstatus   = "<a href=\"userstories.php?status=" . $a_st_userstories['user_status'] . "\">";
+          $linkend      = "</a>";
 
           $class = 'ui-widget-content';
 
@@ -174,6 +179,9 @@
           $q_string  = "select user_id,user_jira,user_task,user_status,user_priority,user_closed ";
           $q_string .= "from st_userstories ";
           $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $a_st_epics['epic_id'] . " and user_closed = 0 ";
+          if ($formVars['status'] >= 0) {
+            $q_string .= "and user_status = " . $formVars['status'] . " ";
+          }
           $q_string .= "order by user_jira ";
           $q_st_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
           if (mysqli_num_rows($q_st_userstories) > 0) {
@@ -181,8 +189,9 @@
 
               $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
               $linkmember = "<a href=\"userstories.member.php?id=" . $a_st_userstories['user_id'] . "\">";
-              $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
-              $linkend   = "</a>";
+              $linkstatus = "<a href=\"userstories.php?status=" . $a_st_userstories['user_status'] . "\">";
+              $linkdel    = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
+              $linkend    = "</a>";
 
               $class = 'ui-widget-content';
 
@@ -204,7 +213,7 @@
               }
               $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
               $output .= "  <td class=\"" . $class . "\">" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $status[$a_st_userstories['user_status']]  . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . " delete\">" . $linkstatus . $status[$a_st_userstories['user_status']]  . $linkend . "</td>";
               $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $priority[$a_st_userstories['user_priority']]  . $linkend . "</td>";
               if ($total > 0) {
                 $output .= "  <td class=\"" . $class . " delete\">" . $linkmember . $total . $linkend . "</td>";

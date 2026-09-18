@@ -18,6 +18,12 @@
 
   logaccess($db, $_SESSION['uid'], $package, "Viewing the userstories table");
 
+  if (isset($_GET['status'])) {
+    $formVars['status'] = clean($_GET['status'], 10);
+  } else {
+    $formVars['status'] = -1;
+  }
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -65,7 +71,7 @@ function attach_story( p_script_url, update ) {
 }
 
 function clear_fields() {
-  show_file('userstories.mysql.php?update=-1');
+  show_file('userstories.mysql.php?update=-1&status=<?php print $formVars['status']; ?>');
 }
 
 $(document).ready( function() {
