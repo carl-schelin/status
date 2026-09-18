@@ -20,22 +20,23 @@
     }
 
     if (check_userlevel($db, $AL_User)) {
-      $formVars['week']       = clean($_GET['startweek'], 10);
-      $formVars['user']       = clean($_GET['user'], 10);
-      $formVars['id']         = clean($_GET['id'], 10);
-      $formVars['user_jira']  = clean($_GET['user_jira'], 10);
-      $formVars['class']      = clean($_GET['class'], 10);
-      $formVars['type']       = clean($_GET['type'], 10);
-      $formVars['progress']   = clean($_GET['progress'], 10);
-      $formVars['project']    = clean($_GET['project'], 10);
-      $formVars['day']        = clean($_GET['day'], 10);
-      $formVars['time']       = clean($_GET['time'], 10);
-      $formVars['task']       = clean($_GET['task'], 255);
-      $formVars['save']       = clean($_GET['save'], 10);
-      $formVars['quarter']    = clean($_GET['quarter'], 10);
-      $formVars['update']     = clean($_GET['update'], 10);
-      $formVars['daily']      = clean($_GET['daily'], 10);
-      $formVars['docopy']     = clean($_GET['docopy'], 10);
+      $formVars['week']           = clean($_GET['startweek'], 10);
+      $formVars['user']           = clean($_GET['user'], 10);
+      $formVars['id']             = clean($_GET['id'], 10);
+      $formVars['strp_ticket']    = clean($_GET['strp_ticket'], 10);
+      $formVars['user_jira']      = clean($_GET['user_jira'], 10);
+      $formVars['class']          = clean($_GET['class'], 10);
+      $formVars['type']           = clean($_GET['type'], 10);
+      $formVars['progress']       = clean($_GET['progress'], 10);
+      $formVars['project']        = clean($_GET['project'], 10);
+      $formVars['day']            = clean($_GET['day'], 10);
+      $formVars['time']           = clean($_GET['time'], 10);
+      $formVars['task']           = clean($_GET['task'], 255);
+      $formVars['save']           = clean($_GET['save'], 10);
+      $formVars['quarter']        = clean($_GET['quarter'], 10);
+      $formVars['update']         = clean($_GET['update'], 10);
+      $formVars['daily']          = clean($_GET['daily'], 10);
+      $formVars['docopy']         = clean($_GET['docopy'], 10);
 
       if ($formVars['user_jira'] == '') {
         $formVars['user_jira'] = 0;
@@ -87,6 +88,7 @@
         $q_string = 
           "strp_week      = "   . $formVars['week']     . "," . 
           "strp_name      = "   . $formVars['user']     . "," . 
+          "strp_ticket    = "   . $formVars['strp_ticket']     . "," . 
           "strp_jira      = "   . $formVars['user_jira']     . "," . 
           "strp_class     = "   . $formVars['class']    . "," . 
           "strp_type      = "   . $formVars['type']     . "," . 
@@ -152,7 +154,7 @@
     $output .= "</tr>";
 
 // Retrieve the task array
-    $q_string  = "select strp_id,strp_jira,strp_task,strp_progress,strp_project,strp_day,strp_time,strp_save,strp_quarter ";
+    $q_string  = "select strp_id,strp_ticket,strp_jira,strp_task,strp_progress,strp_project,strp_day,strp_time,strp_save,strp_quarter ";
     $q_string .= "from st_status ";
     $q_string .= "where strp_name = " . $formVars['user'] . " and strp_class = " . $a_st_class['cls_id'] . " and strp_week = " . $formVars['week'] . " ";
     $q_string .= "order by strp_project,strp_day ";
@@ -209,6 +211,17 @@
 
         $daily_output .= $a_st_userstories['epic_jira'] . "/" . $a_st_userstories['user_jira'] . ": ";
         mysqli_free_result($q_st_userstories);
+      }
+
+      $q_string  = "select tik_number ";
+      $q_string .= "from st_tickets ";
+      $q_string .= "where tik_id = " . $a_task['strp_ticket'] . " ";
+      $q_st_tickets = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_st_tickets) > 0) {
+        $a_st_tickets = mysqli_fetch_array($q_st_tickets);
+
+        $daily_output .= $a_st_tickets['tik_number'] . ": ";
+        mysqli_free_result($q_st_tickets);
       }
 
       $daily_output .= "<a href=\"#\" onclick=\"show_file('status.report.fill.php?id=";
@@ -276,4 +289,6 @@ document.getElementById('saturday').innerHTML  = <?php print number_format((($we
 document.taskmgr.save.checked = true;
 document.taskmgr.update.disabled = true;
 document.taskmgr.copy.disabled = true;
+
+document.taskmgr.strp_ticket.selected[0] = true;
 

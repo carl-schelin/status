@@ -26,6 +26,7 @@
     <ul>
       <li><a href="<?php print $Jiraroot; ?>/epics.php">Jira Epic Topics</a></li>
       <li><a href="<?php print $Jiraroot; ?>/userstories.php">Jira User Stories</a></li>
+      <li><a href="<?php print $Ticketroot; ?>/tickets.php">Jira Tickets</a></li>
     </ul>
   </li>
   <li id="tm_goals"><a href="<?php print $Siteroot; ?>/index.goals.php">Goals</a>

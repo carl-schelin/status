@@ -48,6 +48,10 @@
 
       mysqli_free_result($q_st_status);
 
+      if ($a_st_status['strp_ticket'] > 0) {
+        $a_st_status['strp_ticket']++;
+      }
+
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
       $count = 1;
@@ -78,18 +82,32 @@
     }
   }
 
+
+  print "document.taskmgr.project['"        . $project                               . "'].selected = true;\n";
+  print "document.taskmgr.report['"         . $a_st_status['strp_class'] - $class    . "'].checked = true;\n";
+  print "document.taskmgr.progress['"       . $a_st_status['strp_progress']          . "'].selected = true;\n";
+#  print "document.taskmgr.strp_ticket['"    . $a_st_status['strp_ticket']            . "'].selected = true;\n":
+  print "document.taskmgr.tcktype['"        . $a_st_status['strp_type']              . "'].selected = true;\n";
+  print "document.taskmgr.day['"            . $a_st_status['strp_day']               . "'].checked = true;\n";
+
+  print "document.taskmgr.task.value = \"" . mysqli_real_escape_string($db, $a_st_status['strp_task']) . "\";\n";
+
+  if ($a_st_status['strp_save']) {
+    print "document.taskmgr.save.checked = true;\n";
+  } else {
+    print "document.taskmgr.save.checked = false;\n";
+  }
+
+  if ($a_st_status['strp_quarter']) {
+    print "document.taskmgr.quarter.checked = true;\n";
+  } else {
+    print "document.taskmgr.quarter.checked = false;\n";
+  }
+
+  print "document.taskmgr.time.value = "   . $a_st_status['strp_time'] . ";\n";
+  print "document.taskmgr.id.value = "     . $a_st_status['strp_id']   . ";\n";
+
+  print "document.taskmgr.update.disabled = false;\n";
+  print "document.taskmgr.copy.disabled = false;\n";
+
 ?>
-
-document.taskmgr.project['<?php          print $project;                                                              ?>'].selected = true;
-document.taskmgr.report['<?php           print $a_st_status['strp_class'] - $class;                                   ?>'].checked = true;
-document.taskmgr.progress['<?php         print $a_st_status['strp_progress'];                                         ?>'].selected = true;
-document.taskmgr.tcktype['<?php          print $a_st_status['strp_type'];                                             ?>'].selected = true;
-document.taskmgr.day['<?php              print $a_st_status['strp_day'];                                              ?>'].checked = true;
-document.taskmgr.task.value = "<?php     print mysqli_real_escape_string($db, $a_st_status['strp_task']);             ?>";
-document.taskmgr.save.checked = <?php    if ($a_st_status['strp_save']) { print "true"; } else { print "false"; };    ?>;
-document.taskmgr.quarter.checked = <?php if ($a_st_status['strp_quarter']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.time.value = <?php      print $a_st_status['strp_time'];                                             ?>;
-document.taskmgr.id.value = <?php        print $a_st_status['strp_id'];                                               ?>;
-document.taskmgr.update.disabled = false;
-document.taskmgr.copy.disabled = false;
-

@@ -347,10 +347,10 @@ function textCounter(field,cntfield,maxlimit) {
 ?>
 <tr>
   <td class="ui-widget-content button" title="Update Task/Add Task button. Click this once you're done entering data." colspan=2>
-<input type="button" disabled="true" name="copy" value="Copy Task to Next Week" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print ($formVars['startweek'] + 1);?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=1');">
+<input type="button" disabled="true" name="copy" value="Copy Task to Next Week" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print ($formVars['startweek'] + 1);?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&strp_ticket=' + strp_ticket.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=1');">
 <input type="hidden" name="id" value="0">
-<input type="button" disabled="true" name="update" value="Update This Task" onClick="javascript:attach_file('status.report.mysql.php?update=1&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');">
-<input type="button" value="Add New Task" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');"></td>
+<input type="button" disabled="true" name="update" value="Update This Task" onClick="javascript:attach_file('status.report.mysql.php?update=1&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&strp_ticket=' + strp_ticket.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');">
+<input type="button" value="Add New Task" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&strp_ticket=' + strp_ticket.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');"></td>
 </tr>
 </table>
 
@@ -407,6 +407,20 @@ function textCounter(field,cntfield,maxlimit) {
 ?>
 </select></td>
 </tr>
+<tr>
+  <td class="ui-widget-content" colspan="3">Ticket: <select name="strp_ticket">
+<option value="0">No ticket</option>
+<?php
+  $q_string  = "select tik_id,tik_number,tik_task ";
+  $q_string .= "from st_tickets ";
+  $q_string .= "where tik_user = " . $_SESSION['uid'] . " and tik_closed = 0 ";
+  $q_string .= "order by tik_number ";
+  $q_st_tickets = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_tickets = mysqli_fetch_array($q_st_tickets)) {
+    print "  <option value=\"" . $a_st_tickets['tik_id'] . "\">" . $a_st_tickets['tik_number'] . ": " . $a_st_tickets['tik_task'] . "</option>\n";
+  }
+?>
+</select></tr>
 <tr>
   <td class="ui-widget-content" colspan="2">Jira Epic: <select name="epic_jira" onchange="javascript:attach_userstories('status.report.options.php?epic_id=' + epic_jira.value);">
 <option value="0">No Epic for these User Stories.</option>
