@@ -40,7 +40,7 @@
       $class = $a_st_class['cls_id'];
 
 // Retrieve the task array
-      $q_string  = "select * ";
+      $q_string  = "select strp_id,strp_ticket,strp_jira,strp_project,strp_class,strp_progress,strp_type,strp_day,strp_task,strp_save,strp_quarter,strp_time ";
       $q_string .= "from st_status ";
       $q_string .= "where strp_id = " . $formVars['id'];
       $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
@@ -48,9 +48,17 @@
 
       mysqli_free_result($q_st_status);
 
-      if ($a_st_status['strp_ticket'] > 0) {
-        $a_st_status['strp_ticket']++;
+      $ticket = return_Index($db, $a_st_status['strp_ticket'], "select tik_id from st_tickets where tik_user = " . $formVars['user'] . " and tik_closed = 0");
+
+      if ($ticket > 0) {
+        $ticket--;
       }
+
+      $epic = return_Index($db, $a_st_status['strp_jira'], "select epic_id from st_epics where epic_user = " . $formVars['user'] . " and epic_closed = 0");
+
+#      if ($epic > 0) {
+#        $epic--;
+#      }
 
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
@@ -86,7 +94,8 @@
   print "document.taskmgr.project['"        . $project                               . "'].selected = true;\n";
   print "document.taskmgr.report['"         . $a_st_status['strp_class'] - $class    . "'].checked = true;\n";
   print "document.taskmgr.progress['"       . $a_st_status['strp_progress']          . "'].selected = true;\n";
-#  print "document.taskmgr.strp_ticket['"    . $a_st_status['strp_ticket']            . "'].selected = true;\n":
+  print "document.taskmgr.strp_ticket['"    . $ticket                                . "'].selected = true;\n";
+  print "document.taskmgr.epic_jira['"      . $epic                                  . "'].selected = true;\n";
   print "document.taskmgr.tcktype['"        . $a_st_status['strp_type']              . "'].selected = true;\n";
   print "document.taskmgr.day['"            . $a_st_status['strp_day']               . "'].checked = true;\n";
 
