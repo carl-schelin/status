@@ -26,7 +26,7 @@
 
       $q_string  = "select user_id,user_jira,user_task ";
       $q_string .= "from st_userstories ";
-      $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $formVars['epic_id'] . " ";
+      $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $formVars['epic_id'] . " and user_closed = 0 ";
       $q_string .= "order by user_jira ";
       $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       if (mysqli_num_rows($q_st_userstories) > 0) {
