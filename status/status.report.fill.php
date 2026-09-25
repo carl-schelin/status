@@ -21,7 +21,7 @@
     if (check_userlevel($db, $AL_User)) {
       logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from st_users");
 
-// id of the record being pulled from the database.
+// as status messages are associated with a user, get the user id
       $formVars['user'] = clean($_GET['user'], 10);
 
 // Now get the correct number of classes.
@@ -54,11 +54,22 @@
         $ticket--;
       }
 
-      $epic = return_Index($db, $a_st_status['strp_jira'], "select epic_id from st_epics where epic_user = " . $formVars['user'] . " and epic_closed = 0");
+      $q_string  = "select user_epic ";
+      $q_string .= "from st_userstories ";
+      $q_string .= "where user_id = " . $a_st_status['strp_jira'] . " ";
+      $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_userstories = mysqli_fetch_array($q_st_userstories);
+
+      $epic = return_Index($db, $a_st_userstories['user_epic'], "select epic_id from st_epics where epic_user = " . $formVars['user'] . " and epic_closed = 0");
 
 #      if ($epic > 0) {
 #        $epic--;
 #      }
+
+      $q_string  = "select user_id ";
+      $q_string .= "from st_userstories ";
+      $q_string .= "where user_epic = " . $a_st_userstories['user_epic'] . " and user_user = " . $formVars['user'] . " and user_closed = 0";
+#      $story = return_Index($db, $a_st_status['strp_jira'], $q_string);
 
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
@@ -96,6 +107,7 @@
   print "document.taskmgr.progress['"       . $a_st_status['strp_progress']          . "'].selected = true;\n";
   print "document.taskmgr.strp_ticket['"    . $ticket                                . "'].selected = true;\n";
   print "document.taskmgr.epic_jira['"      . $epic                                  . "'].selected = true;\n";
+#  print "document.taskmgr.user_jira['"      . $story                                 . "'].selected = true;\n";
   print "document.taskmgr.tcktype['"        . $a_st_status['strp_type']              . "'].selected = true;\n";
   print "document.taskmgr.day['"            . $a_st_status['strp_day']               . "'].checked = true;\n";
 
