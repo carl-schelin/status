@@ -72,19 +72,19 @@ function clear_input(formfield) {
 
 if (isset($_POST['project'])) {
 
-  $formVars['prj_name']  = clean($_POST['project'], 255);
-  $formVars['prj_code']  = clean($_POST['code'], 10);
-  $formVars['prj_snow']  = clean($_POST['snow'], 30);
-  $formVars['prj_task']  = clean($_POST['task'], 30);
-  $formVars['prj_desc']  = clean($_POST['desc'], 100);
-  $formVars['prj_group'] = clean($_POST['group'], 10);
+  $formVars['prj_name']  = clean($_POST['project'],       255);
+  $formVars['prj_code']  = clean($_POST['code'],          100);
+  $formVars['prj_snow']  = clean($_POST['snow'],           30);
+  $formVars['prj_task']  = clean($_POST['task'],           30);
+  $formVars['prj_desc']  = clean($_POST['desc'],          100);
+  $formVars['prj_group'] = clean($_POST['group'],          10);
 
   logaccess($db, $_SESSION['username'], "add.project.php", "Adding project: " . $formVars['prj_name']);
 
   $q_string = "insert into st_project " . 
     "set prj_id = NULL, " . 
     "prj_name  = \"" . $formVars['prj_name']  . "\", " . 
-    "prj_code  = "   . $formVars['prj_code']  . "," . 
+    "prj_code  = \"" . $formVars['prj_code']  . "\"," . 
     "prj_snow  = \"" . $formVars['prj_snow']  . "\", " .
     "prj_task  = \"" . $formVars['prj_task']  . "\", " .
     "prj_desc  = \"" . $formVars['prj_desc']  . "\", " .
@@ -141,23 +141,21 @@ $q_string  = "select prj_id,prj_name,prj_code,prj_snow,prj_task,prj_desc ";
 $q_string .= "from st_project ";
 $q_string .= "order by prj_name";
 $q_st_project = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
-while ($a_st_project = mysqli_fetch_array($q_st_project)) {
+if (mysqli_num_rows($q_st_project) > 0) {
+  while ($a_st_project = mysqli_fetch_array($q_st_project)) {
 
+    print "<tr>\n";
+    print "  <td class=\"ui-widget-content\">" . $a_st_project['prj_id'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" title=\"The description as shown in the drop down menus in the Status Management app\">" . $a_st_project['prj_desc'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_st_project['prj_code'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_st_project['prj_snow'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" title=\"The project name as seen in iConnect\">" . $a_st_project['prj_name'] . "</td>\n";
+    print "  <td class=\"ui-widget-content\" title=\"The project task as seen in iConnect\">" . $a_st_project['prj_task'] . "</td>\n";
+    print "</tr>\n";
+  }
+} else {
   print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">" . $a_st_project['prj_id'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The description as shown in the drop down menus in the Status Management app\">" . $a_st_project['prj_desc'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_st_project['prj_code'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project code as seen in iConnect\">" . $a_st_project['prj_snow'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project name as seen in iConnect\">" . $a_st_project['prj_name'] . "</td>\n";
-  print "  <td class=\"ui-widget-content\" title=\"The project task as seen in iConnect\">" . $a_st_project['prj_task'] . "</td>\n";
-  print "</tr>\n";
-  $count++;
-
-}
-
-if ($count == 0) {
-  print "<tr>\n";
-  print "  <td class=\"ui-widget-content\">No records found.</td>\n";
+  print "  <td class=\"ui-widget-content\" colspan=\"6\">No records found.</td>\n";
   print "</tr>\n";
 }
 

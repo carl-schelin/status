@@ -14,6 +14,7 @@
   if (isset($_SESSION['username'])) {
     $package = "userstories.mysql.php";
     $formVars['update'] = clean($_GET['update'], 10);
+    $formVars['status'] = clean($_GET['status'], 10);
 
     if ($formVars['update'] == '') {
       $formVars['update'] = -1;
@@ -25,6 +26,8 @@
         $formVars['user_epic']        = clean($_GET['user_epic'],         10);
         $formVars['user_jira']        = clean($_GET['user_jira'],         60);
         $formVars['user_task']        = clean($_GET['user_task'],        255);
+        $formVars['user_status']      = clean($_GET['user_status'],       10);
+        $formVars['user_priority']    = clean($_GET['user_priority'],     10);
         $formVars['user_user']        = $_SESSION['uid'];
         $formVars['user_closed']      = clean($_GET['user_closed'],       10);
 
@@ -44,6 +47,8 @@
             "user_epic        =   " . $formVars['user_epic']     . "," .
             "user_jira        = \"" . $formVars['user_jira']     . "\"," .
             "user_task        = \"" . $formVars['user_task']     . "\"," .
+            "user_status      =   " . $formVars['user_status']   . "," .
+            "user_priority    =   " . $formVars['user_priority'] . "," .
             "user_user        =   " . $formVars['user_user']     . "," .
             "user_closed      =   " . $formVars['user_closed'];
 
@@ -64,6 +69,17 @@
 
 
       logaccess($db, $_SESSION['uid'], $package, "Creating the table for viewing.");
+
+      $priority[0] = "Lowest";
+      $priority[1] = "Low";
+      $priority[2] = "Medium";
+      $priority[3] = "High";
+      $priority[4] = "Highest";
+
+      $status[0] = "Backlog";
+      $status[1] = "Planning";
+      $status[2] = "On Hold";
+      $status[3] = "In Progress";
 
       $output  = "<p></p>\n";
       $output .= "<table class=\"ui-styled-table\">\n";
@@ -90,11 +106,13 @@
       $output .= "<table class=\"ui-styled-table\">\n";
       $output .= "<tr>\n";
       if (check_userlevel($db, $AL_Developer)) {
-        $output .= "  <th class=\"ui-state-default\">Del</th>\n";
+        $output .= "  <th class=\"ui-state-default\" width=\"160\">Delete User Story</th>\n";
       }
       $output .= "  <th class=\"ui-state-default\">Jira</th>\n";
       $output .= "  <th class=\"ui-state-default\">Title</th>\n";
-      $output .= "  <th class=\"ui-state-default\">Closed</th>\n";
+      $output .= "  <th class=\"ui-state-default\">Status</th>\n";
+      $output .= "  <th class=\"ui-state-default\">Priority</th>\n";
+      $output .= "  <th class=\"ui-state-default\">In Use</th>\n";
       $output .= "</tr>\n";
 
 # because some user stories have no epic "owner"
@@ -103,20 +121,24 @@
 
       $output .= "<tr>";
       $output .= "  <td class=\"" . $class . " button\">" . "Epic: " . "</td>";
-      $output .= "  <td class=\"" . $class . "\" colspan=\"3\">" . "User Stories not assigned to an Epic" . "</td>";
+      $output .= "  <td class=\"" . $class . "\" colspan=\"5\">" . "User Stories not assigned to an Epic" . "</td>";
       $output .= "</tr>";
 
-      $q_string  = "select user_id,user_jira,user_task,user_closed ";
+      $q_string  = "select user_id,user_jira,user_task,user_status,user_priority,user_closed ";
       $q_string .= "from st_userstories ";
       $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = 0 ";
+      if ($formVars['status'] >= 0) {
+        $q_string .= "and user_status = " . $formVars['status'] . " ";
+      }
       $q_string .= "order by user_jira ";
       $q_st_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
       if (mysqli_num_rows($q_st_userstories) > 0) {
         while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
 
-          $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
-          $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
-          $linkend   = "</a>";
+          $linkstart    = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
+          $linkdel      = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
+          $linkstatus   = "<a href=\"userstories.php?status=" . $a_st_userstories['user_status'] . "\">";
+          $linkend      = "</a>";
 
           $class = 'ui-widget-content';
 
@@ -129,9 +151,11 @@
           if (check_userlevel($db, $AL_Developer)) {
             $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
           }
-          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira'] . $linkend . "</td>";
           $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
-          $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">" . $linkstart . $status[$a_st_userstories['user_status']]  . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">" . $linkstart . $priority[$a_st_userstories['user_priority']]  . $linkend . "</td>";
+          $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed    . $linkend . "</td>";
           $output .= "</tr>";
 
         }
@@ -149,20 +173,25 @@
 
           $output .= "<tr>";
           $output .= "  <td class=\"" . $class . " button\">" . "Epic: " . "</td>";
-          $output .= "  <td class=\"" . $class . "\" colspan=\"3\">" . $a_st_epics['epic_jira'] . " - " . $a_st_epics['epic_title'] . "</td>";
+          $output .= "  <td class=\"" . $class . "\" colspan=\"5\">" . $a_st_epics['epic_jira'] . " - " . $a_st_epics['epic_title'] . "</td>";
           $output .= "</tr>";
 
-          $q_string  = "select user_id,user_jira,user_task,user_closed ";
+          $q_string  = "select user_id,user_jira,user_task,user_status,user_priority,user_closed ";
           $q_string .= "from st_userstories ";
           $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = " . $a_st_epics['epic_id'] . " and user_closed = 0 ";
+          if ($formVars['status'] >= 0) {
+            $q_string .= "and user_status = " . $formVars['status'] . " ";
+          }
           $q_string .= "order by user_jira ";
           $q_st_userstories = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
           if (mysqli_num_rows($q_st_userstories) > 0) {
             while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
 
               $linkstart = "<a href=\"#\" onclick=\"show_file('userstories.fill.php?id="  . $a_st_userstories['user_id'] . "');jQuery('#dialogStory').dialog('open');return false;\">";
-              $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
-              $linkend   = "</a>";
+              $linkmember = "<a href=\"userstories.member.php?id=" . $a_st_userstories['user_id'] . "\">";
+              $linkstatus = "<a href=\"userstories.php?status=" . $a_st_userstories['user_status'] . "\">";
+              $linkdel    = "<input type=\"button\" value=\"Remove\" onclick=\"delete_story('userstories.del.php?id=" . $a_st_userstories['user_id'] . "');\">";
+              $linkend    = "</a>";
 
               $class = 'ui-widget-content';
 
@@ -172,13 +201,25 @@
                 $closed = 'Yes';
               }
 
+              $q_string  = "select strp_id ";
+              $q_string .= "from st_status ";
+              $q_string .= "where strp_jira = " . $a_st_userstories['user_id'] . " ";
+              $q_st_status = mysqli_query($db, $q_string) or die($q_string . ": " . mysqli_error($db));
+              $total = mysqli_num_rows($q_st_status);
+
               $output .= "<tr>";
               if (check_userlevel($db, $AL_Developer)) {
                 $output .= "  <td class=\"ui-widget-content delete\">" . $linkdel . "</td>";
               }
-              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . "\">&nbsp;*&nbsp;" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
-              $output .= "  <td class=\"" . $class . "\">" . $linkstart . $closed . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $a_st_userstories['user_jira']  . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . "\">" . $linkstart . $a_st_userstories['user_task'] . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . " delete\">" . $linkstatus . $status[$a_st_userstories['user_status']]  . $linkend . "</td>";
+              $output .= "  <td class=\"" . $class . " delete\">" . $linkstart . $priority[$a_st_userstories['user_priority']]  . $linkend . "</td>";
+              if ($total > 0) {
+                $output .= "  <td class=\"" . $class . " delete\">" . $linkmember . $total . $linkend . "</td>";
+              } else {
+                $output .= "  <td class=\"" . $class . " delete\">" . $total . "</td>";
+              }
               $output .= "</tr>";
 
             }
@@ -186,7 +227,7 @@
         }
       } else {
         $output .= "<tr>";
-        $output .= "  <td class=\"ui-widget-content\" colspan=\"4\">No records found.</td>";
+        $output .= "  <td class=\"ui-widget-content\" colspan=\"6\">No records found.</td>";
         $output .= "</tr>";
       }
 

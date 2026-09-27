@@ -1,306 +1,17 @@
 ### Installation
 
-You'll need to create the statususer account for access to the status management database.
-
-create user 'statususer'@'localhost' identified by 'password';
-
-Then give the user access:
-
-For the 5.1 mysql server:
-
-grant all on status.* to 'statususer'@'localhost';
-
-For the 5.5 mysql servers:
-
-grant privilege on status.* to 'statususer'@'localhost';
-
-Then finish:
-
-flush privileges;
-
-### Create database
-
-create database status;
 
 ### Add tables
 
 This is the set of mysql tables for the status management app.
 
-CREATE TABLE `st_bandf` (
-  `bf_id` int(10) NOT NULL AUTO_INCREMENT,
-  `bf_name` int(10) NOT NULL DEFAULT '0',
-  `bf_borf` int(10) NOT NULL DEFAULT '0',
-  `bf_week` int(10) NOT NULL DEFAULT '0',
-  `bf_text` text NOT NULL,
-  `bf_dev` int(10) NOT NULL DEFAULT '0',
-  `bf_status` int(10) NOT NULL,
-  PRIMARY KEY (`bf_id`)
-); 
-
-CREATE TABLE `st_cande` (
-  `ce_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ce_name` int(10) unsigned NOT NULL DEFAULT '0',
-  `ce_week` int(10) unsigned NOT NULL DEFAULT '0',
-  `ce_text` text,
-  PRIMARY KEY (`ce_id`)
-); 
-
-CREATE TABLE `st_class` (
-  `cls_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cls_name` char(70) DEFAULT NULL,
-  `cls_template` int(10) NOT NULL DEFAULT '0',
-  `cls_project` int(10) unsigned DEFAULT '1',
-  `cls_title` char(100) NOT NULL DEFAULT '',
-  `cls_help` char(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`cls_id`)
-); 
-
-create table st_epics (
-  epic_id int(10) not null auto_increment,
-  epic_jira char(60) not null default '',
-  epic_title char(255) not null default '',
-  epic_user int(10) not null default 0,
-  epic_closed int(10) not null default 0,
-  primary key (epic_id)
-);
-
-CREATE TABLE `st_events` (
-  `evt_id` int(10) NOT NULL AUTO_INCREMENT,
-  `evt_group` int(10) NOT NULL DEFAULT '0',
-  `evt_task` char(200) NOT NULL DEFAULT '',
-  PRIMARY KEY (`evt_id`)
-); 
-
-CREATE TABLE `st_grouplist` (
-  `gpl_id` int(10) NOT NULL AUTO_INCREMENT,
-  `gpl_group` int(10) NOT NULL DEFAULT '0',
-  `gpl_user` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`gpl_id`)
-); 
-
-CREATE TABLE `st_groups` (
-  `grp_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `grp_name` char(70) NOT NULL DEFAULT '',
-  `grp_email` char(100) NOT NULL,
-  `grp_day` int(10) NOT NULL DEFAULT '5',
-  `grp_manager` int(10) NOT NULL DEFAULT '0',
-  `grp_report` int(10) NOT NULL DEFAULT '0',
-  `grp_members` char(254) NOT NULL DEFAULT '',
-  `grp_disabled` int(10) NOT NULL DEFAULT '0',
-  `grp_changedby` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`grp_id`)
-); 
-
-CREATE TABLE `st_levels` (
-  `lvl_id` int(8) NOT NULL AUTO_INCREMENT,
-  `lvl_name` varchar(255) NOT NULL,
-  `lvl_level` int(1) NOT NULL,
-  `lvl_disabled` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`lvl_id`)
-); 
-
-CREATE TABLE `st_log` (
-  `log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `log_user` char(30) NOT NULL DEFAULT '',
-  `log_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `log_source` char(30) NOT NULL DEFAULT '',
-  `log_detail` char(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`log_id`)
-); 
-
-CREATE TABLE `st_polls` (
-  `poll_id` int(10) NOT NULL AUTO_INCREMENT,
-  `poll_pid` int(10) NOT NULL DEFAULT '0',
-  `poll_desc` char(100) NOT NULL,
-  `poll_question` char(100) NOT NULL,
-  `poll_users` longtext NOT NULL,
-  `poll_options` int(10) NOT NULL DEFAULT '0',
-  `poll_selects` int(10) NOT NULL DEFAULT '0',
-  `poll_type` int(10) NOT NULL DEFAULT '0',
-  `poll_owner` int(10) NOT NULL DEFAULT '0',
-  `poll_days` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`poll_id`)
-); 
-
-CREATE TABLE `st_progress` (
-  `pro_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `pro_name` char(70) NOT NULL DEFAULT '',
-  `pro_desc` char(70) NOT NULL DEFAULT '',
-  PRIMARY KEY (`pro_id`)
-); 
-
-CREATE TABLE `st_project` (
-  `prj_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `prj_name` char(30) NOT NULL DEFAULT '',
-  `prj_code` int(10) unsigned NOT NULL DEFAULT '0',
-  `prj_task` char(30) NOT NULL DEFAULT '',
-  `prj_desc` char(100) NOT NULL,
-  `prj_group` int(10) unsigned NOT NULL DEFAULT '1',
-  `prj_close` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`prj_id`)
-); 
-
-CREATE TABLE `st_ras` (
-  `ras_id` int(10) NOT NULL AUTO_INCREMENT,
-  `ras_name` char(100) NOT NULL,
-  `ras_code` int(10) NOT NULL DEFAULT '0',
-  `ras_link` char(255) NOT NULL DEFAULT '',
-  `ras_status` char(255) NOT NULL DEFAULT '',
-  `ras_manager` char(100) NOT NULL,
-  `ras_resource` int(10) NOT NULL DEFAULT '0',
-  `ras_group` int(10) NOT NULL DEFAULT '0',
-  `ras_jan` int(10) NOT NULL DEFAULT '0',
-  `ras_feb` int(10) NOT NULL DEFAULT '0',
-  `ras_mar` int(10) NOT NULL DEFAULT '0',
-  `ras_apr` int(10) NOT NULL DEFAULT '0',
-  `ras_may` int(10) NOT NULL DEFAULT '0',
-  `ras_jun` int(10) NOT NULL DEFAULT '0',
-  `ras_jul` int(10) NOT NULL DEFAULT '0',
-  `ras_aug` int(10) NOT NULL DEFAULT '0',
-  `ras_sep` int(10) NOT NULL DEFAULT '0',
-  `ras_oct` int(10) NOT NULL DEFAULT '0',
-  `ras_nov` int(10) NOT NULL DEFAULT '0',
-  `ras_dec` int(10) NOT NULL DEFAULT '0',
-  `ras_closed` int(10) NOT NULL DEFAULT '0',
-  `ras_priority` int(10) NOT NULL DEFAULT '0',
-  `ras_check` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ras_id`)
-); 
-
-CREATE TABLE `st_report` (
-  `rep_id` int(10) NOT NULL AUTO_INCREMENT,
-  `rep_user` int(10) NOT NULL DEFAULT '0',
-  `rep_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `rep_group` int(10) NOT NULL DEFAULT '0',
-  `rep_status` int(10) NOT NULL DEFAULT '0',
-  `rep_task` text NOT NULL,
-  PRIMARY KEY (`rep_id`)
-); 
-
-CREATE TABLE `st_status` (
-  `strp_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `strp_week` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_name` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_jira` int(10) NOT NULL DEFAULT '0',
-  `strp_class` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_type` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_progress` int(10) unsigned NOT NULL,
-  `strp_project` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_day` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_time` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_task` char(255) NOT NULL DEFAULT '',
-  `strp_save` int(10) unsigned NOT NULL DEFAULT '1',
-  `strp_quarter` int(10) unsigned NOT NULL DEFAULT '0',
-  `strp_yearmon` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`strp_id`)
-); 
-
-CREATE TABLE `st_themes` (
-  `theme_id` int(10) NOT NULL AUTO_INCREMENT,
-  `theme_name` char(40) NOT NULL DEFAULT '',
-  `theme_title` char(40) NOT NULL DEFAULT '',
-  `theme_disabled` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`theme_id`)
-); 
-
-CREATE TABLE `st_titles` (
-  `tit_id` int(10) NOT NULL AUTO_INCREMENT,
-  `tit_name` char(60) NOT NULL DEFAULT '',
-  `tit_level` int(10) NOT NULL DEFAULT '0',
-  `tit_order` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`tit_id`)
-); 
-
-CREATE TABLE `st_todo` (
-  `todo_id` int(10) NOT NULL AUTO_INCREMENT,
-  `todo_name` char(255) NOT NULL,
-  `todo_class` int(10) NOT NULL DEFAULT '0',
-  `todo_project` int(10) NOT NULL DEFAULT '0',
-  `todo_group` int(10) NOT NULL DEFAULT '0',
-  `todo_save` int(10) NOT NULL DEFAULT '0',
-  `todo_entered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `todo_due` int(10) NOT NULL DEFAULT '0',
-  `todo_day` int(10) NOT NULL DEFAULT '0',
-  `todo_time` int(10) NOT NULL DEFAULT '0',
-  `todo_completed` int(10) NOT NULL DEFAULT '0',
-  `todo_user` int(10) NOT NULL,
-  `todo_priority` int(10) NOT NULL DEFAULT '0',
-  `todo_status` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`todo_id`)
-); 
-
-CREATE TABLE `st_type` (
-  `typ_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `typ_name` char(70) NOT NULL DEFAULT '',
-  `typ_desc` char(70) NOT NULL DEFAULT '',
-  PRIMARY KEY (`typ_id`)
-); 
-
-CREATE TABLE `st_users` (
-  `usr_id` int(8) NOT NULL AUTO_INCREMENT,
-  `usr_level` int(1) NOT NULL DEFAULT '2',
-  `usr_disabled` int(1) NOT NULL DEFAULT '0',
-  `usr_name` varchar(20) NOT NULL,
-  `usr_first` varchar(255) NOT NULL,
-  `usr_last` varchar(255) NOT NULL,
-  `usr_email` varchar(255) NOT NULL,
-  `usr_passwd` varchar(32) NOT NULL,
-  `usr_reset` int(10) NOT NULL DEFAULT '0',
-  `usr_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `usr_group` int(1) unsigned NOT NULL DEFAULT '0',
-  `usr_theme` int(10) NOT NULL DEFAULT '7',
-  `usr_maillist` int(1) NOT NULL DEFAULT '0',
-  `usr_cande` int(10) unsigned NOT NULL DEFAULT '0',
-  `usr_manager` int(1) unsigned NOT NULL DEFAULT '0',
-  `usr_template` int(10) unsigned NOT NULL DEFAULT '3',
-  `usr_supervisor` int(1) NOT NULL DEFAULT '0',
-  `usr_director` int(1) NOT NULL DEFAULT '0',
-  `usr_vicepresident` int(10) NOT NULL DEFAULT '0',
-  `usr_projects` char(255) NOT NULL DEFAULT '',
-  `usr_report` int(10) NOT NULL DEFAULT '0',
-  `usr_confirm` int(10) NOT NULL DEFAULT '0',
-  `usr_title` int(10) NOT NULL DEFAULT '0',
-  `usr_phone` char(15) NOT NULL DEFAULT '',
-  PRIMARY KEY (`usr_id`)
-); 
-
-create table st_userstories (
-  user_id int(10) not null auto_increment,
-  user_epic int(10) not null default 0,
-  user_jira char(60) not null default '',
-  user_task char(255) not null default '',
-  user_user int(10) not null default 0,
-  user_closed int(10) not null default 0,
-  primary key (user_id)
-);
-
-CREATE TABLE `st_weeks` (
-  `wk_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `wk_date` date NOT NULL,
-  PRIMARY KEY (`wk_id`)
-); 
-
-
 ### Need to set up the initial levels.
 
 As the variables are used within the code, all entries need to be added
 
-insert into st_levels set lvl_id = null,lvl_name = 'Developer', lvl_level = 1;
-insert into st_levels set lvl_id = null,lvl_name = 'Admin', lvl_level = 2;
-insert into st_levels set lvl_id = null,lvl_name = 'Vice President', lvl_level = 3;
-insert into st_levels set lvl_id = null,lvl_name = 'Director', lvl_level = 4;
-insert into st_levels set lvl_id = null,lvl_name = 'Manager', lvl_level = 5;
-insert into st_levels set lvl_id = null,lvl_name = 'Supervisor', lvl_level = 6;
-insert into st_levels set lvl_id = null,lvl_name = 'Report', lvl_level = 7;
-insert into st_levels set lvl_id = null,lvl_name = 'Guest', lvl_level = 8;
-
-
 ### Initial User
 
 Need to create the administrator account.
-
-insert into st_users set usr_id = null,usr_level = 2, usr_name = 'admin', usr_first = 'Administrator', usr_last = 'Status';
-
 
 ### Weeks Update
 
@@ -320,6 +31,178 @@ The settings.php file needs to be updated to reflect your hostname and to add th
 
 I'm using jQuery so you'll need to install the following files for this to work correctly.
 
+Installation
+
+Import all the .sql files
+
+Import all the .txt files. These prepopulate things like the admin account, group, titles, and some of the drop down menus.
+
+Create a non-Admin group such as Unix or Linux Administration
+
+Create a user account then as admin, approve the user for access. Make sure they're not in the Admin group. When creating projects, the group is associated with the project.
 
 
+
+As the user, you'll need to create several items before you can successfully add daily entries.
+
+
+Under the Jira menu, add the Epic for your tasks. There can be multiple Epics or just use the default No epics entry.
+
+Under the Jira menu, at least create one non-Epic User Story.
+
+
+Under the Projects menu, Click the Add Project Description line and add a couple of projects.
+
+For this tool, I had a list of projects the Unix team used as follows. This would be the Description which is in the drop down when entering work, and the Task which is displayed for timecards. Generally the same for both fields but whatever makes it easy to understand:
+
+1.1 Tickets
+1.2 Maintenance
+1.3 On-Call
+1.4 Consulting
+2.1 Admin
+2.2 Out of Office
+2.3 Training
+2.4 Meetings
+
+As we were using iConnect at the time, we had certain fields that needed to be entered so when you looked at your weekly timecard, you could easily add the work to iConnect.
+
+For us, iConnect Project was 'Unix Systems Administration'. But it's the same name for all the Tasks. So for above, each of the Projects would have 'Unix Systems Administration' as the iConnect Project.
+
+The Service Now field is just the id for Service Now. It can be blank if you're not using Service now.
+
+
+Next up, under Database, you need to select the Classifications Table in order to create the Email Template. Generally Management wants to see what you're working on so they have some sort of layout for the information for them to see.
+
+You'll need to create a template ID and Title to organize them all into a single email template. For the template, you'll select the same Template Number and Title for each entry. For example:
+
+Template: 1
+Title: Default Template
+
+Project is whether this Classification is generally for Projects or a non-project one.
+
+
+
+
+### Instllation process
+
+If you're cloning/pulling, you should already have git but yea, you'll need to have git installed.
+
+Install the following packages:
+
+* git
+* httpd
+* mysql
+* mysql-server
+* php
+
+For the image creation (pie chart in the timecard output mainly):
+
+* gd
+* php-gd
+
+If after the web server is started, restart the web server
+
+    systemctl restart httpd
+
+### Getting Started
+
+```
+systemctl enable mysqld
+systemctl enable httpd
+systemctl start mysqld
+systemctl start httpd
+```
+
+#### MariaDB
+
+If you've installed Mariadb vs 8.0, this system using mysqli so you'll need to install php_mysqlnd
+
+    dnf install -y php_mysqlnd
+
+#### SELinux
+
+If SELinux is installed, in the status directory, run:
+
+    restorecon -R -v status
+
+To manage selinux, install setroubleshoot
+
+    dnf install -y setroubleshoot
+
+#### MySQL/MariaDB
+
+Once installed, run mysql_secure_installation to get it set up.
+
+For the database, create the inventory database.
+
+    create database status;
+
+Create a status admin user with full rights to the inventory database.
+
+```
+CREATE USER 'statusadmin'@'localhost' IDENTIFIED BY '[password]';
+GRANT ALL PRIVILEGES ON status.* TO 'statusadmin'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+In the sql directory, loop through the files and import them into the inventory database.
+
+```
+for IMPORT in $(ls *sql)
+do
+  echo ${IMPORT}
+  mysql --user=root -p inventory < ${IMPORT}
+done
+```
+
+You'll have to enter the password for each file.
+
+#### Data Files
+
+In the txt directory are multiple files used to prepopulate the status database. This data is required to set up an admin account then update various tables 
+with expected defaults.
+
+For now, you'll need to log into mysql and use the database, then just copy and paste in the information in the files.
+
+#### Settings File
+
+The settings.php file contains server information, mysql connection details, path variables and a few other settings. You mainly have to update the server infor
+mation and connection details such as username and password to the database.
+
+Once done, copy the settings.php file and fixsettings script into the statusroot directory and run the script. It will link the settings.php file into each directory.
+
+Note that you can change the debugging option in the settings.php file. If you make it write errors to the screen, some aspects of the status app won't work quite as expected as the version of PHP might generate Warning messages that I haven't identified yet.
+
+### Cascading Style Sheets
+
+In the css directory, I have jquery.js 3.6.0, jquery-ui 1.13.1 in a jquery-ui directory, and jQuery-ui-themes in a jquery-ui-themes directory installed.
+
+You should be able to locate a tar file in http://schelin.org/status/css.tar
+
+### Images
+
+In the imgs directory, I have several image files used in the system. All are necessary
+
+* Status image header. This can be changed to a different branded value if you like and change the name in the settings.php file.
+* Progress Bar images
+* Pencil image to indicate editable text
+
+You should be able to locate a tar file in http://schelin.org/status/imgs.tar
+
+### Login Type
+
+There are two login possibilities. Either that access to all parts of the status app requires a login account or that guests can access the app without authentication. 
+
+Every script loads up the guest.php file which isn't part of the installation. In order to move forward, you'll need to link either the nologin.php script for guest access to guest.php
+
+    ln nologin.php guest.php
+
+If authentication is required, you'll need to link the login.php script to guest.php
+
+    ln login.php guest.php
+
+
+### Finished
+
+With these tasks done, you should be able to log in to the new install with the admin:admin credentials and start adding devices.
 

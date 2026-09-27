@@ -1,0 +1,12 @@
+insert into st_class set cls_id = null,cls_name = "General",cls_template = 1,cls_project = 0,cls_title = "Default Template",
+cls_help = "Department tasks such as meetings, training, and paperwork.";
+insert into st_class set cls_id = null,cls_name = "Escalations",cls_template = 1,cls_project = 0,cls_title = "Default Template",
+cls_help = "Work where you needed manager intervention to get the task done.";
+insert into st_class set cls_id = null,cls_name = "Events/Incidents",cls_template = 1,cls_project = 0,cls_title = "Default Template",
+cls_help = "Level 4 tickets, emergent and planned events, incidents.";
+insert into st_class set cls_id = null,cls_name = "Projects",cls_template = 1,cls_project = 1,cls_title = "Default Template",
+cls_help = "Projects managed by a Project Manager.";
+insert into st_class set cls_id = null,cls_name = "Infrastructure",cls_template = 1,cls_project = 0,cls_title = "Default Template",
+cls_help = "Work that affects a group of servers such as ntp installation or single sign-on.";
+insert into st_class set cls_id = null,cls_name = "Maintenance",cls_template = 1,cls_project = 2,cls_title = "Default Template",
+cls_help = "General server work such as tickets or troubleshooting.";

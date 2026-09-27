@@ -18,6 +18,12 @@
 
   logaccess($db, $_SESSION['uid'], $package, "Viewing the userstories table");
 
+  if (isset($_GET['status'])) {
+    $formVars['status'] = clean($_GET['status'], 10);
+  } else {
+    $formVars['status'] = -1;
+  }
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -55,6 +61,8 @@ function attach_story( p_script_url, update ) {
   as_url += "&user_epic="         + as_form.user_epic.value;
   as_url += "&user_jira="         + encode_URI(as_form.user_jira.value);
   as_url += "&user_task="         + encode_URI(as_form.user_task.value);
+  as_url += "&user_status="       + as_form.user_status.value;
+  as_url += "&user_priority="     + as_form.user_priority.value;
   as_url += "&user_closed="       + as_form.user_closed.checked;
 
   script = document.createElement('script');
@@ -63,7 +71,7 @@ function attach_story( p_script_url, update ) {
 }
 
 function clear_fields() {
-  show_file('userstories.mysql.php?update=-1');
+  show_file('userstories.mysql.php?update=-1&status=<?php print $formVars['status']; ?>');
 }
 
 $(document).ready( function() {
@@ -74,8 +82,8 @@ $(document).ready( function() {
   $( "#dialogStory" ).dialog({
     autoOpen: false,
     modal: true,
-    height: 200,
-    width: 1100,
+    height: 275,
+    width: 600,
     show: 'slide',
     hide: 'slide',
     closeOnEscape: true,
@@ -201,7 +209,28 @@ $(document).ready( function() {
 </tr>
 <tr>
   <td class="ui-widget-content">Jira: <input type="text" name="user_jira" size="10"></td>
-  <td class="ui-widget-content">User Story: <input type="text" name="user_task" size="90"></td>
+</tr>
+<tr>
+  <td class="ui-widget-content">User Story: <input type="text" name="user_task" size="50"></td>
+</tr>
+<tr>
+  <td class="ui-widget-content">Status: <select name="user_status">
+<option value="0">Backlog</option>
+<option value="1">Planning</option>
+<option value="2">On Hold</option>
+<option value="3">In Progress</option>
+</select></td>
+</tr>
+<tr>
+  <td class="ui-widget-content">Priority: <select name="user_priority">
+<option value="0">Lowest Priority</option>
+<option value="1">Low Priority</option>
+<option value="2" Selected='True'>Medium Priority</option>
+<option value="3">High Priority</option>
+<option value="4">Highest Priority</option>
+</select></td>
+</tr>
+<tr>
   <td class="ui-widget-content">Close: <input type="checkbox" name="user_closed"></td>
 </tr>
 </table>

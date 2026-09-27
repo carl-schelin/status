@@ -15,6 +15,8 @@
   check_login($db, $AL_User);
 
   $package = "email.php";
+  $debug = 'no';
+  $debug = 'yes';
 
   logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
@@ -27,6 +29,10 @@
     $formVars['startweek'] = 118;
   }
 
+  if ($formVars['endweek'] == '') {
+    $formVars['endweek'] = 118;
+  }
+
   if ($formVars['startweek'] == $formVars['endweek']) {
     $formVars['endweek'] = $formVars['startweek'] + 1;
   }
@@ -36,6 +42,10 @@
   }
 
   $logfile = "email.php";
+
+  if ( $debug == 'yes' ) {
+    print "<pre>User: " . $formVars['user'] . ", Startweek: " . $formVars['startweek'] . ", Endweek: " . $formVars['endweek'] . ", Group: " . $formVars['group'] . "</pre>\n";
+  }
 
   logaccess($db, $_SESSION['username'], $logfile, "Sending e-mail status message: week=" . $formVars['startweek'] . " user=" . $formVars['user']);
 
@@ -76,6 +86,10 @@
   $usermail = $a_st_users['usr_email'];
   $usergroup = $a_st_users['usr_group'];
 
+  if ($debug == 'yes') {
+    print "<pre>User: " . $userval . ", Email: " . $usermail . ", Group: " . $usergroup . "</pre>\n";
+  }
+
 #######
 # Retrieve information for the group
 #######
@@ -87,6 +101,12 @@
   $a_st_groups = mysqli_fetch_array($q_st_groups);
 
   $startday = $a_st_groups['grp_day'];
+
+  if ($debug == 'yes') {
+    print "<pre>Start Day: " . $startday . "</pre>\n";
+# start on Sunday; can select a different day for reports to start but for testing, use Sunday
+    $startday = 0;
+  }
 
 #######
 # Retrieve all the weeks into the weekval array
@@ -198,7 +218,7 @@
   $first = 0;
   $body = '';
 
-  $q_string  =  "select strp_id,strp_week,strp_name,strp_class,strp_project,strp_progress,strp_task,strp_day ";
+  $q_string  =  "select strp_id,strp_week,strp_name,strp_ticket,strp_jira,strp_class,strp_project,strp_progress,strp_task,strp_day ";
   $q_string .= "from st_status ";
   $q_string .= "where ($u_string) ";
   $q_string .= "and strp_week >= " . $formVars['startweek'] . " and strp_save = 1 ";
@@ -246,16 +266,56 @@
       if ($a_st_status['strp_progress'] > 0) {
         $body .= $progval[$a_st_status['strp_progress']] . ": ";
       }
-      $body .= $a_st_status['strp_task'] . "\n";
+
+      $q_string  = "select user_jira ";
+      $q_string .= "from st_userstories ";
+      $q_string .= "where user_id = " . $a_st_status['strp_jira'] . " ";
+      $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_st_userstories) > 0) {
+        $a_st_userstories = mysqli_fetch_array($q_st_userstories);
+        $jira = $a_st_userstories['user_jira'] . ": ";
+      } else {
+        $jira = '';
+      }
+
+      $q_string  = "select tik_number ";
+      $q_string .= "from st_tickets ";
+      $q_string .= "where tik_id = " . $a_st_status['strp_ticket'] . " ";
+      $q_st_tickets = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      if (mysqli_num_rows($q_st_tickets) > 0) {
+        $a_st_tickets = mysqli_fetch_array($q_st_tickets);
+        $ticket = $a_st_tickets['tik_number'] . ": ";
+      } else {
+        $ticket = '';
+      }
+
+      $body .= $jira . $ticket . $a_st_status['strp_task'] . "\n";
     }
   }
 
-  echo "<meta http-equiv=\"REFRESH\" content=\"5; url=" . $Siteroot . "\">\n";
+  if ($debug == "yes") {
+    print "<pre>To: " . $usermail . "\nSubject: " . $subject . "\n\n" . $body . "</pre>";
+  } else {
+    echo "<meta http-equiv=\"REFRESH\" content=\"5; url=" . $Siteroot . "\">\n";
+  }
 
-  if (mail($usermail, $subject, $body)) {
-      echo("<p>Message successfully sent!</p>");
+  $headers  = 'MIME-Version: 1.0' ."\r\n";
+  $headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n";
+  $headers .= 'From: Status management <unixsvc@oss1cotool11.orionspace.com>' . "\r\n";
+  $headers .= 'Reply-To: Status management <unixsvc@oss1cotool11.orionspace.com>' . "\r\n";
+  $headers .= 'X-Mailer: PHP/' . phpversion() . "\r\n";
+
+  $headers = array(
+    'From' => 'unixsvc@oss1cotool11.orionspace.com',
+    'Reply-To' => 'unixsvc@oss1cotool11.orionspace.com',
+    'X-Mailer' => 'PHP/' . phpversion()
+  );
+
+  $result = mail($usermail, $subject, $body, $headers);
+  if ($result) {
+      echo("<p>Message successfully sent! [" . $result . "]</p>");
    } else {
-      echo("<p>Message delivery failed...</p>");
+      echo("<p>Message delivery failed... [" . $result . "]</p>");
    }
 
 ?>

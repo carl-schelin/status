@@ -26,6 +26,13 @@
     <ul>
       <li><a href="<?php print $Jiraroot; ?>/epics.php">Jira Epic Topics</a></li>
       <li><a href="<?php print $Jiraroot; ?>/userstories.php">Jira User Stories</a></li>
+      <li><a href="<?php print $Ticketroot; ?>/tickets.php">Jira Tickets</a></li>
+    </ul>
+  </li>
+  <li id="tm_goals"><a href="<?php print $Siteroot; ?>/index.goals.php">Goals</a>
+    <ul>
+      <li><a href="<?php print $Goalroot; ?>/titles.php?group=<?php print $_SESSION['group']; ?>">Add Goal Titles</a></li>
+      <li><a href="<?php print $Goalroot; ?>/goals.php?group=<?php print $_SESSION['group']; ?>">Add Goals</a></li>
     </ul>
   </li>
   <li id="tm_projects"><a href="<?php print $Siteroot; ?>/index.projects.php">Projects</a>
@@ -37,8 +44,8 @@
   </li>
   <li id="tm_manage"><a href="<?php print $Siteroot; ?>/index.manage.php">Database</a>
     <ul>
-      <li><a href="<?php print $Siteroot; ?>/add.class.php">Classifications Table</a></li>
-      <li><a href="<?php print $Siteroot; ?>/add.progress.php">Progress Table</a></li>
-      <li><a href="<?php print $Siteroot; ?>/add.type.php">Task Types Table</a></li>
+      <li><a href="<?php print $Adminroot; ?>/class.php">Classifications Table</a></li>
+      <li><a href="<?php print $Adminroot; ?>/progress.php">Progress Table</a></li>
+      <li><a href="<?php print $Adminroot; ?>/type.php">Task Types Table</a></li>
     </ul>
   </li>

@@ -88,7 +88,7 @@
       $output .= "<table class=\"ui-styled-table\">\n";
       $output .= "<tr>\n";
       if (check_userlevel($db, $AL_Developer)) {
-        $output .= "  <th class=\"ui-state-default\">Del</th>\n";
+        $output .= "  <th class=\"ui-state-default\" width=\"160\">Delete Epic</th>\n";
       }
       $output .= "  <th class=\"ui-state-default\">Jira</th>\n";
       $output .= "  <th class=\"ui-state-default\">Title</th>\n";

@@ -21,7 +21,7 @@
     if (check_userlevel($db, $AL_User)) {
       logaccess($db, $_SESSION['username'], $package, "Requesting record " . $formVars['id'] . " from st_users");
 
-// id of the record being pulled from the database.
+// as status messages are associated with a user, get the user id
       $formVars['user'] = clean($_GET['user'], 10);
 
 // Now get the correct number of classes.
@@ -40,13 +40,36 @@
       $class = $a_st_class['cls_id'];
 
 // Retrieve the task array
-      $q_string  = "select * ";
+      $q_string  = "select strp_id,strp_ticket,strp_jira,strp_project,strp_class,strp_progress,strp_type,strp_day,strp_task,strp_save,strp_quarter,strp_time ";
       $q_string .= "from st_status ";
       $q_string .= "where strp_id = " . $formVars['id'];
       $q_st_status = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
       $a_st_status = mysqli_fetch_array($q_st_status);
 
       mysqli_free_result($q_st_status);
+
+      $ticket = return_Index($db, $a_st_status['strp_ticket'], "select tik_id from st_tickets where tik_user = " . $formVars['user'] . " and tik_closed = 0");
+
+      if ($ticket > 0) {
+        $ticket--;
+      }
+
+      $q_string  = "select user_epic ";
+      $q_string .= "from st_userstories ";
+      $q_string .= "where user_id = " . $a_st_status['strp_jira'] . " ";
+      $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+      $a_st_userstories = mysqli_fetch_array($q_st_userstories);
+
+      $epic = return_Index($db, $a_st_userstories['user_epic'], "select epic_id from st_epics where epic_user = " . $formVars['user'] . " and epic_closed = 0");
+
+#      if ($epic > 0) {
+#        $epic--;
+#      }
+
+      $q_string  = "select user_id ";
+      $q_string .= "from st_userstories ";
+      $q_string .= "where user_epic = " . $a_st_userstories['user_epic'] . " and user_user = " . $formVars['user'] . " and user_closed = 0";
+#      $story = return_Index($db, $a_st_status['strp_jira'], $q_string);
 
 // Retrieve the projects in the same order as the main page to identify which needs to be set as true
       $project = 0;
@@ -78,18 +101,34 @@
     }
   }
 
+
+  print "document.taskmgr.project['"        . $project                               . "'].selected = true;\n";
+  print "document.taskmgr.report['"         . $a_st_status['strp_class'] - $class    . "'].checked = true;\n";
+  print "document.taskmgr.progress['"       . $a_st_status['strp_progress']          . "'].selected = true;\n";
+  print "document.taskmgr.strp_ticket['"    . $ticket                                . "'].selected = true;\n";
+  print "document.taskmgr.epic_jira['"      . $epic                                  . "'].selected = true;\n";
+#  print "document.taskmgr.user_jira['"      . $story                                 . "'].selected = true;\n";
+  print "document.taskmgr.tcktype['"        . $a_st_status['strp_type']              . "'].selected = true;\n";
+  print "document.taskmgr.day['"            . $a_st_status['strp_day']               . "'].checked = true;\n";
+
+  print "document.taskmgr.task.value = \"" . mysqli_real_escape_string($db, $a_st_status['strp_task']) . "\";\n";
+
+  if ($a_st_status['strp_save']) {
+    print "document.taskmgr.save.checked = true;\n";
+  } else {
+    print "document.taskmgr.save.checked = false;\n";
+  }
+
+  if ($a_st_status['strp_quarter']) {
+    print "document.taskmgr.quarter.checked = true;\n";
+  } else {
+    print "document.taskmgr.quarter.checked = false;\n";
+  }
+
+  print "document.taskmgr.time.value = "   . $a_st_status['strp_time'] . ";\n";
+  print "document.taskmgr.id.value = "     . $a_st_status['strp_id']   . ";\n";
+
+  print "document.taskmgr.update.disabled = false;\n";
+  print "document.taskmgr.copy.disabled = false;\n";
+
 ?>
-
-document.taskmgr.project['<?php          print $project; ?>'].selected = true;
-document.taskmgr.report['<?php           print $a_st_status['strp_class'] - $class; ?>'].checked = true;
-document.taskmgr.progress['<?php         print $a_st_status['strp_progress']; ?>'].selected = true;
-document.taskmgr.tcktype['<?php          print $a_st_status['strp_type']; ?>'].selected = true;
-document.taskmgr.day['<?php              print $a_st_status['strp_day']; ?>'].checked = true;
-document.taskmgr.task.value = "<?php     print mysqli_real_escape_string($db, $a_st_status['strp_task']); ?>";
-document.taskmgr.save.checked = <?php    if ($a_st_status['strp_save']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.quarter.checked = <?php if ($a_st_status['strp_quarter']) { print "true"; } else { print "false"; }; ?>;
-document.taskmgr.time.value = <?php      print $a_st_status['strp_time']; ?>;
-document.taskmgr.id.value = <?php        print $a_st_status['strp_id']; ?>;
-document.taskmgr.update.disabled = false;
-document.taskmgr.copy.disabled = false;
-

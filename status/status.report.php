@@ -184,9 +184,9 @@ function show_daily() {
   }
 
   if (document.taskmgr.daily.checked) {
-    show_file('status.report.mysql.php?startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>&daily=' + day);
+    show_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>&daily=' + day);
   } else {
-    show_file('status.report.mysql.php?startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>');
+    show_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&class=<?php print $class;?>');
   }
 
 }
@@ -347,10 +347,10 @@ function textCounter(field,cntfield,maxlimit) {
 ?>
 <tr>
   <td class="ui-widget-content button" title="Update Task/Add Task button. Click this once you're done entering data." colspan=2>
-<input type="button" disabled="true" name="copy" value="Copy Task to Next Week" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print ($formVars['startweek'] + 1);?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=1');">
+<input type="button" disabled="true" name="copy" value="Copy Task to Next Week" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print ($formVars['startweek'] + 1);?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&strp_ticket=' + strp_ticket.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=1');">
 <input type="hidden" name="id" value="0">
-<input type="button" disabled="true" name="update" value="Update This Task" onClick="javascript:attach_file('status.report.mysql.php?update=1&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');">
-<input type="button" value="Add New Task" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');"></td>
+<input type="button" disabled="true" name="update" value="Update This Task" onClick="javascript:attach_file('status.report.mysql.php?update=1&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&strp_ticket=' + strp_ticket.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');">
+<input type="button" value="Add New Task" onClick="javascript:attach_file('status.report.mysql.php?update=0&startweek=<?php print $formVars['startweek'];?>&user=<?php print $formVars['user'];?>&user_jira=' + user_jira.value + '&type=' + tcktype.value + '&progress=' + progress.value + '&strp_ticket=' + strp_ticket.value + '&project=' + project.value + '&time=' + time.value + '&task=' + encodeURIComponent(task.value) + '&save=' + save.checked + '&quarter=' + quarter.checked + '&docopy=0');"></td>
 </tr>
 </table>
 
@@ -408,12 +408,26 @@ function textCounter(field,cntfield,maxlimit) {
 </select></td>
 </tr>
 <tr>
+  <td class="ui-widget-content" colspan="3">Ticket: <select name="strp_ticket">
+<option value="0">No ticket</option>
+<?php
+  $q_string  = "select tik_id,tik_number,tik_task ";
+  $q_string .= "from st_tickets ";
+  $q_string .= "where tik_user = " . $_SESSION['uid'] . " and tik_closed = 0 ";
+  $q_string .= "order by tik_number ";
+  $q_st_tickets = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_tickets = mysqli_fetch_array($q_st_tickets)) {
+    print "  <option value=\"" . $a_st_tickets['tik_id'] . "\">" . $a_st_tickets['tik_number'] . ": " . $a_st_tickets['tik_task'] . "</option>\n";
+  }
+?>
+</select></tr>
+<tr>
   <td class="ui-widget-content" colspan="2">Jira Epic: <select name="epic_jira" onchange="javascript:attach_userstories('status.report.options.php?epic_id=' + epic_jira.value);">
 <option value="0">No Epic for these User Stories.</option>
 <?php
   $q_string  = "select epic_id,epic_jira,epic_title ";
   $q_string .= "from st_epics ";
-  $q_string .= "where epic_user = 5 and epic_closed = 0 ";
+  $q_string .= "where epic_user = " . $_SESSION['uid'] . " and epic_closed = 0 ";
   $q_string .= "order by epic_jira ";
   $q_st_epics = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_epics = mysqli_fetch_array($q_st_epics)) {
@@ -422,10 +436,11 @@ function textCounter(field,cntfield,maxlimit) {
 ?>
 </select></td>
   <td class="ui-widget-content" colspan="2">Jira User Story: <select name="user_jira">
+<option value="0">No User Stories have been created for this Epic.</option>
 <?php
   $q_string  = "select user_id,user_jira,user_task ";
   $q_string .= "from st_userstories ";
-  $q_string .= "where user_user = 5 and user_epic = 0 and user_closed = 0 ";
+  $q_string .= "where user_user = " . $_SESSION['uid'] . " and user_epic = 0 and user_closed = 0 ";
   $q_string .= "order by user_jira ";
   $q_st_userstories = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_userstories = mysqli_fetch_array($q_st_userstories)) {
@@ -520,7 +535,7 @@ if ($_SESSION['group'] < 5) {
   <td class="ui-widget-content">Involuntary, non-incident work such as calls for assistance or responding to system alerts</td>
 </tr>
 <tr>
-  <td class="ui-widget-content"><b>1.3 Maintenance</b></td>
+  <td class="ui-widget-content"><b>1.2 Maintenance</b></td>
   <td class="ui-widget-content"><b>2.3 Training</b></td>
   <td class="ui-widget-content">&nbsp;</td>
 </tr>

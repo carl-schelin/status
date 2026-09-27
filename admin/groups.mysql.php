@@ -110,13 +110,13 @@
       $title  = "<table class=\"ui-styled-table\">";
       $title .= "<tr>";
       if (check_userlevel($db, $AL_Admin)) {
-        $title .= "  <th class=\"ui-state-default\">Del</th>";
+        $title .= "  <th class=\"ui-state-default\" width=\"160\">Delete Group</th>";
       }
-      $title .= "  <th class=\"ui-state-default\">Id</th>";
       $title .= "  <th class=\"ui-state-default\">Group</th>";
       $title .= "  <th class=\"ui-state-default\">Group EMail</th>";
       $title .= "  <th class=\"ui-state-default\">Group Manager</th>";
       $title .= "  <th class=\"ui-state-default\">Report</th>";
+      $title .= "  <th class=\"ui-state-default\">Members</th>";
       $title .= "</tr>";
 
       $group     .= $header . $title;
@@ -129,7 +129,7 @@
       if (mysqli_num_rows($q_st_groups) > 0) {
         while ($a_st_groups = mysqli_fetch_array($q_st_groups)) {
 
-          $linkstart = "<a href=\"#\" onclick=\"show_file('groups.fill.php?id="  . $a_st_groups['grp_id'] . "');jQuery('#dialogGroup').dialog('open');\">";
+          $linkstart = "<a href=\"#\" onclick=\"show_file('groups.fill.php?id="  . $a_st_groups['grp_id'] . "');jQuery('#dialogUpdate').dialog('open');return false;\">";
           $linkdel   = "<input type=\"button\" value=\"Remove\" onclick=\"delete_line('groups.del.php?id=" . $a_st_groups['grp_id'] . "');\">";
           $linkend = "</a>";
 
@@ -138,15 +138,34 @@
             $class = "ui-state-error";
           }
 
+          $total = 0;
+          $q_string  = "select usr_id ";
+          $q_string .= "from st_users ";
+          $q_string .= "where usr_group = " . $a_st_groups['grp_id'] . " ";
+          $q_st_users = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+          if (mysqli_num_rows($q_st_users) > 0) {
+            while ($a_st_users = mysqli_fetch_array($q_st_users)) {
+              $total++;
+            }
+          }
+
+          if ($total > 0) {
+            $totallink = "<a href=\"groups.members.php?id=" . $a_st_groups['grp_id'] . "\" target=\"_blank\">";
+          }
+
           $group .= "<tr>";
           if (check_userlevel($db, $AL_Admin)) {
-            $group .= "  <td class=\"" . $class . " delete\">" . $linkdel   . "</td>";
+            if ($total == 0) {
+              $group .= "  <td class=\"" . $class . " delete\">" . $linkdel . "</td>";
+            } else {
+              $group .= "  <td class=\"" . $class . " delete\">Members &gt; 0</td>";
+            }
           }
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_id']           . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_name']         . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_email']        . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['usr_first'] . " " . $a_st_groups['usr_last'] . $linkend . "</td>";
-          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_report']       . $linkend . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"        . $linkstart . $a_st_groups['grp_name']                        . $linkend . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"                     . $a_st_groups['grp_email']                                  . "</td>";
+          $group .= "  <td class=\"" . $class . "\">"                     . $a_st_groups['usr_first'] . " " . $a_st_groups['usr_last'] . "</td>";
+          $group .= "  <td class=\"" . $class . " delete\">"              . $a_st_groups['grp_report']                                 . "</td>";
+          $group .= "  <td class=\"" . $class . " delete\">" . $totallink . $total                                          . $linkend . "</td>";
           $group .= "</tr>";
 
         }
@@ -160,13 +179,13 @@
 
       $group .= "</table>";
 
-      print "document.getElementById('group_mysql').innerHTML = '"     . mysqli_real_escape_string($db, $group)     . "';\n\n";
+      print "document.getElementById('table_mysql').innerHTML = '"     . mysqli_real_escape_string($db, $group)     . "';\n\n";
 
-      print "document.groups.grp_name.value = '';\n";
-      print "document.groups.grp_email.value = '';\n";
-      print "document.groups.grp_manager[0].selected = true;\n";
-      print "document.groups.grp_disabled[0].selected = true;\n";
-      print "document.groups.grp_report.value = '';\n";
+      print "document.formUpdate.grp_name.value = '';\n";
+      print "document.formUpdate.grp_email.value = '';\n";
+      print "document.formUpdate.grp_manager[0].selected = true;\n";
+      print "document.formUpdate.grp_disabled[0].selected = true;\n";
+      print "document.formUpdate.grp_report.value = '';\n";
     } else {
       logaccess($db, $_SESSION['username'], $package, "Unauthorized access.");
     }

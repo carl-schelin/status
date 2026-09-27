@@ -30,15 +30,15 @@
 
       $manager      = return_Index($db, $a_st_groups['grp_manager'],      "select usr_id from st_users where usr_disabled = 0 order by usr_last,usr_first");
 
-      print "document.groups.grp_name.value = '"      . mysqli_real_escape_string($db, $a_st_groups['grp_name'])      . "';\n";
-      print "document.groups.grp_email.value = '"     . mysqli_real_escape_string($db, $a_st_groups['grp_email'])     . "';\n";
-      print "document.groups.grp_report.value = '"    . mysqli_real_escape_string($db, $a_st_groups['grp_report'])    . "';\n";
+      print "document.formUpdate.grp_name.value = '"      . mysqli_real_escape_string($db, $a_st_groups['grp_name'])      . "';\n";
+      print "document.formUpdate.grp_email.value = '"     . mysqli_real_escape_string($db, $a_st_groups['grp_email'])     . "';\n";
+      print "document.formUpdate.grp_report.value = '"    . mysqli_real_escape_string($db, $a_st_groups['grp_report'])    . "';\n";
 
-      print "document.groups.grp_manager['"       . $manager      . "'].selected = true;\n";
+      print "document.formUpdate.grp_manager['"       . $manager      . "'].selected = true;\n";
 
-      print "document.groups.grp_disabled['" . $a_st_groups['grp_disabled'] . "'].selected = 'true';\n";
+      print "document.formUpdate.grp_disabled['" . $a_st_groups['grp_disabled'] . "'].selected = 'true';\n";
 
-      print "document.groups.id.value = " . $formVars['id'] . ";\n";
+      print "document.formUpdate.id.value = " . $formVars['id'] . ";\n";
 
     } else {
       logaccess($db, $_SESSION['username'], $package, "Unauthorized access.");

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# search all files for a variable
+
+SEARCH=${1}
+IGNORE=""
+if [[ ${SEARCH} = '-i' ]]
+then
+  IGNORE="-i"
+  SEARCH=${2}
+fi
+
+for i in $(find . -type d -print | egrep -v "(RCS|pictures|./css|research|.csv$|.git)" | sort)
+do
+  echo "Searching: ${i}"
+  for j in $(ls -la ${i} | egrep -v "(settings.php|settings.backup.php|^total|^d|^l)" | awk '{print $NF}')
+  do
+    grep ${IGNORE} -H ${SEARCH} ${i}/${j}
+  done
+done
+

@@ -32,9 +32,10 @@
 <div class="main ui-widget-content">
 
 <ul>
-  <li><a href="requests/add.class.php">Manage the various classifications.</a></li>
-  <li><a href="requests/add.progress.php">Manage the task progress.</a></li>
-  <li><a href="requests/add.type.php">Manage the task types.</a></li>
+  <li><a href="<?php print $Adminroot; ?>/class.php">Manage the various classifications.</a></li>
+  <li><a href="<?php print $Adminroot; ?>/progress.php">Manage the task progress.</a></li>
+  <li><a href="<?php print $Adminroot; ?>/type.php">Manage the task types.</a></li>
+  <li><a href="<?php print $Adminroot; ?>/titles.php">Manage Titles.</a></li>
 </ul>
 
 </div>

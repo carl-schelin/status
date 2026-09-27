@@ -42,6 +42,7 @@ function attach_users(p_script_url, update) {
   au_url += "&usr_manager="    + au_form.usr_manager.value;
   au_url += "&usr_title="      + au_form.usr_title.value;
   au_url += "&usr_theme="      + au_form.usr_theme.value;
+  au_url += "&usr_template="   + au_form.usr_template.value;
   au_url += "&usr_passwd="     + encode_URI(au_form.usr_passwd.value);
   au_url += "&usr_reenter="    + encode_URI(au_form.usr_reenter.value);
   au_url += "&usr_reset="      + au_form.usr_reset.checked;
@@ -88,6 +89,7 @@ $(document).ready( function() {
     <li><strong>First Name</strong> - The user's first name.</li>
     <li><strong>Last Name</strong> - The user's last name.</li>
     <li><strong>Theme</strong> - Select a theme for the user.</li>
+    <li><strong>Template</strong> - Select a template for reporting.</li>
     <li><strong>E-Mail</strong> - The user's official email address. This is important in that several email portions of the system check incoming email against this address.</li>
     <li><strong>Phone Number</strong> - The user's contact phone number. Could be desk phone or cell phone.</li>
   </ul></li>
@@ -133,6 +135,17 @@ $(document).ready( function() {
   $q_st_themes = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
   while ($a_st_themes = mysqli_fetch_array($q_st_themes)) {
     print "<option value=\"" . $a_st_themes['theme_id'] . "\">" . $a_st_themes['theme_title'] . "</option>\n";
+  }
+?>
+</select></td>
+  <td class="ui-widget-content">Template <select name="usr_template">
+<?php
+  $q_string  = "select cls_template,cls_title ";
+  $q_string .= "from st_class ";
+  $q_string .= "order by cls_title ";
+  $q_st_class = mysqli_query($db, $q_string) or die(header("Location: " . $Siteroot . "/error.php?script=" . $package . "&error=" . $q_string . "&mysql=" . mysqli_error($db)));
+  while ($a_st_class = mysqli_fetch_array($q_st_class)) {
+    print "<option value=\"" . $a_st_class['cls_template'] . "\">" . $a_st_class['cls_title'] . "</option>\n";
   }
 ?>
 </select></td>

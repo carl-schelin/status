@@ -18,6 +18,13 @@
 
   logaccess($db, $_SESSION['username'], $package, "Accessing script");
 
+# if help has not been seen yet,
+  if (show_Help($db, $Sitepath . "/" . $package)) {
+    $display = "display: block";
+  } else {
+    $display = "display: none";
+  }
+
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -53,44 +60,88 @@ function delete_level( p_script_url ) {
   }
 ?>
 
-function attach_level( p_script_url, update ) {
-  var al_form = document.levels;
-  var al_url;
+function attach_file( p_script_url, update ) {
+  var af_form = document.formCreate;
+  var af_url;
 
-  al_url  = '?update='   + update;
-  al_url += '&id='       + al_form.id.value;
+  af_url  = '?update='   + update;
 
-  al_url += "&lvl_name="      + encode_URI(al_form.lvl_name.value);
-  al_url += "&lvl_level="     + encode_URI(al_form.lvl_level.value);
-  al_url += "&lvl_disabled="  + al_form.lvl_disabled.value;
+  af_url += "&lvl_name="         + encode_URI(af_form.lvl_name.value);
+  af_url += "&lvl_level="        + encode_URI(af_form.lvl_level.value);
+  af_url += "&lvl_disabled="     + encode_URI(af_form.lvl_disabled.value);
 
   script = document.createElement('script');
-  script.src = p_script_url + al_url;
+  script.src = p_script_url + af_url;
   document.getElementsByTagName('head')[0].appendChild(script);
 }
+
+function update_file( p_script_url, update ) {
+  var uf_form = document.formUpdate;
+  var uf_url;
+
+  uf_url  = '?update='   + update;
+  uf_url += '&id='       + uf_form.id.value;
+
+  uf_url += "&lvl_name="         + encode_URI(uf_form.lvl_name.value);
+  uf_url += "&lvl_level="        + encode_URI(uf_form.lvl_level.value);
+  uf_url += "&lvl_disabled="     + encode_URI(uf_form.lvl_disabled.value);
+
+  script = document.createElement('script');
+  script.src = p_script_url + uf_url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
 
 function clear_fields() {
   show_file('levels.mysql.php?update=-1');
 }
 
 $(document).ready( function() {
-  $( "#tabs" ).tabs( ).addClass( "tab-shadow" );
-
-  $( '#clickAddLevel' ).click(function() {
-    $( "#dialogLevel" ).dialog('open');
+  $( '#clickCreate' ).click(function() {
+    $( "#dialogCreate" ).dialog('open');
   });
 
-  $( "#dialogLevel" ).dialog({
+  $( "#dialogCreate" ).dialog({
     autoOpen: false,
     modal: true,
-    height: 200,
-    width: 1100,
+    height: 225,
+    width: 600,
     show: 'slide',
     hide: 'slide',
     closeOnEscape: true,
     dialogClass: 'dialogWithDropShadow',
     close: function(event, ui) {
-      $( "#dialogLevel" ).hide();
+      $( "#dialogCreate" ).hide();
+    },
+    buttons: [
+      {
+        text: "Cancel",
+        click: function() {
+          show_file('levels.mysql.php?update=-1');
+          $( this ).dialog( "close" );
+        }
+      },
+      {
+        text: "Add Level",
+        click: function() {
+          attach_file('levels.mysql.php', 0);
+          $( this ).dialog( "close" );
+        }
+      }
+    ]
+  });
+
+  $( "#dialogUpdate" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 225,
+    width: 600,
+    show: 'slide',
+    hide: 'slide',
+    closeOnEscape: true,
+    dialogClass: 'dialogWithDropShadow',
+    close: function(event, ui) {
+      $( "#dialogUpdate" ).hide();
     },
     buttons: [
       {
@@ -103,14 +154,14 @@ $(document).ready( function() {
       {
         text: "Update Level",
         click: function() {
-          attach_level('levels.mysql.php', 1);
+          update_file('levels.mysql.php', 1);
           $( this ).dialog( "close" );
         }
       },
       {
         text: "Add Level",
         click: function() {
-          attach_level('levels.mysql.php', 0);
+          update_file('levels.mysql.php', 0);
           $( this ).dialog( "close" );
         }
       }
@@ -127,8 +178,6 @@ $(document).ready( function() {
 <?php include($Sitepath . '/topmenu.end.php'); ?>
 
 <div id="main">
-
-<form name="mainform">
 
 <table class="ui-styled-table">
 <tr>
@@ -156,38 +205,35 @@ $(document).ready( function() {
 
 <table class="ui-styled-table">
 <tr>
-  <td class="ui-widget-content button"><input type="button" id="clickAddLevel" value="Add Level"></td>
+  <td class="ui-widget-content button"><input type="button" id="clickCreate" value="Add Level"></td>
 </tr>
 </table>
+
+<span id="table_mysql"><?php print wait_Process('Waiting...')?></span>
+
+</div>
+
+</div>
+
+
+<div id="dialogCreate" title="Add Levels">
+
+<form name="formCreate">
+
+<?php include('levels.dialog.php'); ?>
 
 </form>
 
-<span id="table_mysql"></span>
-
-</div>
-
 </div>
 
 
-<div id="dialogLevel" title="Level Form">
+<div id="dialogUpdate" title="Edit Levels">
 
-<form name="levels">
+<form name="formUpdate">
 
 <input type="hidden" name="id" value="0">
 
-<table class="ui-styled-table">
-<tr>
-  <th class="ui-state-default" colspan="3">Level Form</th>
-</tr>
-<tr>
-  <td class="ui-widget-content">Level Name: <input type="text" name="lvl_name" size="40"></td>
-  <td class="ui-widget-content">Access Level: <input type="number" name="lvl_level" size="10"></td>
-  <td class="ui-widget-content">Status <select name="lvl_disabled">
-<option value="0">Enabled</option>
-<option value="1">Disabled</option>
-</select></td>
-</tr>
-</table>
+<?php include('levels.dialog.php'); ?>
 
 </form>
 

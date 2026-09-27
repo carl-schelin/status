@@ -110,8 +110,8 @@ if (mysqli_num_rows($q_st_project) > 0) {
     print "<tr>\n";
 
     print "  <td class=\"ui-widget-content\" id=\"name_" . $prj_id . "\"><input type=\"text\" name=\"name_"   .$prj_id."\" size=\"40\" value=\"".$a_st_project['prj_name']."\"></td>\n";
-    print "  <td class=\"ui-widget-content\" id=\"proj_" . $prj_id . "\"><input type=\"text\" name=\"project_".$prj_id."\" size=\"5\"  value=\"".$a_st_project['prj_code']."\"></td>\n";
-    print "  <td class=\"ui-widget-content\" id=\"snow_" . $prj_id . "\"><input type=\"text\" name=\"snow_"   .$prj_id."\" size=\"5\"  value=\"".$a_st_project['prj_snow']."\"></td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"proj_" . $prj_id . "\"><input type=\"text\" name=\"project_".$prj_id."\" size=\"15\"  value=\"".$a_st_project['prj_code']."\"></td>\n";
+    print "  <td class=\"ui-widget-content\" id=\"snow_" . $prj_id . "\"><input type=\"text\" name=\"snow_"   .$prj_id."\" size=\"15\"  value=\"".$a_st_project['prj_snow']."\"></td>\n";
     print "  <td class=\"ui-widget-content\" id=\"task_" . $prj_id . "\"><input type=\"text\" name=\"task_"   .$prj_id."\" size=\"30\" value=\"".$a_st_project['prj_task']."\"></td>\n";
     print "  <td class=\"ui-widget-content\" id=\"desc_" . $prj_id . "\"><input type=\"text\" name=\"desc_"   .$prj_id."\" size=\"25\" value=\"".$a_st_project['prj_desc']."\"></td>\n";
     if (preg_match("/:" . $prj_id . ":/i", $a_st_users['usr_projects'])) {
@@ -126,7 +126,7 @@ if (mysqli_num_rows($q_st_project) > 0) {
       $checked = "";
     }
     print "  <td class=\"ui-widget-content delete\" title=\"Close this project to additional hours\" id=\"clos_" . $prj_id . "\" align=center><input type=\"checkbox\" name=\"close_"  . $prj_id . "\" $checked></td>\n";
-    print "  <td class=\"ui-widget-content delete\" title=\"Save changes to this project code.\" id=\"save_" . $prj_id . "\"><input type=\"button\" value=\"Save\" onClick=\"javascript:attach_file('edit.project.mysql.php?id=" . $prj_id . "&name=' + encodeURIComponent(name_$prj_id.value) + '&close=' + close_$prj_id.checked + '&code=' + project_$prj_id.value + '&task=' + encodeURIComponent(task_$prj_id.value) + '&desc=' + encodeURIComponent(desc_$prj_id.value) + '&personal=' + pers_$prj_id.checked);\"></td>\n";
+    print "  <td class=\"ui-widget-content delete\" title=\"Save changes to this project code.\" id=\"save_" . $prj_id . "\"><input type=\"button\" value=\"Save\" onClick=\"javascript:attach_file('edit.project.mysql.php?id=" . $prj_id . "&name=' + encodeURIComponent(name_$prj_id.value) + '&close=' + close_$prj_id.checked + '&code=' + project_$prj_id.value + '&snow=' + snow_$prj_id.value + '&task=' + encodeURIComponent(task_$prj_id.value) + '&desc=' + encodeURIComponent(desc_$prj_id.value) + '&personal=' + pers_$prj_id.checked);\"></td>\n";
 
     print "</tr>\n";
   }
@@ -153,7 +153,7 @@ while ($a_st_groups = mysqli_fetch_array($q_st_groups)) {
   print "<div id=\"main\">\n";
   print "<table class=\"ui-widget-content\">\n";
   print "<tr>\n";
-  print "  <th class=\"ui-state-default\" colspan=7>" . $a_st_groups['grp_name'] . "</th>\n";
+  print "  <th class=\"ui-state-default\" colspan=\"7\">" . $a_st_groups['grp_name'] . "</th>\n";
   print "</tr>\n";
   print "<tr>\n";
   print "  <th class=\"ui-state-default\">Project Name</th>\n";

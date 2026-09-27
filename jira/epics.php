@@ -73,8 +73,8 @@ $(document).ready( function() {
   $( "#dialogEpic" ).dialog({
     autoOpen: false,
     modal: true,
-    height: 180,
-    width: 1100,
+    height: 225,
+    width: 600,
     show: 'slide',
     hide: 'slide',
     closeOnEscape: true,
@@ -185,7 +185,11 @@ $(document).ready( function() {
 </tr>
 <tr>
   <td class="ui-widget-content">Jira: <input type="text" name="epic_jira" size="10"></td>
-  <td class="ui-widget-content">Epic: <input type="text" name="epic_title" size="90"></td>
+</tr>
+<tr>
+  <td class="ui-widget-content">Epic: <input type="text" name="epic_title" size="50"></td>
+</tr>
+<tr>
   <td class="ui-widget-content">Close: <input type="checkbox" name="epic_closed"></td>
 </tr>
 </table>
